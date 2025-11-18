@@ -1,4 +1,5 @@
 import 'package:calorie_lens_ai_app/core/usecases/usecases.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding/check_onboarding_status.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding/complete_onboarding.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_state.dart';
@@ -17,8 +18,9 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     emit(OnboardingLoading());
     final failureOrStatus = await checkOnboardingStatus(NoParams());
     failureOrStatus.fold(
-      (failure) =>
-          emit(OnboardingError(message: 'Failed to check onboarding status')),
+      (failure) => emit(
+        OnboardingError(message: AppTexts.checkInitialScreenErrorMessage),
+      ),
       (status) =>
           status ? emit(OnboardingCompleted()) : emit(OnboardingNotCompleted()),
     );
@@ -28,8 +30,9 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     emit(OnboardingLoading());
     final failureOrComplete = await completeOnboarding(NoParams());
     failureOrComplete.fold(
-      (failure) =>
-          emit(OnboardingError(message: 'Failed to complete onboarding')),
+      (failure) => emit(
+        OnboardingError(message: AppTexts.completeOnboardingErrorMessage),
+      ),
       (_) => emit(OnboardingCompleted()),
     );
   }

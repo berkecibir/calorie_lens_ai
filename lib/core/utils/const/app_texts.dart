@@ -3,4 +3,10 @@ class AppTexts {
   static const String signInPageId = 'sign_in_page_id';
   static const String signUpPageId = 'sign_up_page_id';
   static const String onboardingPageId = 'onboarding_page_id';
+
+  // Onboarding Cubit Texts
+  static const String checkInitialScreenErrorMessage =
+      'Failed to check onboarding status';
+  static const String completeOnboardingErrorMessage =
+      'Failed to complete onboarding';
 }
