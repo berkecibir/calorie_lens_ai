@@ -24,8 +24,7 @@ class ConnectionFailure extends Failure {
 class CacheFailure extends Failure {
   final String message;
 
-  const CacheFailure(this.message);
-
+  const CacheFailure([this.message = '']);
   @override
   List<Object> get props => [message];
 }

@@ -1,10 +1,16 @@
+import 'package:calorie_lens_ai_app/core/injection/injection_container.dart'
+    as di;
 import 'package:calorie_lens_ai_app/core/init/app_init.dart';
 import 'package:calorie_lens_ai_app/core/routes/app_routes.dart';
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
-import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/pages/sign_up_page.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/providers/bloc_providers_set_up.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'feat/calorie_lens_ai/presentation/pages/onboarding/pages/onboarding_pages.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   runApp(const MainApp());
 }
 
@@ -13,11 +19,17 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppInit.initDeviceSize(context);
-    return MaterialApp(
-      navigatorKey: Navigation.navigationKey,
-      routes: AppRoutes.routes,
-      initialRoute: SignUpPage.id,
+    return MultiBlocProvider(
+      providers: BlocProviderSetUp.providers,
+      child: MaterialApp(
+        builder: (context, child) {
+          AppInit.initDeviceSize(context);
+          return child ?? const SizedBox.shrink();
+        },
+        navigatorKey: Navigation.navigationKey,
+        routes: AppRoutes.routes,
+        initialRoute: OnboardingPages.id,
+      ),
     );
   }
 }

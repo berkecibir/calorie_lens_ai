@@ -1,5 +1,12 @@
-import 'package:provider/single_child_widget.dart';
+import 'package:calorie_lens_ai_app/core/injection/injection_container.dart'
+    as di;
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BlocProviderSetUp {
-  static List<SingleChildWidget> providers = [];
+  static final providers = [
+    BlocProvider<OnboardingCubit>(
+      create: (_) => di.sl<OnboardingCubit>()..checkInitialScreen(),
+    ),
+  ];
 }
