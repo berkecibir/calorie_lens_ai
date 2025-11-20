@@ -19,10 +19,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppInit.initDeviceSize(context);
     return MultiBlocProvider(
       providers: BlocProviderSetUp.providers,
       child: MaterialApp(
+        builder: (context, child) {
+          AppInit.initDeviceSize(context);
+          return child ?? const SizedBox.shrink();
+        },
         navigatorKey: Navigation.navigationKey,
         routes: AppRoutes.routes,
         initialRoute: OnboardingPages.id,

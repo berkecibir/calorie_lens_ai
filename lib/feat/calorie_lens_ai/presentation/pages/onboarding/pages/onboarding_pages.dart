@@ -1,4 +1,5 @@
 import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
+import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_state.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/pages/onboarding_last_page.dart';
@@ -20,24 +21,26 @@ class _OnboardingPagesState extends State<OnboardingPages> {
 
   final List<Map<String, dynamic>> _onboardingPages = [
     {
-      'title': 'Yemeklerinizi Tanıyın',
-      'description':
-          'Fotoğrafla yemeklerinizi tanımlayın ve otomatik kalori hesaplamasından yararlanın.',
+      'title': AppTexts.onboardingFirstPageTitle,
+      'description': AppTexts.onboardingFirstPageBodyMessage,
       'icon': Icons.camera_alt,
     },
     {
-      'title': 'Beslenmenizi Takip Edin',
-      'description':
-          'Günlük beslenme alışkanlıklarınızı analiz edin ve hedeflerinize ulaşın.',
+      'title': AppTexts.onboardingSecondPageTitle,
+      'description': AppTexts.onboardingSecondPageBodyMessage,
       'icon': Icons.track_changes,
     },
     {
-      'title': 'Sağlıklı Yaşamın Kilidine Ulaşın',
-      'description':
-          'Kişiye özel önerilerle sağlıklı yaşam hedeflerinize ulaşın.',
+      'title': AppTexts.onboardingThirdPageTitle,
+      'description': AppTexts.onboardingThirdPageBodyMessage,
       'icon': Icons.health_and_safety,
     },
   ];
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +48,7 @@ class _OnboardingPagesState extends State<OnboardingPages> {
       body: BlocListener<OnboardingCubit, OnboardingState>(
         listener: (context, state) {
           if (state is OnboardingCompleted) {
-            // Navigation to Auth (Sign Up)
-            //Navigation.pushReplacementNamed(root: auth screens );
+            Navigation.pushReplacementNamed(root: AppTexts.signUpPageId);
           }
         },
         child: Column(
@@ -59,7 +61,6 @@ class _OnboardingPagesState extends State<OnboardingPages> {
                   if (index == _onboardingPages.length) {
                     return const OnboardingLastPage();
                   }
-
                   final page = _onboardingPages[index];
                   return OnboardingWidget(
                     title: page['title'],
@@ -84,7 +85,6 @@ class _OnboardingPagesState extends State<OnboardingPages> {
                   if (_currentPage < _onboardingPages.length)
                     TextButton(
                       onPressed: () {
-                        // Skip onboarding
                         context
                             .read<OnboardingCubit>()
                             .completeOnboardingProcess();
@@ -93,8 +93,6 @@ class _OnboardingPagesState extends State<OnboardingPages> {
                     )
                   else
                     const SizedBox.shrink(),
-
-                  // Page indicators
                   Row(
                     children: List.generate(_onboardingPages.length + 1, (
                       index,
@@ -112,8 +110,6 @@ class _OnboardingPagesState extends State<OnboardingPages> {
                       );
                     }),
                   ),
-
-                  // Next button or empty space
                   if (_currentPage < _onboardingPages.length)
                     IconButton(
                       onPressed: () {

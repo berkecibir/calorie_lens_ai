@@ -1,5 +1,8 @@
 import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
+import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
+import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
@@ -10,7 +13,7 @@ class OnboardingLastPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: DevicePadding.xlarge.all,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -29,7 +32,7 @@ class OnboardingLastPage extends StatelessWidget {
           ),
           DeviceSpacing.medium.height,
           Text(
-            'KaloriLens AI uygulamasını kullanmaya başlamak için aşağıdaki butona tıklayın.',
+            AppTexts.onboardingLastPageBodyMessage,
             style: Theme.of(context).textTheme.bodyLarge,
             textAlign: TextAlign.center,
           ),
@@ -37,6 +40,7 @@ class OnboardingLastPage extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               context.read<OnboardingCubit>().completeOnboardingProcess();
+              Navigation.pushReplacementNamed(root: AppTexts.signUpPageId);
             },
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
@@ -44,7 +48,7 @@ class OnboardingLastPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            child: const Text('Başlayalım'),
+            child: const Text(AppTexts.onboardingLastPageButtonTitle),
           ),
         ],
       ),

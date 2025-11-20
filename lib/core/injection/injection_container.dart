@@ -42,4 +42,5 @@ Future<void> init() async {
     () =>
         OnboardingCubit(checkOnboardingStatus: sl(), completeOnboarding: sl()),
   );
+  await Future<void>.value();
 }
