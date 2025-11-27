@@ -10,7 +10,6 @@ class AppTexts {
   static const String completeOnboardingErrorMessage =
       'Failed to complete onboarding';
 
-
   // Onboarding Pages Texts
   static const String onboardingLastPageBodyMessage =
       'KaloriLens AI uygulamasını kullanmaya başlamak için aşağıdaki butona tıklayın.';
@@ -25,4 +24,29 @@ class AppTexts {
       'Sağlıklı Yaşamın Kilidine Ulaşın';
   static const String onboardingThirdPageBodyMessage =
       'Kişiye özel önerilerle sağlıklı yaşam hedeflerinize ulaşın.';
+
+  // Auth Pages Strings
+
+  static const String welcomeText = 'Hoş Geldiniz!';
+
+  // Auth Text Form Fields Strings
+
+  static const String emailLabelText = 'Email';
+
+  // Appbar Titles
+
+  static const String authAppbarTitle = 'Kayıt Ol';
+
+  // Validator Strings
+
+  static const validateFormMessage = 'Bu alan boş geçilemez';
+  static const validateEmailMessage = 'E-posta boş geçilemez';
+  static const validateRegexcontrollMessage =
+      'Geçerli bir e-posta adresi giriniz';
+  static const validatePasswordMessage = 'Şifre boş geçilemez';
+  // Validator RegExp Strings
+  static const authRegExp = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+  static String validatePasswordLengthMessage(int minLength) {
+    return 'Şifre en az $minLength karakter olmalıdır';
+  }
 }
