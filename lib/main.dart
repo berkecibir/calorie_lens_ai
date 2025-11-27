@@ -9,8 +9,8 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/providers/
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+Future<void> main() async {
+  await AppInit.initializeApp();
   await di.init();
   runApp(const MainApp());
 }
