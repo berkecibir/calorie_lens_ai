@@ -1,6 +1,9 @@
 import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/core/utils/validators/form_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../cubits/auth/password_visibility_cubit.dart';
 
 class AuthTextFormField extends StatelessWidget {
   final String labelText;
@@ -107,21 +110,49 @@ class AuthTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      validator: validator,
-      decoration: InputDecoration(
-        suffixIcon: suffix != null ? Icon(suffix) : null,
-        suffixIconColor: Colors.grey,
-        labelText: labelText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-      obscureText: isObscure,
-      keyboardType: textInputType,
-      textInputAction: textInputAction,
-      autovalidateMode: autovalidateMode,
+    final isPasswordField = textInputType == TextInputType.visiblePassword;
+
+    return isPasswordField
+        ? BlocProvider(
+            create: (_) => PasswordVisibilityCubit(),
+            child: buildTextField(context, isPasswordField),
+          )
+        : buildTextField(context, isPasswordField);
+  }
+
+  Widget buildTextField(BuildContext context, bool isPasswordField) {
+    return BlocBuilder<PasswordVisibilityCubit, bool>(
+      builder: (context, isObscureState) {
+        return TextFormField(
+          controller: controller,
+          validator: validator,
+          obscureText: isPasswordField ? isObscureState : isObscure,
+          decoration: InputDecoration(
+            suffixIconColor: Colors.grey,
+            labelText: labelText,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            suffixIcon: suffix != null
+                ? IconButton(
+                    icon: Icon(
+                      isPasswordField
+                          ? (isObscureState
+                              ? Icons.visibility_off
+                              : Icons.visibility)
+                          : suffix,
+                    ),
+                    onPressed: isPasswordField
+                        ? () => context.read<PasswordVisibilityCubit>().toggle()
+                        : null,
+                  )
+                : null,
+          ),
+          keyboardType: textInputType,
+          textInputAction: textInputAction,
+          autovalidateMode: autovalidateMode,
+        );
+      },
     );
   }
 }

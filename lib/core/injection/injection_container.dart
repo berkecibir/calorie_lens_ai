@@ -22,6 +22,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../feat/calorie_lens_ai/presentation/cubits/auth/password_visibility_cubit.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -105,5 +107,8 @@ Future<void> init() async {
       getCurrentUser: sl(),
     ),
   );
+
+  sl.registerFactory(() => PasswordVisibilityCubit());
+
   await Future<void>.value();
 }
