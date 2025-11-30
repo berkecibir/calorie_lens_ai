@@ -43,3 +43,15 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase yapılandırma dosyası
+firebase.json
+
+# Firebase options dosyası
+lib/firebase_options.dart
+
+# Google Services yapılandırma dosyası
+android/app/google-services.json
+
+# .env dosyası
+.env

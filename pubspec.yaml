@@ -18,7 +18,8 @@ dependencies:
   # Firebase
   firebase_core: ^4.2.1   
   firebase_auth: ^6.1.2  
-
+  cloud_firestore: ^6.1.0
+  
   # 🔧 Dependency Injection
   get_it: ^9.0.5          
   injectable: ^2.1.2

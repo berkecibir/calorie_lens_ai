@@ -25,6 +25,16 @@ class AppTexts {
   static const String onboardingThirdPageBodyMessage =
       'Kişiye özel önerilerle sağlıklı yaşam hedeflerinize ulaşın.';
 
+  // UserModel Strings
+
+  static const String email = 'email';
+  static const String displayName = 'displayName';
+  static const String photoUrl = 'photoUrl';
+  static const String createdAt = 'createdAt';
+  static const String lastLogin = 'lastLogin';
+  static const String uid = 'uid';
+  static const String isEmailVerified = 'isEmailVerified';
+
   // Auth Pages Strings
 
   static const String welcomeText = 'Hoş Geldiniz!';
@@ -32,6 +42,9 @@ class AppTexts {
   // Auth Text Form Fields Strings
 
   static const String emailLabelText = 'Email';
+  static const String passwordLabelText = 'Parola';
+  static const String confirmPasswordLabelText = 'Parola Onay';
+  static const String fullNameLabelText = 'Ad Soyad';
 
   // Appbar Titles
 

@@ -8,8 +8,10 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/providers/bloc_providers_set_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   await AppInit.initializeApp();
   await di.init();
   runApp(const MainApp());
