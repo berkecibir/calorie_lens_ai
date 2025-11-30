@@ -11,7 +11,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
-  await dotenv.load(fileName: ".env");
+  try {
+    await dotenv.load(fileName: "assets/.env");
+  } on Exception catch (e) {
+    debugPrint(e.toString());
+  }
   await AppInit.initializeApp();
   await di.init();
   runApp(const MainApp());

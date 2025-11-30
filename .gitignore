@@ -52,3 +52,4 @@ android/app/google-services.json
 # Environment configuration files
 .env
 .env.*
+
