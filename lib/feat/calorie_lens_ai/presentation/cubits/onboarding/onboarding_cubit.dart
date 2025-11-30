@@ -12,7 +12,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   OnboardingCubit({
     required this.checkOnboardingStatus,
     required this.completeOnboarding,
-  }) : super(OnboardingInitial());
+  }) : super(OnboardingNotCompleted());
 
   Future<void> checkInitialScreen() async {
     emit(OnboardingLoading());
@@ -21,8 +21,14 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       (failure) => emit(
         OnboardingError(message: AppTexts.checkInitialScreenErrorMessage),
       ),
-      (status) =>
-          status ? emit(OnboardingCompleted()) : emit(OnboardingNotCompleted()),
+      (status) {
+        if (status) {
+          emit(OnboardingCompleted());
+        } else {
+          // Eğer tamamlanmadıysa, mevcut sayfa 0'dan başlar
+          emit(const OnboardingPageChanged(0));
+        }
+      },
     );
   }
 
@@ -35,5 +41,10 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       ),
       (_) => emit(OnboardingCompleted()),
     );
+  }
+
+  // Sayfa değiştirildiğinde tetiklenir
+  void pageChanged(int newPage) {
+    emit(OnboardingPageChanged(newPage));
   }
 }
