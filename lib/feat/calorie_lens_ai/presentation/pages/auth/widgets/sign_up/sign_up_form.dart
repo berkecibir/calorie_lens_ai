@@ -2,8 +2,11 @@ import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
 import 'package:calorie_lens_ai_app/core/utils/validators/form_validator.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/pages/sign_in_page.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/widgets/auth_text_form_field.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../../../../core/widgets/navigation_helper/navigation_helper.dart';
 
 class SignUpFormSection extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -101,7 +104,9 @@ class SignUpFormSection extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Navigation.pushNamed(root: SignInPage.id);
+                },
                 style: TextButton.styleFrom(
                   padding: DevicePadding.small.onlyHorizontal,
                   minimumSize: Size.zero,

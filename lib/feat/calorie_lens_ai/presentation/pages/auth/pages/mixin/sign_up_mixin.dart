@@ -22,10 +22,12 @@ mixin SignUpMixin on State<SignUpPage> {
 
   void signUp() {
     if (key.currentState!.validate()) {
+      final email = emailController.text.trim();
+      final password = passwordController.text.trim();
       context.read<AuthCubit>().signUp(
           displayName: fullNameController.text.trim(),
-          email: emailController.text.trim(),
-          password: passwordController.text.trim());
+          email: email,
+          password: password);
     }
   }
 }
