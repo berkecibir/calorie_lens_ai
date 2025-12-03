@@ -1,0 +1,11 @@
+﻿00:00 +0: loading C:/Users/ataha/projects/calorie_lens_ai/calorie_lens_ai_app/test/feat/calorie_lens_ai/data/repositories/auth/auth_repository_test.dart
+00:00 +0 -1: loading C:/Users/ataha/projects/calorie_lens_ai/calorie_lens_ai_app/test/feat/calorie_lens_ai/data/repositories/auth/auth_repository_test.dart [E]
+  Failed to load "C:/Users/ataha/projects/calorie_lens_ai/calorie_lens_ai_app/test/feat/calorie_lens_ai/data/repositories/auth/auth_repository_test.dart":
+  Compilation failed for testPath=C:/Users/ataha/projects/calorie_lens_ai/calorie_lens_ai_app/test/feat/calorie_lens_ai/data/repositories/auth/auth_repository_test.dart: test/feat/calorie_lens_ai/data/repositories/auth/auth_repository_test.dart:31:31: Error: Required named parameter 'createdAt' must be provided.
+    final tUserModel = UserModel(
+                                ^
+  lib/feat/calorie_lens_ai/data/models/auth/user_model.dart:7:9: Context: Found this candidate, but the arguments don't match.
+    const UserModel({
+          ^^^^^^^^^
+  .
+00:00 +0 -1: Some tests failed.

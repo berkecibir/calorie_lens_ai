@@ -1,4 +1,6 @@
+import 'package:calorie_lens_ai_app/core/error/exceptions.dart';
 import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
+import 'package:calorie_lens_ai_app/core/utils/helpers/firebase/firebase_error_handler.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/auth/auth_remote_data_source.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/models/auth/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,6 +27,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
+    } catch (e) {
+      throw ServerException(message: e.toString());
     }
   }
 
@@ -36,6 +40,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return UserModel.fromFirebaseUser(user);
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
+    } catch (e) {
+      throw ServerException(message: e.toString());
     }
   }
 
@@ -48,6 +54,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
+    } catch (e) {
+      throw ServerException(message: e.toString());
     }
   }
 
@@ -58,7 +66,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
     } catch (e) {
-      throw Exception('Send password reset email failed: $e');
+      throw ServerException(message: 'Şifre sıfırlama e-postası gönderilemedi: $e');
     }
   }
 
@@ -69,12 +77,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       final user = userCredential.user;
-      if (user == null) throw Exception('Sign in failed');
+      if (user == null) throw ServerException(message: 'Giriş yapılamadı.');
       // Last login timestamp'i güncelle
       await updateLastLogin(user.uid);
       return UserModel.fromFirebaseUser(user);
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
+    } catch (e) {
+       if (e is ServerException) rethrow;
+      throw ServerException(message: e.toString());
     }
   }
 
@@ -84,6 +95,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       await _firebaseAuth.signOut();
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
+    } catch (e) {
+      throw ServerException(message: e.toString());
     }
   }
 
@@ -97,7 +110,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           email: email, password: password);
       final user = userCredential.user;
       if (user == null) {
-        throw Exception('User registration failed');
+        throw ServerException(message: 'Kullanıcı kaydı başarısız.');
       }
       // Update display name
       await user.updateDisplayName(displayName);
@@ -122,6 +135,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return userModel;
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
+    } catch (e) {
+       if (e is ServerException) rethrow;
+      throw ServerException(message: e.toString());
     }
   }
 
@@ -132,7 +148,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         AppTexts.lastLogin: Timestamp.fromDate(DateTime.now()),
       });
     } on FirebaseAuthException catch (e) {
-      throw Exception('Failed to update last login: ${e.message}');
+      throw ServerException(message: 'Son giriş tarihi güncellenemedi: ${e.message}');
+    } catch (e) {
+       throw ServerException(message: 'Son giriş tarihi güncellenemedi: $e');
     }
   }
 
@@ -141,7 +159,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final currentUser = _firebaseAuth.currentUser;
       if (currentUser == null) {
-        throw Exception('Kullanıcı oturumu açık değil.');
+        throw ServerException(message: 'Kullanıcı oturumu açık değil.');
       }
 
       // 1. Firebase Auth Kullanıcısını Güncelleme (displayName, photoURL)
@@ -168,27 +186,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return UserModel.fromFirebaseUser(updatedAuthUser);
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
-    } on Exception catch (e) {
-      throw Exception('Kullanıcı bilgilerini güncelleme başarısız: $e');
+    } catch (e) {
+       if (e is ServerException) rethrow;
+      throw ServerException(message: 'Kullanıcı bilgileri güncellenemedi: $e');
     }
   }
 
-  Exception _handleAuthException(FirebaseAuthException e) {
-    switch (e.code) {
-      case 'weak-password':
-        return Exception('Şifre çok zayıf.');
-      case 'email-already-in-use':
-        return Exception('Bu email zaten kayıtlı.');
-      case 'invalid-email':
-        return Exception('Geçersiz email adresi.');
-      case 'user-not-found':
-        return Exception('Kullanıcı bulunamadı.');
-      case 'wrong-password':
-        return Exception('Hatalı şifre.');
-      case 'user-disabled':
-        return Exception('Bu kullanıcı hesabı devre dışı.');
-      default:
-        return Exception('Authentication hatası: ${e.message}');
-    }
+  ServerException _handleAuthException(FirebaseAuthException e) {
+    return ServerException(message: FirebaseErrorHandler.handleAuthException(e));
   }
 }

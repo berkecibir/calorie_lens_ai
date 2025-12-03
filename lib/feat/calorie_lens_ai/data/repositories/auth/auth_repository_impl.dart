@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:calorie_lens_ai_app/core/error/exceptions.dart';
 import 'package:calorie_lens_ai_app/core/error/failure.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/auth/auth_local_data_source.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/auth/auth_remote_data_source.dart';
@@ -20,11 +20,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   /// Exception'ları uygulama seviyesinde anlamlı Failure'lara dönüştüren yardımcı fonksiyon.
   Failure _handleException(Exception e) {
-    // Özel hatalar için branch'ler
-    if (e is FirebaseAuthException) {
-      // Firebase hatalarının user-friendly mesajlarını kullan
-      final message = e.message ?? _firebaseCodeToMessage(e.code);
-      return ServerFailure(message: message);
+    if (e is ServerException) {
+      return ServerFailure(message: e.message);
     }
 
     if (e is SocketException) {
@@ -43,28 +40,6 @@ class AuthRepositoryImpl implements AuthRepository {
     // Diğer Exception'lar için temizlenmiş bir mesaj
     final raw = e.toString().replaceFirst('Exception: ', '');
     return ServerFailure(message: raw);
-  }
-
-  /// FirebaseAuthException.code değerlerini daha okunaklı mesaja çevir (isteğe bağlı).
-  String _firebaseCodeToMessage(String code) {
-    switch (code) {
-      case 'invalid-email':
-        return 'Geçersiz e-posta adresi.';
-      case 'user-disabled':
-        return 'Kullanıcı devre dışı bırakılmış.';
-      case 'user-not-found':
-        return 'Kullanıcı bulunamadı.';
-      case 'wrong-password':
-        return 'Girdiğiniz parola hatalı.';
-      case 'email-already-in-use':
-        return 'Bu e-posta ile zaten kayıt yapılmış.';
-      case 'weak-password':
-        return 'Parola zayıf. Daha güçlü bir parola seçin.';
-      case 'requires-recent-login':
-        return 'Bu işlemi gerçekleştirmek için tekrar giriş yapmanız gerekiyor.';
-      default:
-        return 'Kimlik doğrulama işlemi sırasında bir hata oluştu.';
-    }
   }
 
   @override
