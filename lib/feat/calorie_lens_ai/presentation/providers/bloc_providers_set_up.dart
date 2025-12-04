@@ -12,7 +12,7 @@ class BlocProviderSetUp {
       create: (_) => di.sl<OnboardingCubit>()..checkInitialScreen(),
     ),
     BlocProvider<AuthCubit>(
-      create: (_) => di.sl<AuthCubit>(),
+      create: (_) => di.sl<AuthCubit>()..checkAuthStatus(),
     ),
     BlocProvider<PasswordVisibilityCubit>(
       create: (_) => di.sl<PasswordVisibilityCubit>(),

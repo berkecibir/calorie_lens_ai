@@ -24,6 +24,9 @@ dependencies:
   get_it: ^9.0.5          
   injectable: ^2.1.2
 
+  # Percent Indicator for progress bars and circular indicators 
+  percent_indicator: ^4.2.5
+
   # 🌐 Network & Data
   dio: ^5.4.3            
   retrofit: ^4.1.0        

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:calorie_lens_ai_app/core/utils/helpers/shared/shared_helper.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/auth/auth_local_data_source.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/models/auth/user_model.dart';
+import '../../../../../../core/error/exceptions.dart';
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   static const String _userSessionKey = 'user_session';
@@ -17,7 +18,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       final userJson = jsonEncode(user.toJson());
       await _sharedPreferencesHelper.setString(_userSessionKey, userJson);
     } catch (e) {
-      throw Exception('Failed to save user session: $e');
+      throw CacheException(message: 'Failed to save user session: $e');
     }
   }
 
@@ -31,7 +32,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       final decodedJson = jsonDecode(userJson) as Map<String, dynamic>;
       return UserModel.fromJson(decodedJson);
     } catch (e) {
-      throw Exception('Failed to get cached user session: $e');
+      throw CacheException(message: 'Failed to get cached user session: $e');
     }
   }
 
@@ -40,7 +41,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     try {
       await _sharedPreferencesHelper.remove(_userSessionKey);
     } catch (e) {
-      throw Exception('Failed to clear user session: $e');
+      throw CacheException(message: 'Failed to clear user session: $e');
     }
   }
 
@@ -60,7 +61,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     try {
       await saveUserSession(user);
     } catch (e) {
-      throw Exception('Failed to update cached user: $e');
+      throw CacheException(message: 'Failed to update cached user: $e');
     }
   }
 
@@ -69,7 +70,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     try {
       await _sharedPreferencesHelper.setString(_authTokenKey, token);
     } catch (e) {
-      throw Exception('Failed to save auth token: $e');
+      throw CacheException(message: 'Failed to save auth token: $e');
     }
   }
 
@@ -78,7 +79,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     try {
       return await _sharedPreferencesHelper.getString(_authTokenKey);
     } catch (e) {
-      throw Exception('Failed to get auth token: $e');
+      throw CacheException(message: 'Failed to get auth token: $e');
     }
   }
 
@@ -87,7 +88,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     try {
       await _sharedPreferencesHelper.remove(_authTokenKey);
     } catch (e) {
-      throw Exception('Failed to clear auth token: $e');
+      throw CacheException(message: 'Failed to clear auth token: $e');
     }
   }
 }

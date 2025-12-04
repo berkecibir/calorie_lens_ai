@@ -2,6 +2,7 @@ import 'package:calorie_lens_ai_app/core/utils/helpers/shared/shared_helper.dart
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/auth/auth_local_data_source.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/auth/auth_local_data_source_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/onboarding/onboarding_local_data_source.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/onboarding/onboarding_local_data_source_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/auth/auth_remote_data_source.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/auth/auth_remote_data_source_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/repositories/auth/auth_repository_impl.dart';
@@ -9,6 +10,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/repositories/onboa
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/auth/auth_repository.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/onboarding/onboarding_repository.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/get_current_user.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/send_email_verification.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_in_with_email_and_password.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_out.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_up_with_email_and_password.dart';
@@ -90,6 +92,10 @@ Future<void> init() async {
 
   sl.registerLazySingleton<GetCurrentUser>(
     () => GetCurrentUser(repository: sl()),
+  );
+
+  sl.registerLazySingleton<SendEmailVerification>(
+    () => SendEmailVerification(repository: sl()),
   );
 
   // Cubits
