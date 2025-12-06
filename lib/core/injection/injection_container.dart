@@ -3,12 +3,16 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/auth/auth_local_data_source_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/onboarding/onboarding_local_data_source.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/onboarding/onboarding_local_data_source_impl.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/onboarding_wizard/onboarding_wizard_local_data_source.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/onboarding_wizard/onboarding_wizard_local_data_source_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/auth/auth_remote_data_source.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/auth/auth_remote_data_source_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/repositories/auth/auth_repository_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/repositories/onboarding/onboarding_repository_impl.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/repositories/onboarding_wizard/onboarding_wizard_repository_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/auth/auth_repository.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/onboarding/onboarding_repository.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/onboarding_wizard/onboarding_wizard_repository.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/get_current_user.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/send_email_verification.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_in_with_email_and_password.dart';
@@ -16,8 +20,12 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/si
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_up_with_email_and_password.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding/check_onboarding_status.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding/complete_onboarding.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/get_user_profile.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/save_user_profile.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/calculate_and_save_nutrition_data.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/auth/auth_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 // Gerekli Firebase importları
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,6 +53,11 @@ Future<void> init() async {
     () => OnboardingLocalDataSourceImpl(sharedPreferencesHelper: sl()),
   );
 
+  // Yeni eklenen data source
+  sl.registerLazySingleton<OnboardingWizardLocalDataSource>(
+    () => OnboardingWizardLocalDataSourceImpl(sharedPreferencesHelper: sl()),
+  );
+
   sl.registerLazySingleton<AuthRemoteDataSource>(
     // Artık FirebaseAuth ve FirebaseFirestore GetIt'te kayıtlı
     () => AuthRemoteDataSourceImpl(firebaseAuth: sl(), firestore: sl()),
@@ -58,6 +71,10 @@ Future<void> init() async {
   // ---
   sl.registerLazySingleton<OnboardingRepository>(
     () => OnboardingRepositoryImpl(localDataSource: sl()),
+  );
+
+  sl.registerLazySingleton<OnboardingWizardRepository>(
+    () => OnboardingWizardRepositoryImpl(sl(), firestore: sl(), auth: sl()),
   );
 
   sl.registerLazySingleton<AuthRepository>(
@@ -75,6 +92,17 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<CompleteOnboarding>(
     () => CompleteOnboardingImpl(repository: sl()),
+  );
+
+  // Yeni eklenen use caseler
+  sl.registerLazySingleton<GetUserProfile>(
+    () => GetUserProfile(repository: sl()),
+  );
+  sl.registerLazySingleton<SaveUserProfile>(
+    () => SaveUserProfile(repository: sl()),
+  );
+  sl.registerLazySingleton<CalculateAndSaveNutritionData>(
+    () => CalculateAndSaveNutritionData(repository: sl()),
   );
 
   // Auth
@@ -103,6 +131,15 @@ Future<void> init() async {
   sl.registerFactory(
     () =>
         OnboardingCubit(checkOnboardingStatus: sl(), completeOnboarding: sl()),
+  );
+
+  // Yeni eklenen cubit
+  sl.registerFactory(
+    () => OnboardingWizardCubit(
+      getUserProfile: sl(),
+      saveUserProfile: sl(),
+      calculateAndSaveNutritionData: sl(),
+    ),
   );
 
   sl.registerFactory(

@@ -5,10 +5,12 @@ import 'package:calorie_lens_ai_app/core/init/app_init.dart';
 import 'package:calorie_lens_ai_app/core/routes/app_routes.dart';
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/pages/sign_up_page.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/pages/onboarding_pages.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/providers/bloc_providers_set_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive_flutter/adapters.dart';
 
 Future<void> main() async {
   try {
@@ -18,6 +20,7 @@ Future<void> main() async {
   }
   await AppInit.initializeApp();
   await di.init();
+  await Hive.initFlutter();
   runApp(const MainApp());
 }
 
@@ -36,7 +39,7 @@ class MainApp extends StatelessWidget {
         },
         navigatorKey: Navigation.navigationKey,
         routes: AppRoutes.routes,
-        initialRoute: SignUpPage.id,
+        initialRoute: OnboardingPages.id,
       ),
     );
   }

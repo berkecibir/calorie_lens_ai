@@ -9,7 +9,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/widgets/sign_up/sign_up_loading_section.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/widgets/sign_up/sign_up_logo_section.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/widgets/sign_up/sign_up_title_section.dart';
-import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/user_informations/pages/user_informations.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/onboarding_wizard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,7 +33,7 @@ class _SignUpPageState extends State<SignUpPage> with SignUpMixin {
               backgroundColor: Theme.of(context).colorScheme.error,
             ));
           } else if (state is Authenticated) {
-            Navigation.push(page: const UserInformations());
+            Navigation.pushReplacementNamed(root: OnboardingWizardPage.id);
           }
         },
         builder: (context, state) {

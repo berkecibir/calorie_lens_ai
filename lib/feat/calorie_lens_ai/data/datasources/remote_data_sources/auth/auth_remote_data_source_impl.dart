@@ -3,8 +3,8 @@ import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/core/utils/helpers/firebase/firebase_error_handler.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/auth/auth_remote_data_source.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/models/auth/user_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseAuth _firebaseAuth;
@@ -66,7 +66,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
     } catch (e) {
-      throw ServerException(message: 'Şifre sıfırlama e-postası gönderilemedi: $e');
+      throw ServerException(
+          message: 'Şifre sıfırlama e-postası gönderilemedi: $e');
     }
   }
 
@@ -84,7 +85,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
     } catch (e) {
-       if (e is ServerException) rethrow;
+      if (e is ServerException) rethrow;
       throw ServerException(message: e.toString());
     }
   }
@@ -136,7 +137,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
     } catch (e) {
-       if (e is ServerException) rethrow;
+      if (e is ServerException) rethrow;
       throw ServerException(message: e.toString());
     }
   }
@@ -148,9 +149,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         AppTexts.lastLogin: Timestamp.fromDate(DateTime.now()),
       });
     } on FirebaseAuthException catch (e) {
-      throw ServerException(message: 'Son giriş tarihi güncellenemedi: ${e.message}');
+      throw ServerException(
+          message: 'Son giriş tarihi güncellenemedi: ${e.message}');
     } catch (e) {
-       throw ServerException(message: 'Son giriş tarihi güncellenemedi: $e');
+      throw ServerException(message: 'Son giriş tarihi güncellenemedi: $e');
     }
   }
 
@@ -187,12 +189,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
     } catch (e) {
-       if (e is ServerException) rethrow;
+      if (e is ServerException) rethrow;
       throw ServerException(message: 'Kullanıcı bilgileri güncellenemedi: $e');
     }
   }
 
   ServerException _handleAuthException(FirebaseAuthException e) {
-    return ServerException(message: FirebaseErrorHandler.handleAuthException(e));
+    return ServerException(
+        message: FirebaseErrorHandler.handleAuthException(e));
   }
 }
