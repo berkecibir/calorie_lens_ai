@@ -1,3 +1,5 @@
+import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
+import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +51,7 @@ class _AgeHeightStepState extends State<AgeHeightStep> {
     return BlocBuilder<OnboardingWizardCubit, OnboardingWizardState>(
       builder: (context, state) {
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: DevicePadding.xlarge.all,
           child: Form(
             key: _formKey,
             onChanged: () {
@@ -68,7 +70,7 @@ class _AgeHeightStepState extends State<AgeHeightStep> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 16),
+                DeviceSpacing.medium.height,
                 Text(
                   'Metabolizma hızınızı hesaplamak için bu bilgilere ihtiyacımız var.',
                   style: theme.textTheme.bodyLarge?.copyWith(
@@ -90,11 +92,13 @@ class _AgeHeightStepState extends State<AgeHeightStep> {
                     suffixText: 'Yıl',
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty)
+                    if (value == null || value.isEmpty) {
                       return 'Lütfen yaşınızı girin';
+                    }
                     final age = int.tryParse(value);
-                    if (age == null || age < 10 || age > 120)
+                    if (age == null || age < 10 || age > 120) {
                       return 'Geçerli bir yaş girin';
+                    }
                     return null;
                   },
                   onChanged: (value) {
@@ -105,8 +109,7 @@ class _AgeHeightStepState extends State<AgeHeightStep> {
                     }
                   },
                 ),
-                const SizedBox(height: 24),
-
+                DeviceSpacing.xlarge.height,
                 // HEIGHT INPUT
                 TextFormField(
                   controller: _heightController,
@@ -119,11 +122,13 @@ class _AgeHeightStepState extends State<AgeHeightStep> {
                     suffixText: 'cm',
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty)
+                    if (value == null || value.isEmpty) {
                       return 'Lütfen boyunuzu girin';
+                    }
                     final height = int.tryParse(value);
-                    if (height == null || height < 50 || height > 300)
+                    if (height == null || height < 50 || height > 300) {
                       return 'Geçerli bir boy girin';
+                    }
                     return null;
                   },
                   onChanged: (value) {

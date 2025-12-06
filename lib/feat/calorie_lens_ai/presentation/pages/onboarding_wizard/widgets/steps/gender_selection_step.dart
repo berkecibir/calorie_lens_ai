@@ -4,6 +4,8 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onb
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../../../core/widgets/device_spacing/device_spacing.dart';
+
 class GenderSelectionStep extends StatelessWidget {
   final VoidCallback? onNext; // Optional, if we want to bubble up navigation
 
@@ -52,7 +54,7 @@ class GenderSelectionStep extends StatelessWidget {
                             cubit.userProfile.copyWith(gender: Gender.male)),
                       ),
                     ),
-                    const SizedBox(width: 24),
+                    DeviceSpacing.xlarge.width,
                     Expanded(
                       child: _GenderCard(
                         icon: Icons.female,
@@ -70,11 +72,11 @@ class GenderSelectionStep extends StatelessWidget {
                 onPressed: currentGender != null
                     ? () {
                         // Assuming the parent page handles page switching via controller based on tree structure,
-                        // But since we are inside a PageView, we might need to access the parent controller or 
-                        // just assume the parent passed a callback. 
+                        // But since we are inside a PageView, we might need to access the parent controller or
+                        // just assume the parent passed a callback.
                         // However, strictly speaking, this widget is just the content.
                         // The "Next" button logic in the parent page was: "Each step will have its own Next button".
-                        // So I need to implement the PageController logic here? 
+                        // So I need to implement the PageController logic here?
                         // No, best practice: Access the parent page's controller or use a callback provided by a wrapper.
                         // BUT, to keep it loosely coupled, let's find the PageController from context if possible? No.
                         // Let's rely on finding the PageView's controller? Hard.
@@ -89,16 +91,16 @@ class GenderSelectionStep extends StatelessWidget {
                         // For now, I'll assumme `onNext` is passed or I'll implement a `wizard_controller` later.
                         // ACTUALLY: I can use `PageController` if I pass it to the constructor.
                         // Let's stick effectively to `onNext`. I will update `OnboardingWizardPage` to build steps in `itemBuilder` and pass callbacks.
-                        
+
                         // For now, placeholders.
                         final pageController = PageController(); // DUMMY
                         // In reality, we need to signal "Next".
                         // Use a custom ancestor widget or access via context?
                         // `OnboardingWizardPage` is the parent. We can find `_OnboardingWizardPageState` if public? No.
-                        
+
                         // REVISION: I will change `OnboardingWizardPage` to use `PageView.builder` and pass the callback.
                         // For now, this widget accepts `onNext` in constructor.
-                        onNext?.call(); 
+                        onNext?.call();
                       }
                     : null,
                 style: ElevatedButton.styleFrom(
@@ -134,13 +136,14 @@ class _GenderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: isSelected ? theme.colorScheme.primaryContainer : theme.cardColor,
+          color:
+              isSelected ? theme.colorScheme.primaryContainer : theme.cardColor,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: isSelected ? theme.colorScheme.primary : Colors.transparent,
@@ -154,7 +157,7 @@ class _GenderCard extends StatelessWidget {
                 offset: const Offset(0, 4),
               )
             else
-               BoxShadow(
+              BoxShadow(
                 color: Colors.black.withOpacity(0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
@@ -167,13 +170,17 @@ class _GenderCard extends StatelessWidget {
             Icon(
               icon,
               size: 64,
-              color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+              color: isSelected
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.onSurfaceVariant,
             ),
             const SizedBox(height: 16),
             Text(
               label,
               style: theme.textTheme.titleLarge?.copyWith(
-                color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurfaceVariant,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               ),
             ),
