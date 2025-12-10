@@ -19,7 +19,7 @@ class BlocProviderSetUp {
       create: (_) => di.sl<PasswordVisibilityCubit>(),
     ),
     BlocProvider<OnboardingWizardCubit>(
-      create: (_) => di.sl<OnboardingWizardCubit>(),
+      create: (_) => di.sl<OnboardingWizardCubit>()..checkWizardStatus(),
     ),
   ];
 }

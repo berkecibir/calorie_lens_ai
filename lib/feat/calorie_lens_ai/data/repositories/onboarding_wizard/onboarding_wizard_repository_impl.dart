@@ -69,7 +69,7 @@ class OnboardingWizardRepositoryImpl implements OnboardingWizardRepository {
       final proteinGrams = (dailyCalorieGoal * proteinPercentage / 4).round();
       final carbGrams = (dailyCalorieGoal * carbPercentage / 4).round();
       final fatGrams = (dailyCalorieGoal * fatPercentage / 9).round();
-      
+
       // Save to Local via DataSource
       await localDataSource.saveUserProfile(profile);
 
@@ -77,7 +77,7 @@ class OnboardingWizardRepositoryImpl implements OnboardingWizardRepository {
       if (auth.currentUser != null) {
         final profileModel = UserProfileModel.fromEntity(profile);
         final profileJson = profileModel.toJson();
-        
+
         await firestore.collection('users').doc(auth.currentUser!.uid).set({
           ...profileJson, // Spread profile fields
           'bmr': bmr,
@@ -112,6 +112,26 @@ class OnboardingWizardRepositoryImpl implements OnboardingWizardRepository {
       UserProfileEntity profile) async {
     try {
       await localDataSource.saveUserProfile(profile);
+      return const Right(null);
+    } on Exception catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> checkOnboardingWizardStatus() async {
+    try {
+      final status = await localDataSource.checkOnboardingWizardStatus();
+      return Right(status);
+    } on Exception catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> completeOnboardingWizard() async {
+    try {
+      await localDataSource.completeOnboardingWizard();
       return const Right(null);
     } on Exception catch (e) {
       return Left(CacheFailure(e.toString()));

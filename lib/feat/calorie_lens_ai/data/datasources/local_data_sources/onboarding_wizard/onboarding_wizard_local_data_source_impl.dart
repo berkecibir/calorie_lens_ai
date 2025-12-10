@@ -10,8 +10,11 @@ class OnboardingWizardLocalDataSourceImpl
   static const String BOX_NAME = 'onboarding_wizard_box';
   // ignore: constant_identifier_names
   static const String USER_PROFILE_KEY = 'userProfile';
+  // ignore: constant_identifier_names
+  static const String WIZARD_COMPLETED_KEY = 'wizardCompleted';
 
-  final SharedPreferencesHelper sharedPreferencesHelper; // Keeping to match injection, though unused for main data now
+  final SharedPreferencesHelper
+      sharedPreferencesHelper; // Keeping to match injection, though unused for main data now
 
   OnboardingWizardLocalDataSourceImpl({required this.sharedPreferencesHelper});
 
@@ -24,7 +27,7 @@ class OnboardingWizardLocalDataSourceImpl
 
   @override
   Future<UserProfileEntity> getUserProfile() async {
-     try {
+    try {
       final box = await _openBox();
       final data = box.get(USER_PROFILE_KEY);
       if (data != null) {
@@ -48,7 +51,23 @@ class OnboardingWizardLocalDataSourceImpl
 
   @override
   Future<void> clearTempCache() async {
-     final box = await _openBox();
-     await box.delete(USER_PROFILE_KEY);
+    final box = await _openBox();
+    await box.delete(USER_PROFILE_KEY);
+  }
+
+  @override
+  Future<bool> checkOnboardingWizardStatus() async {
+    try {
+      final box = await _openBox();
+      return box.get(WIZARD_COMPLETED_KEY) ?? false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @override
+  Future<void> completeOnboardingWizard() async {
+    final box = await _openBox();
+    await box.put(WIZARD_COMPLETED_KEY, true);
   }
 }

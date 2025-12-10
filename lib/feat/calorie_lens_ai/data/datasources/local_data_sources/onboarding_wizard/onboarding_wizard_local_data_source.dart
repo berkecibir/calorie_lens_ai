@@ -4,4 +4,6 @@ abstract class OnboardingWizardLocalDataSource {
   Future<UserProfileEntity> getUserProfile();
   Future<void> saveUserProfile(UserProfileEntity profile);
   Future<void> clearTempCache();
+  Future<bool> checkOnboardingWizardStatus();
+  Future<void> completeOnboardingWizard();
 }

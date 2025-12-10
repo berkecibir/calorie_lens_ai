@@ -35,3 +35,18 @@ class OnboardingWizardError extends OnboardingWizardState {
   final String message;
   const OnboardingWizardError({required this.message});
 }
+
+class OnboardingWizardsSuccess extends OnboardingWizardState {
+  final String message;
+  const OnboardingWizardsSuccess({required this.message});
+  @override
+  List<Object> get props => [message];
+}
+
+class OnboardingWizardNotCompleted extends OnboardingWizardState {
+  final bool isCompleted;
+
+  const OnboardingWizardNotCompleted({required this.isCompleted});
+  @override
+  List<Object> get props => [isCompleted];
+}

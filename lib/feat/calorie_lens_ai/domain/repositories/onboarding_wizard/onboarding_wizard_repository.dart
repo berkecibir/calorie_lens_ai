@@ -7,4 +7,6 @@ abstract class OnboardingWizardRepository {
   Future<Either<Failure, void>> saveUserProfile(UserProfileEntity profile);
   Future<Either<Failure, void>> calculateAndSaveNutritionData(
       UserProfileEntity profile);
+  Future<Either<Failure, bool>> checkOnboardingWizardStatus();
+  Future<Either<Failure, void>> completeOnboardingWizard();
 }

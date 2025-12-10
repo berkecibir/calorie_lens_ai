@@ -20,6 +20,16 @@ class OnboardingWizardPage extends StatefulWidget {
 }
 
 class _OnboardingWizardPageState extends State<OnboardingWizardPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        context.read<OnboardingWizardCubit>().checkWizardStatus();
+      },
+    );
+  }
+
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
@@ -57,15 +67,12 @@ class _OnboardingWizardPageState extends State<OnboardingWizardPage> {
       child: Scaffold(
         body: BlocConsumer<OnboardingWizardCubit, OnboardingWizardState>(
           listener: (context, state) {
-            if (state is OnboardingWizardCompleted) {
-              Navigation.pushReplacementNamed(
-                  root: HomePage.id); // Or appropriate next route
+            if (state is OnboardingWizardsSuccess) {
+              Navigation.pushReplacementNamed(root: HomePage.id);
+            } else if (state is OnboardingWizardCompleted) {
             } else if (state is OnboardingWizardError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
-            } else if (state is OnboardingWizardPageChanged) {
-              // Sync state logic if needed, but PageView control is mostly local or driven by state
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(state.message)));
             }
           },
           builder: (context, state) {

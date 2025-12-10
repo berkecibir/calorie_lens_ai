@@ -20,7 +20,7 @@ class SummaryStep extends StatelessWidget {
       builder: (context, state) {
         final profile = cubit.userProfile;
         final isLoading = state is OnboardingWizardLoading;
-        
+
         return SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -42,34 +42,39 @@ class SummaryStep extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-              
               _SummaryCard(
                 title: 'Kişisel Bilgiler',
                 icon: Icons.person_outline,
                 children: [
-                  _SummaryRow(label: 'Cinsiyet', value: profile.gender == Gender.male ? 'Erkek' : 'Kadın'),
+                  _SummaryRow(
+                      label: 'Cinsiyet',
+                      value: profile.gender == Gender.male ? 'Erkek' : 'Kadın'),
                   _SummaryRow(label: 'Yaş', value: '${profile.age} Yıl'),
                   _SummaryRow(label: 'Boy', value: '${profile.heightCm} cm'),
                 ],
               ),
               const SizedBox(height: 16),
-              
               _SummaryCard(
                 title: 'Hedefler',
                 icon: Icons.track_changes_outlined,
                 children: [
-                  _SummaryRow(label: 'Mevcut Kilo', value: '${profile.weightKg} kg'),
-                  _SummaryRow(label: 'Hedef Kilo', value: '${profile.targetWeightKg} kg'),
-                  _SummaryRow(label: 'Aktivite', value: _getActivityLabel(profile.activityLevel)),
+                  _SummaryRow(
+                      label: 'Mevcut Kilo', value: '${profile.weightKg} kg'),
+                  _SummaryRow(
+                      label: 'Hedef Kilo',
+                      value: '${profile.targetWeightKg} kg'),
+                  _SummaryRow(
+                      label: 'Aktivite',
+                      value: _getActivityLabel(profile.activityLevel)),
                 ],
               ),
               const SizedBox(height: 16),
-               
               _SummaryCard(
                 title: 'Beslenme',
                 icon: Icons.restaurant_menu,
                 children: [
-                  _SummaryRow(label: 'Diyet Tipi', value: profile.dietType ?? '-'),
+                  _SummaryRow(
+                      label: 'Diyet Tipi', value: profile.dietType ?? '-'),
                   if (profile.allergies.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
@@ -86,26 +91,27 @@ class SummaryStep extends StatelessWidget {
                           const SizedBox(height: 4),
                           Wrap(
                             spacing: 8,
-                            children: profile.allergies.map((a) => Chip(
-                              label: Text(a, style: const TextStyle(fontSize: 10)),
-                              padding: EdgeInsets.zero,
-                              visualDensity: VisualDensity.compact,
-                            )).toList(),
+                            children: profile.allergies
+                                .map((a) => Chip(
+                                      label: Text(a,
+                                          style: const TextStyle(fontSize: 10)),
+                                      padding: EdgeInsets.zero,
+                                      visualDensity: VisualDensity.compact,
+                                    ))
+                                .toList(),
                           ),
                         ],
                       ),
                     ),
                 ],
               ),
-
               const SizedBox(height: 48),
-              
               if (isLoading)
                 const Center(child: CircularProgressIndicator())
               else
                 ElevatedButton(
                   onPressed: () {
-                    cubit.completeOnboardingWizard();
+                    cubit.finishOnboardingWizard();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -123,16 +129,21 @@ class SummaryStep extends StatelessWidget {
       },
     );
   }
-  
+
   String _getActivityLabel(ActivityLevel? level) {
     if (level == null) return '-';
     // Basit bir mapping, dilerseniz ActivityLevelStep'teki map'i public yapıp kullanabilirsiniz.
-    switch(level) {
-      case ActivityLevel.sedentary: return 'Hareketsiz';
-      case ActivityLevel.lightlyActive: return 'Az Hareketli';
-      case ActivityLevel.moderate: return 'Orta Hareketli';
-      case ActivityLevel.active: return 'Çok Hareketli';
-      case ActivityLevel.veryActive: return 'Aşırı Hareketli';
+    switch (level) {
+      case ActivityLevel.sedentary:
+        return 'Hareketsiz';
+      case ActivityLevel.lightlyActive:
+        return 'Az Hareketli';
+      case ActivityLevel.moderate:
+        return 'Orta Hareketli';
+      case ActivityLevel.active:
+        return 'Çok Hareketli';
+      case ActivityLevel.veryActive:
+        return 'Aşırı Hareketli';
     }
   }
 }
@@ -156,7 +167,8 @@ class _SummaryCard extends StatelessWidget {
       color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: theme.colorScheme.outlineVariant.withOpacity(0.5)),
+        side: BorderSide(
+            color: theme.colorScheme.outlineVariant.withOpacity(0.5)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -165,15 +177,15 @@ class _SummaryCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                 Icon(icon, size: 20, color: theme.colorScheme.primary),
-                 const SizedBox(width: 8),
-                 Text(
-                   title,
-                   style: theme.textTheme.titleMedium?.copyWith(
-                     fontWeight: FontWeight.bold,
-                     color: theme.colorScheme.onSurface,
-                   ),
-                 ),
+                Icon(icon, size: 20, color: theme.colorScheme.primary),
+                const SizedBox(width: 8),
+                Text(
+                  title,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
               ],
             ),
             const Divider(height: 24),

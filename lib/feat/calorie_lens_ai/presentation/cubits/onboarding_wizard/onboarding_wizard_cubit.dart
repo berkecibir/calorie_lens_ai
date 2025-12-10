@@ -1,5 +1,7 @@
 import 'package:calorie_lens_ai_app/core/usecases/usecases.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/check_onboarding_wizard_status.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/complete_onboarding_wizard.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/get_user_profile.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/save_user_profile.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/calculate_and_save_nutrition_data.dart';
@@ -10,23 +12,28 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
   final GetUserProfile getUserProfile;
   final SaveUserProfile saveUserProfile;
   final CalculateAndSaveNutritionData calculateAndSaveNutritionData;
+  final CheckOnboardingWizardStatus checkOnboardingWizardStatus;
+  final CompleteOnboardingWizard completeOnboardingWizardUseCase;
 
-  // Kullanıcı profili verisini tutmak için
   UserProfileEntity userProfile = UserProfileEntity.empty();
 
   OnboardingWizardCubit({
     required this.getUserProfile,
     required this.saveUserProfile,
     required this.calculateAndSaveNutritionData,
+    required this.checkOnboardingWizardStatus,
+    required this.completeOnboardingWizardUseCase,
   }) : super(OnboardingWizardInitial());
 
   Future<void> loadUserProfile() async {
     emit(OnboardingWizardLoading());
-    final failureOrProfile = await getUserProfile(NoParams());
-    failureOrProfile.fold(
+
+    final result = await getUserProfile(NoParams());
+    result.fold(
       (failure) => emit(
         OnboardingWizardError(
-            message: "Profil yüklenemedi: ${failure.toString()}"),
+          message: "Profil yüklenemedi: ${failure.toString()}",
+        ),
       ),
       (profile) {
         userProfile = profile;
@@ -35,42 +42,78 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
     );
   }
 
-  Future<void> completeOnboardingWizard() async {
+  Future<void> checkWizardStatus() async {
     emit(OnboardingWizardLoading());
 
-    // Önce kullanıcı profilini kaydet
-    final failureOrSave = await saveUserProfile(userProfile);
-    await failureOrSave.fold(
-      (failure) async {
-        emit(OnboardingWizardError(
-            message: "Profil kaydedilemedi: ${failure.toString()}"));
-        return;
-      },
-      (_) async {
-        // Profil kaydedildikten sonra besin değerlerini hesapla ve kaydet
-        final failureOrCalculate =
-            await calculateAndSaveNutritionData(userProfile);
-        failureOrCalculate.fold(
-          (failure) {
-            emit(OnboardingWizardError(
-                message:
-                    "Besin değerleri hesaplanamadı: ${failure.toString()}"));
-          },
-          (_) {
-            // Tüm işlemler başarılı olduysa wizard'ı tamamla
-            emit(OnboardingWizardCompleted());
-          },
-        );
+    final result = await checkOnboardingWizardStatus(NoParams());
+    result.fold(
+      (failure) => emit(
+        OnboardingWizardError(
+          message: "Wizard durumu kontrol edilemedi: ${failure.toString()}",
+        ),
+      ),
+      (isCompleted) {
+        if (isCompleted) {
+          emit(
+            OnboardingWizardsSuccess(
+              message: "Wizard zaten tamamlanmış",
+            ),
+          );
+        } else {
+          emit(const OnboardingWizardNotCompleted(isCompleted: false));
+        }
       },
     );
   }
 
-  // Sayfa değiştirildiğinde tetiklenir
+  /// ✅ Tüm onboarding akışını tamamlar
+  Future<void> finishOnboardingWizard() async {
+    emit(OnboardingWizardLoading());
+
+    // 1️⃣ Profil kaydet
+    final saveResult = await saveUserProfile(userProfile);
+    if (saveResult.isLeft()) {
+      emit(
+        OnboardingWizardError(
+          message: "Profil kaydedilemedi",
+        ),
+      );
+      return;
+    }
+
+    // 2️⃣ Besin değerlerini hesapla & kaydet
+    final nutritionResult = await calculateAndSaveNutritionData(userProfile);
+    if (nutritionResult.isLeft()) {
+      emit(
+        OnboardingWizardError(
+          message: "Besin değerleri hesaplanamadı",
+        ),
+      );
+      return;
+    }
+
+    // 3️⃣ Wizard tamamlandı işaretle
+    final completeResult = await completeOnboardingWizardUseCase(NoParams());
+    completeResult.fold(
+      (failure) => emit(
+        OnboardingWizardError(
+          message: "Wizard durumu güncellenemedi",
+        ),
+      ),
+      (_) => emit(
+        OnboardingWizardsSuccess(
+          message: "Wizard başarıyla tamamlandı!",
+        ),
+      ),
+    );
+  }
+
+  // ✅ Sayfa değişimi
   void pageChanged(int newPage) {
     emit(OnboardingWizardPageChanged(newPage));
   }
 
-  // Kullanıcı profilini güncelle
+  // ✅ Profil güncelleme
   void updateUserProfile(UserProfileEntity updatedProfile) {
     userProfile = updatedProfile;
     emit(OnboardingWizardProfileUpdated(userProfile));

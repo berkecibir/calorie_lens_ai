@@ -20,6 +20,8 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/si
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_up_with_email_and_password.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding/check_onboarding_status.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding/complete_onboarding.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/check_onboarding_wizard_status.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/complete_onboarding_wizard.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/get_user_profile.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/save_user_profile.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/calculate_and_save_nutrition_data.dart';
@@ -95,6 +97,7 @@ Future<void> init() async {
   );
 
   // Yeni eklenen use caseler
+  // Onboarding Wizard
   sl.registerLazySingleton<GetUserProfile>(
     () => GetUserProfile(repository: sl()),
   );
@@ -103,6 +106,13 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<CalculateAndSaveNutritionData>(
     () => CalculateAndSaveNutritionData(repository: sl()),
+  );
+
+  sl.registerLazySingleton<CheckOnboardingWizardStatus>(
+    () => CheckOnboardingWizardStatusImpl(repository: sl()),
+  );
+  sl.registerLazySingleton<CompleteOnboardingWizard>(
+    () => CompleteOnboardingWizardImpl(repository: sl()),
   );
 
   // Auth
@@ -134,13 +144,13 @@ Future<void> init() async {
   );
 
   // Yeni eklenen cubit
-  sl.registerFactory(
-    () => OnboardingWizardCubit(
-      getUserProfile: sl(),
-      saveUserProfile: sl(),
-      calculateAndSaveNutritionData: sl(),
-    ),
-  );
+  sl.registerFactory(() => OnboardingWizardCubit(
+        getUserProfile: sl(),
+        saveUserProfile: sl(),
+        calculateAndSaveNutritionData: sl(),
+        checkOnboardingWizardStatus: sl(),
+        completeOnboardingWizardUseCase: sl(),
+      ));
 
   sl.registerFactory(
     () => AuthCubit(
