@@ -1,4 +1,3 @@
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:calorie_lens_ai_app/core/usecases/usecases.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
@@ -79,7 +78,7 @@ void main() {
             .thenAnswer((_) async => const Right(null));
         when(mockCompleteOnboardingWizard.call(any))
             .thenAnswer((_) async => const Right(null));
-        
+
         // IMPORTANT: Set initial state with data!
         // We simulate that the user has already entered data by calling update methods
         // or directly setting state if we could (but we use the cubit methods)
@@ -89,7 +88,7 @@ void main() {
         cubit.updateWeight(80);
         cubit.updateTargetWeight(75);
         cubit.updateActivityLevel(ActivityLevel.moderate);
-        
+
         return cubit;
       },
       act: (cubit) => cubit.finishOnboardingWizard(),
@@ -104,70 +103,79 @@ void main() {
           predicate<UserProfileEntity>((profile) {
             print("Verifying saved profile: ${profile.age}");
             return profile.age == 30 &&
-                   profile.heightCm == 180 &&
-                   profile.weightKg == 80;
+                profile.heightCm == 180 &&
+                profile.weightKg == 80;
           }),
         ))).called(1);
-
       },
     );
 
-    test('Full user flow: CheckStatus -> UpdateGender -> PageChange -> UpdateAge -> Finish', () async {
-        // 1. Initial Check
-        when(mockCheckOnboardingWizardStatus.call(any))
-            .thenAnswer((_) async => const Right(false)); // Not completed
-        
-        await cubit.checkWizardStatus();
-        expect(cubit.state, isA<OnboardingWizardNotCompleted>());
+    test(
+        'Full user flow: CheckStatus -> UpdateGender -> PageChange -> UpdateAge -> Finish',
+        () async {
+      // 1. Initial Check
+      when(mockCheckOnboardingWizardStatus.call(any))
+          .thenAnswer((_) async => const Right(false)); // Not completed
 
-        // 2. User updates Gender (Step 1)
-        cubit.updateGender(Gender.male);
-        expect(cubit.state, isA<OnboardingWizardLoaded>());
-        expect((cubit.state as OnboardingWizardLoaded).userProfile.gender, Gender.male);
+      await cubit.checkWizardStatus();
+      expect(cubit.state, isA<OnboardingWizardNotCompleted>());
 
-        // 3. User swipes to Page 1
-        cubit.pageChanged(1);
-        expect(cubit.state, isA<OnboardingWizardLoaded>());
-        expect((cubit.state as OnboardingWizardLoaded).userProfile.gender, Gender.male); // Should persist!
+      // 2. User updates Gender (Step 1)
+      cubit.updateGender(Gender.male);
+      expect(cubit.state, isA<OnboardingWizardLoaded>());
+      expect((cubit.state as OnboardingWizardLoaded).userProfile.gender,
+          Gender.male);
 
-        // 4. User updates Age (Step 2)
-        cubit.updateAge(30);
-        expect(cubit.state, isA<OnboardingWizardLoaded>());
-        final profile = (cubit.state as OnboardingWizardLoaded).userProfile;
-        expect(profile.gender, Gender.male); // Should still be Male
-        expect(profile.age, 30);
+      // 3. User swipes to Page 1
+      cubit.pageChanged(1);
+      expect(cubit.state, isA<OnboardingWizardLoaded>());
+      expect((cubit.state as OnboardingWizardLoaded).userProfile.gender,
+          Gender.male); // Should persist!
 
-        // 5. Setup mocks for finish
-        when(mockSaveUserProfile.call(any)).thenAnswer((_) async => const Right(null));
-        when(mockCalculateAndSaveNutritionData.call(any)).thenAnswer((_) async => const Right(null));
-        when(mockCompleteOnboardingWizard.call(any)).thenAnswer((_) async => const Right(null));
+      // 4. User updates Age (Step 2)
+      cubit.updateAge(30);
+      expect(cubit.state, isA<OnboardingWizardLoaded>());
+      final profile = (cubit.state as OnboardingWizardLoaded).userProfile;
+      expect(profile.gender, Gender.male); // Should still be Male
+      expect(profile.age, 30);
 
-        // 6. Finish
-        await cubit.finishOnboardingWizard();
+      // 5. Setup mocks for finish
+      when(mockSaveUserProfile.call(any))
+          .thenAnswer((_) async => const Right(null));
+      when(mockCalculateAndSaveNutritionData.call(any))
+          .thenAnswer((_) async => const Right(null));
+      when(mockCompleteOnboardingWizard.call(any))
+          .thenAnswer((_) async => const Right(null));
 
-        // Verify that the profile sent to save/calculate has BOTH fields
-        verify(mockSaveUserProfile.call(argThat(
-          predicate<UserProfileEntity>((p) => p.gender == Gender.male && p.age == 30),
-        ))).called(1);
+      // 6. Finish
+      await cubit.finishOnboardingWizard();
+
+      // Verify that the profile sent to save/calculate has BOTH fields
+      verify(mockSaveUserProfile.call(argThat(
+        predicate<UserProfileEntity>(
+            (p) => p.gender == Gender.male && p.age == 30),
+      ))).called(1);
     });
 
-    test('checkWizardStatus should NOT wipe data if user has already started entering info', () async {
-       // 1. Setup initial state with data
-       cubit.updateAge(25);
-       expect(cubit.state, isA<OnboardingWizardLoaded>());
+    test(
+        'checkWizardStatus should NOT wipe data if user has already started entering info',
+        () async {
+      // 1. Setup initial state with data
+      cubit.updateAge(25);
+      expect(cubit.state, isA<OnboardingWizardLoaded>());
 
-       // 2. Call checkWizardStatus (simulating a rebuild or accidental call)
-       when(mockCheckOnboardingWizardStatus.call(any))
-            .thenAnswer((_) async => const Right(false)); 
-       
-       await cubit.checkWizardStatus();
+      // 2. Call checkWizardStatus (simulating a rebuild or accidental call)
+      when(mockCheckOnboardingWizardStatus.call(any))
+          .thenAnswer((_) async => const Right(false));
 
-       // 3. Current behavior (BUG): It presumably wipes data and emits NotCompleted
-       // We WANT it to either preserve data or not emit NotCompleted if data exists.
-       // For this test, let's see what happens.
-       
-       // Ideally, if we fix it, state should still be Loaded or contain the age 25.
-       // But currently, it probably reverts to NotCompleted or Empty Loaded.
+      await cubit.checkWizardStatus();
+
+      // 3. Current behavior (BUG): It presumably wipes data and emits NotCompleted
+      // We WANT it to either preserve data or not emit NotCompleted if data exists.
+      // For this test, let's see what happens.
+
+      // Ideally, if we fix it, state should still be Loaded or contain the age 25.
+      // But currently, it probably reverts to NotCompleted or Empty Loaded.
     });
   });
 }
