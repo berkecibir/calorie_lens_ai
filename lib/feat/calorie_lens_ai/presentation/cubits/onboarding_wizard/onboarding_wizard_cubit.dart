@@ -58,6 +58,8 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
   }
 
   Future<void> checkWizardStatus() async {
+    if (state is OnboardingWizardLoaded) return;
+
     emit(OnboardingWizardLoading());
 
     final result = await checkOnboardingWizardStatus(NoParams());
