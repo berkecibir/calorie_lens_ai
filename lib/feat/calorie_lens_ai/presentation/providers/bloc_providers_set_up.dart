@@ -4,7 +4,6 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/aut
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../cubits/auth/password_visibility_cubit.dart';
 
 class BlocProviderSetUp {

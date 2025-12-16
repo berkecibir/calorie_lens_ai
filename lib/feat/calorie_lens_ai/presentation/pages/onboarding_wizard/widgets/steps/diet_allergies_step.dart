@@ -37,13 +37,15 @@ class _DietAllergiesStepState extends State<DietAllergiesStep> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cubit = context.read<OnboardingWizardCubit>();
 
     return BlocBuilder<OnboardingWizardCubit, OnboardingWizardState>(
       builder: (context, state) {
-        final currentDiet = cubit.userProfile.dietType;
-        final currentAllergies = cubit.userProfile.allergies;
-
+        String? currentDiet;
+        List<String> currentAllergies = [];
+        if (state is OnboardingWizardLoaded) {
+          currentDiet = state.userProfile.dietType;
+          currentAllergies = state.userProfile.allergies;
+        }
         return SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -85,8 +87,9 @@ class _DietAllergiesStepState extends State<DietAllergiesStep> {
                     selected: isSelected,
                     onSelected: (selected) {
                       if (selected) {
-                        cubit.updateUserProfile(
-                            cubit.userProfile.copyWith(dietType: diet));
+                        context
+                            .read<OnboardingWizardCubit>()
+                            .updateDietType(diet);
                       }
                     },
                     selectedColor: theme.colorScheme.primaryContainer,
@@ -128,8 +131,9 @@ class _DietAllergiesStepState extends State<DietAllergiesStep> {
                       } else {
                         updatedAllergies.remove(allergy);
                       }
-                      cubit.updateUserProfile(
-                          cubit.userProfile.copyWith(allergies: updatedAllergies));
+                      context
+                          .read<OnboardingWizardCubit>()
+                          .updateAllergies(updatedAllergies);
                     },
                     selectedColor: theme.colorScheme.tertiaryContainer,
                     labelStyle: TextStyle(

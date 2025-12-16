@@ -10,17 +10,22 @@ class SummaryStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cubit = context.read<OnboardingWizardCubit>();
 
     return BlocConsumer<OnboardingWizardCubit, OnboardingWizardState>(
       listener: (context, state) {
-        // Hata durumları OnboardingWizardPage'de dinleniyor, ancak burada özel bir işlem gerekebilir mi?
-        // Loading durumu buton üzerinde gösterilebilir.
+        // Loading sırasında burada özel işlem yapılabilir
       },
       builder: (context, state) {
-        final profile = cubit.userProfile;
-        final isLoading = state is OnboardingWizardLoading;
-
+        UserProfileEntity? profile;
+        bool isLoading = state is OnboardingWizardLoading;
+        if (state is OnboardingWizardLoaded) {
+          profile = state.userProfile;
+        }
+        if (profile == null) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
         return SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -111,7 +116,9 @@ class SummaryStep extends StatelessWidget {
               else
                 ElevatedButton(
                   onPressed: () {
-                    cubit.finishOnboardingWizard();
+                    context
+                        .read<OnboardingWizardCubit>()
+                        .finishOnboardingWizard();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),

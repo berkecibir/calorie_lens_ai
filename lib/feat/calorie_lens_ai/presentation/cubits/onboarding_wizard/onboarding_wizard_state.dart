@@ -7,11 +7,46 @@ abstract class OnboardingWizardState extends Equatable {
   List<Object> get props => [];
 }
 
-class OnboardingWizardInitial extends OnboardingWizardState {}
+class OnboardingWizardInitial extends OnboardingWizardState {
+  const OnboardingWizardInitial();
+  @override
+  List<Object> get props => [];
+}
 
-class OnboardingWizardLoading extends OnboardingWizardState {}
+class OnboardingWizardLoading extends OnboardingWizardState {
+  const OnboardingWizardLoading();
+  @override
+  List<Object> get props => [];
+}
 
-class OnboardingWizardCompleted extends OnboardingWizardState {}
+class OnboardingWizardLoaded extends OnboardingWizardState {
+  final UserProfileEntity userProfile;
+  final int currentPageIndex;
+
+  const OnboardingWizardLoaded({
+    required this.userProfile,
+    this.currentPageIndex = 0,
+  });
+
+  OnboardingWizardLoaded copyWith({
+    UserProfileEntity? userProfile,
+    int? currentPageIndex,
+  }) {
+    return OnboardingWizardLoaded(
+      userProfile: userProfile ?? this.userProfile,
+      currentPageIndex: currentPageIndex ?? this.currentPageIndex,
+    );
+  }
+  @override
+  List<Object> get props => [userProfile, currentPageIndex];
+}
+
+
+class OnboardingWizardCompleted extends OnboardingWizardState {
+  const OnboardingWizardCompleted();
+  @override
+  List<Object> get props => [];
+}
 
 class OnboardingWizardPageChanged extends OnboardingWizardState {
   final int currentPage;
@@ -34,6 +69,8 @@ class OnboardingWizardProfileUpdated extends OnboardingWizardState {
 class OnboardingWizardError extends OnboardingWizardState {
   final String message;
   const OnboardingWizardError({required this.message});
+  @override
+  List<Object> get props => [message];
 }
 
 class OnboardingWizardsSuccess extends OnboardingWizardState {

@@ -6,6 +6,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/onb
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class OnboardingWizardRepositoryImpl implements OnboardingWizardRepository {
   final OnboardingWizardLocalDataSource localDataSource;
@@ -30,6 +31,9 @@ class OnboardingWizardRepositoryImpl implements OnboardingWizardRepository {
           'onboardingCompleted': true,
           'updatedAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
+      } else {
+        debugPrint(
+            'Warning: Kullanıcı kimliği doğrulanmamış, veritabanına kaydedilemiyor.');
       }
       return const Right(null);
     } on Exception catch (e) {

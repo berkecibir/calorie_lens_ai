@@ -6,6 +6,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboard
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/save_user_profile.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/calculate_and_save_nutrition_data.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
@@ -15,8 +16,6 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
   final CheckOnboardingWizardStatus checkOnboardingWizardStatus;
   final CompleteOnboardingWizard completeOnboardingWizardUseCase;
 
-  UserProfileEntity userProfile = UserProfileEntity.empty();
-
   OnboardingWizardCubit({
     required this.getUserProfile,
     required this.saveUserProfile,
@@ -24,6 +23,21 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
     required this.checkOnboardingWizardStatus,
     required this.completeOnboardingWizardUseCase,
   }) : super(OnboardingWizardInitial());
+
+  // profili güvenli bir şekilde almak için yardımcı metot
+  UserProfileEntity _getCurrentProfile() {
+    if (state is OnboardingWizardLoaded) {
+      return (state as OnboardingWizardLoaded).userProfile;
+    }
+    return UserProfileEntity.empty();
+  }
+
+  int _getCurrentPage() {
+    if (state is OnboardingWizardLoaded) {
+      return (state as OnboardingWizardLoaded).currentPageIndex;
+    }
+    return 0;
+  }
 
   Future<void> loadUserProfile() async {
     emit(OnboardingWizardLoading());
@@ -36,8 +50,9 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
         ),
       ),
       (profile) {
-        userProfile = profile;
-        emit(OnboardingWizardProfileUpdated(profile));
+        emit(
+          OnboardingWizardLoaded(userProfile: profile, currentPageIndex: 0),
+        );
       },
     );
   }
@@ -66,12 +81,98 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
     );
   }
 
+  // update metodları
+  void updateAge(int age) {
+    final currentProfile = _getCurrentProfile();
+    final newProfile = currentProfile.copyWith(age: age);
+    emit(OnboardingWizardLoaded(
+        userProfile: newProfile, currentPageIndex: _getCurrentPage()));
+  }
+
+  void updateHeight(int height) {
+    final currentProfile = _getCurrentProfile();
+    final newProfile = currentProfile.copyWith(heightCm: height);
+    emit(OnboardingWizardLoaded(
+        userProfile: newProfile, currentPageIndex: _getCurrentPage()));
+  }
+
+  void updateWeight(double weight) {
+    final currentProfile = _getCurrentProfile();
+    final newProfile = currentProfile.copyWith(weightKg: weight);
+
+    emit(OnboardingWizardLoaded(
+      userProfile: newProfile,
+      currentPageIndex: _getCurrentPage(),
+    ));
+  }
+
+  void updateTargetWeight(double targetWeight) {
+    final currentProfile = _getCurrentProfile();
+    final newProfile = currentProfile.copyWith(targetWeightKg: targetWeight);
+
+    emit(OnboardingWizardLoaded(
+      userProfile: newProfile,
+      currentPageIndex: _getCurrentPage(),
+    ));
+  }
+
+  void updateGender(Gender gender) {
+    final currentProfile = _getCurrentProfile();
+    final newProfile = currentProfile.copyWith(gender: gender);
+
+    emit(OnboardingWizardLoaded(
+      userProfile: newProfile,
+      currentPageIndex: _getCurrentPage(),
+    ));
+  }
+
+  void updateActivityLevel(ActivityLevel activityLevel) {
+    final currentProfile = _getCurrentProfile();
+    final newProfile = currentProfile.copyWith(activityLevel: activityLevel);
+
+    emit(OnboardingWizardLoaded(
+      userProfile: newProfile,
+      currentPageIndex: _getCurrentPage(),
+    ));
+  }
+
+  void updateDietType(String dietType) {
+    final currentProfile = _getCurrentProfile();
+    final newProfile = currentProfile.copyWith(dietType: dietType);
+
+    emit(OnboardingWizardLoaded(
+      userProfile: newProfile,
+      currentPageIndex: _getCurrentPage(),
+    ));
+  }
+
+  void updateAllergies(List<String> allergies) {
+    final currentProfile = _getCurrentProfile();
+    final newProfile = currentProfile.copyWith(allergies: allergies);
+
+    emit(OnboardingWizardLoaded(
+      userProfile: newProfile,
+      currentPageIndex: _getCurrentPage(),
+    ));
+  }
+
   /// ✅ Tüm onboarding akışını tamamlar
   Future<void> finishOnboardingWizard() async {
+    final currentProfile = _getCurrentProfile();
+
     emit(OnboardingWizardLoading());
 
+    // DEBUG: Profili kontrol et
+    debugPrint('📋 Profile being saved:');
+    debugPrint('  - Gender: ${currentProfile.gender}');
+    debugPrint('  - Age: ${currentProfile.age}');
+    debugPrint('  - Height: ${currentProfile.heightCm}');
+    debugPrint('  - Weight: ${currentProfile.weightKg}');
+    debugPrint('  - Target Weight: ${currentProfile.targetWeightKg}');
+    debugPrint('  - Activity: ${currentProfile.activityLevel}');
+
     // 1️⃣ Profil kaydet
-    final saveResult = await saveUserProfile(userProfile);
+    final saveResult = await saveUserProfile(currentProfile);
     if (saveResult.isLeft()) {
       emit(
         OnboardingWizardError(
@@ -82,40 +183,40 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
     }
 
     // 2️⃣ Besin değerlerini hesapla & kaydet
-    final nutritionResult = await calculateAndSaveNutritionData(userProfile);
-    if (nutritionResult.isLeft()) {
-      emit(
-        OnboardingWizardError(
-          message: "Besin değerleri hesaplanamadı",
-        ),
-      );
-      return;
-    }
-
-    // 3️⃣ Wizard tamamlandı işaretle
-    final completeResult = await completeOnboardingWizardUseCase(NoParams());
-    completeResult.fold(
-      (failure) => emit(
-        OnboardingWizardError(
-          message: "Wizard durumu güncellenemedi",
-        ),
-      ),
-      (_) => emit(
-        OnboardingWizardsSuccess(
-          message: "Wizard başarıyla tamamlandı!",
-        ),
-      ),
+    final nutritionResult = await calculateAndSaveNutritionData(currentProfile);
+    nutritionResult.fold(
+      (failure) {
+        debugPrint('❌ Nutrition calculation failed: ${failure.toString()}');
+        emit(
+          OnboardingWizardError(
+            message: "Besin hesaplama hatası: ${failure.toString()}",
+          ),
+        );
+      },
+      (_) async {
+        // 3️⃣ Wizard tamamlandı işaretle
+        final completeResult =
+            await completeOnboardingWizardUseCase(NoParams());
+        completeResult.fold(
+          (failure) => emit(
+            OnboardingWizardError(
+              message: "Wizard durumu güncellenemedi: ${failure.toString()}",
+            ),
+          ),
+          (_) => emit(
+            OnboardingWizardsSuccess(
+              message: "Wizard başarıyla tamamlandı!",
+            ),
+          ),
+        );
+      },
     );
   }
 
-  // ✅ Sayfa değişimi
-  void pageChanged(int newPage) {
-    emit(OnboardingWizardPageChanged(newPage));
-  }
 
-  // ✅ Profil güncelleme
-  void updateUserProfile(UserProfileEntity updatedProfile) {
-    userProfile = updatedProfile;
-    emit(OnboardingWizardProfileUpdated(userProfile));
+
+  void pageChanged(int index) {
+    emit(OnboardingWizardLoaded(
+        userProfile: _getCurrentProfile(), currentPageIndex: index));
   }
 }

@@ -14,14 +14,17 @@ class GenderSelectionStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cubit = context.read<OnboardingWizardCubit>();
+    //final cubit = context.read<OnboardingWizardCubit>();
 
     return BlocBuilder<OnboardingWizardCubit, OnboardingWizardState>(
       builder: (context, state) {
-        final currentGender = cubit.userProfile.gender;
+        Gender? currentGender;
+        if (state is OnboardingWizardLoaded) {
+          currentGender = state.userProfile.gender;
+        }
 
         return Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24.0), //bak buna
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -50,59 +53,27 @@ class GenderSelectionStep extends StatelessWidget {
                         icon: Icons.male,
                         label: 'Erkek',
                         isSelected: currentGender == Gender.male,
-                        onTap: () => cubit.updateUserProfile(
-                            cubit.userProfile.copyWith(gender: Gender.male)),
+                        onTap: () => context
+                            .read<OnboardingWizardCubit>()
+                            .updateGender(Gender.male),
                       ),
                     ),
                     DeviceSpacing.xlarge.width,
                     Expanded(
                       child: _GenderCard(
-                        icon: Icons.female,
-                        label: 'Kadın',
-                        isSelected: currentGender == Gender.female,
-                        onTap: () => cubit.updateUserProfile(
-                            cubit.userProfile.copyWith(gender: Gender.female)),
-                      ),
+                          icon: Icons.female,
+                          label: 'Kadın',
+                          isSelected: currentGender == Gender.female,
+                          onTap: () => context
+                              .read<OnboardingWizardCubit>()
+                              .updateGender(Gender.female)),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 32),
               ElevatedButton(
-                onPressed: currentGender != null
-                    ? () {
-                        // Assuming the parent page handles page switching via controller based on tree structure,
-                        // But since we are inside a PageView, we might need to access the parent controller or
-                        // just assume the parent passed a callback.
-                        // However, strictly speaking, this widget is just the content.
-                        // The "Next" button logic in the parent page was: "Each step will have its own Next button".
-                        // So I need to implement the PageController logic here?
-                        // No, best practice: Access the parent page's controller or use a callback provided by a wrapper.
-                        // BUT, to keep it loosely coupled, let's find the PageController from context if possible? No.
-                        // Let's rely on finding the PageView's controller? Hard.
-                        // Simple solution: `DefaultTabController` style? No.
-                        // Let's use `PageController` passed down? No, too much coupling.
-                        // Let's assume the parent widget `OnboardingWizardPage` exposes a method `nextPage`.
-                        // Or just use `NotificationListener`?
-                        // Let's keep it simple: The `OnboardingWizardPage` I wrote *doesn't* have a global next button inside the step.
-                        // It expects the step to contain the button.
-                        // So `onNext` callback is needed. But `OnboardingWizardPage` code I wrote initialized `_steps` as a constant list without callbacks.
-                        // I will fix `OnboardingWizardPage` later to inject callbacks.
-                        // For now, I'll assumme `onNext` is passed or I'll implement a `wizard_controller` later.
-                        // ACTUALLY: I can use `PageController` if I pass it to the constructor.
-                        // Let's stick effectively to `onNext`. I will update `OnboardingWizardPage` to build steps in `itemBuilder` and pass callbacks.
-
-                        // For now, placeholders.
-                        final pageController = PageController(); // DUMMY
-                        // In reality, we need to signal "Next".
-                        // Use a custom ancestor widget or access via context?
-                        // `OnboardingWizardPage` is the parent. We can find `_OnboardingWizardPageState` if public? No.
-
-                        // REVISION: I will change `OnboardingWizardPage` to use `PageView.builder` and pass the callback.
-                        // For now, this widget accepts `onNext` in constructor.
-                        onNext?.call();
-                      }
-                    : null,
+                onPressed: currentGender != null ? onNext : null,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(

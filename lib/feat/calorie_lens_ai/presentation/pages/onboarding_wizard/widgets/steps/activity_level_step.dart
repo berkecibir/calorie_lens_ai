@@ -13,7 +13,7 @@ class ActivityLevelStep extends StatelessWidget {
     ActivityLevel.sedentary: {
       'title': 'Hareketsiz',
       'description': 'Masa başı iş, az veya hiç egzersiz yok.',
-      'icon': 'chair', 
+      'icon': 'chair',
     },
     ActivityLevel.lightlyActive: {
       'title': 'Az Hareketli',
@@ -40,11 +40,13 @@ class ActivityLevelStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cubit = context.read<OnboardingWizardCubit>();
 
     return BlocBuilder<OnboardingWizardCubit, OnboardingWizardState>(
       builder: (context, state) {
-        final currentLevel = cubit.userProfile.activityLevel;
+        ActivityLevel? currentLevel;
+        if (state is OnboardingWizardLoaded) {
+          currentLevel = state.userProfile.activityLevel;
+        }
 
         return SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -67,25 +69,25 @@ class ActivityLevelStep extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-              
               ...ActivityLevel.values.map((level) {
                 final details = _activityDetails[level]!;
                 final isSelected = currentLevel == level;
-                
+
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: _ActivityCard(
                     title: details['title']!,
                     description: details['description']!,
-                    iconData: _getIconData(details['icon']!), 
+                    iconData: _getIconData(details['icon']!),
                     isSelected: isSelected,
                     onTap: () {
-                      cubit.updateUserProfile(cubit.userProfile.copyWith(activityLevel: level));
+                      context
+                          .read<OnboardingWizardCubit>()
+                          .updateActivityLevel(level);
                     },
                   ),
                 );
               }),
-
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: currentLevel != null ? onNext : null,
@@ -106,12 +108,19 @@ class ActivityLevelStep extends StatelessWidget {
 
   IconData _getIconData(String iconName) {
     switch (iconName) {
-      case 'chair': return Icons.chair_outlined; // chair exists in recent flutter? if not use weekend
-      case 'directions_walk': return Icons.directions_walk;
-      case 'fitness_center': return Icons.fitness_center;
-      case 'run_circle': return Icons.directions_run;
-      case 'local_fire_department': return Icons.local_fire_department;
-      default: return Icons.help_outline;
+      case 'chair':
+        return Icons
+            .chair_outlined; // chair exists in recent flutter? if not use weekend
+      case 'directions_walk':
+        return Icons.directions_walk;
+      case 'fitness_center':
+        return Icons.fitness_center;
+      case 'run_circle':
+        return Icons.directions_run;
+      case 'local_fire_department':
+        return Icons.local_fire_department;
+      default:
+        return Icons.help_outline;
     }
   }
 }
@@ -134,41 +143,45 @@ class _ActivityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? theme.colorScheme.primaryContainer : theme.cardColor,
+          color:
+              isSelected ? theme.colorScheme.primaryContainer : theme.cardColor,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected ? theme.colorScheme.primary : Colors.transparent,
             width: 1.5,
           ),
-           boxShadow: [
-             if (!isSelected)
+          boxShadow: [
+            if (!isSelected)
               BoxShadow(
                 color: Colors.black.withOpacity(0.03),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
-           ],
+          ],
         ),
         child: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: isSelected 
-                  ? theme.colorScheme.primary.withOpacity(0.2) 
-                  : theme.colorScheme.surfaceContainerHighest.withOpacity(0.5),
+                color: isSelected
+                    ? theme.colorScheme.primary.withOpacity(0.2)
+                    : theme.colorScheme.surfaceContainerHighest
+                        .withOpacity(0.5),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 iconData,
-                color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(width: 16),
@@ -180,16 +193,19 @@ class _ActivityCard extends StatelessWidget {
                     title,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: isSelected ? theme.colorScheme.onPrimaryContainer : theme.colorScheme.onSurface,
+                      color: isSelected
+                          ? theme.colorScheme.onPrimaryContainer
+                          : theme.colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     description,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: isSelected 
-                        ? theme.colorScheme.onPrimaryContainer.withOpacity(0.8) 
-                        : theme.colorScheme.onSurfaceVariant,
+                      color: isSelected
+                          ? theme.colorScheme.onPrimaryContainer
+                              .withOpacity(0.8)
+                          : theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],

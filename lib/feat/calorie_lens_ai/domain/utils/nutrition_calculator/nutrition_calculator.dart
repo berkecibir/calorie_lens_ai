@@ -1,15 +1,20 @@
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
 
 class NutritionCalculator {
-  // close constructor to prevent instantiation | Kapalı yapıcı, örnekleme engellemek için
   const NutritionCalculator._();
+
   static Map<String, dynamic> calculate(UserProfileEntity profile) {
+    // ✅ Tüm gerekli alanları kontrol et
     if (profile.weightKg == null ||
         profile.heightCm == null ||
-        profile.age == null) {
+        profile.age == null ||
+        profile.gender == null ||
+        profile.targetWeightKg == null) {
       throw Exception(
-          "Eksik profil bilgisi: Ağırlık, boy veya yaş girilmemiş.");
+        "Eksik profil bilgisi: Ağırlık, boy, yaş, cinsiyet ve hedef kilo gerekli!",
+      );
     }
+
     // 1. BMR Hesaplama (Mifflin-St Jeor)
     double bmr;
     if (profile.gender == Gender.male) {
@@ -23,20 +28,24 @@ class NutritionCalculator {
           5 * profile.age! -
           161;
     }
+
     // 2. TDEE Hesaplama (Aktivite Çarpanı)
     double activityMultiplier = _getActivityMultiplier(profile.activityLevel);
     final tdee = bmr * activityMultiplier;
+
     // 3. Hedef Belirleme (Kilo alma/verme durumuna göre)
-    // Not: Mantık olarak hedef kilonun mevcut kilodan farkına bakıyoruz
     final isWeightLoss = profile.targetWeightKg! < profile.weightKg!;
     final dailyCalorieGoal = isWeightLoss ? tdee - 500 : tdee + 500;
+
     // 4. Makro Dağılımı (%30 Protein, %40 Carb, %30 Fat)
     const proteinPercentage = 0.3;
     const carbPercentage = 0.4;
     const fatPercentage = 0.3;
+
     final proteinGrams = (dailyCalorieGoal * proteinPercentage / 4).round();
     final carbGrams = (dailyCalorieGoal * carbPercentage / 4).round();
     final fatGrams = (dailyCalorieGoal * fatPercentage / 9).round();
+
     return {
       'bmr': bmr,
       'tdee': tdee,

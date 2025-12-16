@@ -1,3 +1,4 @@
+import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
@@ -23,11 +24,22 @@ class _AgeHeightStepState extends State<AgeHeightStep> {
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<OnboardingWizardCubit>();
-    _ageController =
-        TextEditingController(text: cubit.userProfile.age?.toString() ?? '');
+    final cubitState = context.read<OnboardingWizardCubit>().state;
+
+    int initialAge = 0;
+    int initialHeight = 0;
+
+    if (cubitState is OnboardingWizardLoaded) {
+      initialAge = cubitState.userProfile.age ?? 0;
+      initialHeight = cubitState.userProfile.heightCm ?? 0;
+    }
+
+    _ageController = TextEditingController(
+      text: initialAge > 0 ? initialAge.toString() : '',
+    );
     _heightController = TextEditingController(
-        text: cubit.userProfile.heightCm?.toString() ?? '');
+      text: initialHeight > 0 ? initialHeight.toString() : '',
+    );
   }
 
   @override
@@ -46,7 +58,6 @@ class _AgeHeightStepState extends State<AgeHeightStep> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cubit = context.read<OnboardingWizardCubit>();
 
     return BlocBuilder<OnboardingWizardCubit, OnboardingWizardState>(
       builder: (context, state) {
@@ -54,12 +65,6 @@ class _AgeHeightStepState extends State<AgeHeightStep> {
           padding: DevicePadding.xlarge.all,
           child: Form(
             key: _formKey,
-            onChanged: () {
-              // Auto-save logic or just wait for submit?
-              // Better to update cubit on save or change?
-              // Let's update on each valid change to keep state synced?
-              // Actually, let's update on changed for smooth feeling, but validate fully on submit.
-            },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -78,7 +83,7 @@ class _AgeHeightStepState extends State<AgeHeightStep> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: AppSizes.s48),
 
                 // AGE INPUT
                 TextFormField(
@@ -104,8 +109,7 @@ class _AgeHeightStepState extends State<AgeHeightStep> {
                   onChanged: (value) {
                     final age = int.tryParse(value);
                     if (age != null) {
-                      cubit.updateUserProfile(
-                          cubit.userProfile.copyWith(age: age));
+                      context.read<OnboardingWizardCubit>().updateAge(age);
                     }
                   },
                 ),
@@ -134,18 +138,19 @@ class _AgeHeightStepState extends State<AgeHeightStep> {
                   onChanged: (value) {
                     final height = int.tryParse(value);
                     if (height != null) {
-                      cubit.updateUserProfile(
-                          cubit.userProfile.copyWith(heightCm: height));
+                      context
+                          .read<OnboardingWizardCubit>()
+                          .updateHeight(height);
                     }
                   },
                 ),
 
-                const SizedBox(height: 48),
+                const SizedBox(height: AppSizes.s48),
 
                 ElevatedButton(
                   onPressed: _submit,
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: DevicePadding.medium.onlyVertical,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),

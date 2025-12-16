@@ -21,11 +21,20 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<OnboardingWizardCubit>();
+    final cubitState = context.read<OnboardingWizardCubit>().state;
+    double initialWeight = 0;
+    double initialGoalWeight = 0;
+
+    if (cubitState is OnboardingWizardLoaded) {
+      initialWeight = cubitState.userProfile.weightKg ?? 0;
+      initialGoalWeight = cubitState.userProfile.targetWeightKg ?? 0;
+    }
+
     _weightController = TextEditingController(
-        text: cubit.userProfile.weightKg?.toString() ?? '');
+      text: initialWeight > 0 ? initialWeight.toString() : '',
+    );
     _goalWeightController = TextEditingController(
-        text: cubit.userProfile.targetWeightKg?.toString() ?? '');
+        text: initialGoalWeight > 0 ? initialGoalWeight.toString() : '');
   }
 
   @override
@@ -44,7 +53,7 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cubit = context.read<OnboardingWizardCubit>();
+    //final cubit = context.read<OnboardingWizardCubit>();
 
     return BlocBuilder<OnboardingWizardCubit, OnboardingWizardState>(
       builder: (context, state) {
@@ -90,15 +99,17 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
                   validator: (value) {
                     if (value == null || value.isEmpty) return 'Kilonuzu girin';
                     final weight = double.tryParse(value);
-                    if (weight == null || weight < 30 || weight > 300)
+                    if (weight == null || weight < 30 || weight > 300) {
                       return 'Geçerli bir kilo girin';
+                    }
                     return null;
                   },
                   onChanged: (value) {
                     final weight = double.tryParse(value);
                     if (weight != null) {
-                      cubit.updateUserProfile(
-                          cubit.userProfile.copyWith(weightKg: weight));
+                      context
+                          .read<OnboardingWizardCubit>()
+                          .updateWeight(weight);
                     }
                   },
                 ),
@@ -120,18 +131,21 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
                     suffixText: 'kg',
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty)
+                    if (value == null || value.isEmpty) {
                       return 'Hedef kiloyu girin';
+                    }
                     final weight = double.tryParse(value);
-                    if (weight == null || weight < 30 || weight > 300)
+                    if (weight == null || weight < 30 || weight > 300) {
                       return 'Geçerli bir kilo girin';
+                    }
                     return null;
                   },
                   onChanged: (value) {
                     final weight = double.tryParse(value);
                     if (weight != null) {
-                      cubit.updateUserProfile(
-                          cubit.userProfile.copyWith(targetWeightKg: weight));
+                      context
+                          .read<OnboardingWizardCubit>()
+                          .updateTargetWeight(weight);
                     }
                   },
                 ),

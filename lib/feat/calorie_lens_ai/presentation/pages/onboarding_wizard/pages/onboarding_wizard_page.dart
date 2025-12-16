@@ -25,7 +25,11 @@ class _OnboardingWizardPageState extends State<OnboardingWizardPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        context.read<OnboardingWizardCubit>().checkWizardStatus();
+        final cubit = context.read<OnboardingWizardCubit>();
+        // ✅ Önce wizard status'ü kontrol et
+        cubit.checkWizardStatus();
+        // ✅ Eğer tamamlanmamışsa, profili yükle
+        cubit.loadUserProfile();
       },
     );
   }
