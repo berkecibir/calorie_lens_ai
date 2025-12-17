@@ -70,6 +70,5 @@ Proje yönetiminde Trello kullanılmaktadır. / We use Trello for project manage
 
 ## 🏗 Mimari / Architecture
 
-Bu proje temiz mimari (Clean Architecture) prensipleriyle oluşturulmuştur.
-
+Bu proje Clean Architecture prensipleriyle oluşturulmuştur.  
 This project is built using Clean Architecture principles.
