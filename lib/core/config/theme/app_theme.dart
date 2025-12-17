@@ -6,7 +6,7 @@ class AppTheme {
   static const Color lightPrimaryColor =
       Color(0xFF66BB6A); // Açık tema ana rengi (yeşil tonu)
   static const Color lightPrimaryVariant = Color(0xFF388E3C);
-  static const Color lightAccentColor = Color(0xFF4CAF50); // Vurgu rengi
+  static const Color lightAccentColor = Color(0xFFFF9800); // Vurgu rengi (Turuncu)
   static const Color lightBackgroundColor = Color(0xFFF0F2F5); // Arka plan
   static const Color lightSurfaceColor = Colors.white; // Kartlar, dialoglar vb.
   static const Color lightTextColor = Color(0xFF212121); // Ana metin

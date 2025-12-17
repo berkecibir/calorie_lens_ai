@@ -28,3 +28,12 @@ class CacheFailure extends Failure {
   @override
   List<Object> get props => [message];
 }
+
+class CalculationFailure extends Failure {
+  final String message;
+
+  const CalculationFailure({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
