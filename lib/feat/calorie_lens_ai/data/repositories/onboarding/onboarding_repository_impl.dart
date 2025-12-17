@@ -1,5 +1,5 @@
 import 'package:calorie_lens_ai_app/core/error/failure.dart';
-import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/onboarding_local_data_source.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/onboarding/onboarding_local_data_source.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/onboarding/onboarding_repository.dart';
 import 'package:dartz/dartz.dart';
 

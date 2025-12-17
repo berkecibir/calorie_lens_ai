@@ -31,7 +31,7 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
+build/
 
 # Symbolication related
 app.*.symbols
@@ -43,3 +43,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase yapılandırma dosyaları
+firebase.json
+lib/firebase_options.dart
+android/app/google-services.json
+
+# Environment configuration files
+.env
+.env.*
+

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "169378458828",
+    "project_id": "calorie-lens-ai-86c22",
+    "storage_bucket": "calorie-lens-ai-86c22.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169378458828:android:ce09a465ebac6881bb2669",
+        "android_client_info": {
+          "package_name": "com.example.calorie_lens_ai_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkOA-crH59XqPB4d49VdeJBAATUcQwAG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
