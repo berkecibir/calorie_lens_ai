@@ -12,6 +12,8 @@ class OnboardingLoading extends OnboardingState {}
 
 class OnboardingCompleted extends OnboardingState {}
 
+class OnboardingNotCompleted extends OnboardingState {}
+
 class OnboardingPageChanged extends OnboardingState {
   final int currentPage;
 
@@ -20,8 +22,6 @@ class OnboardingPageChanged extends OnboardingState {
   @override
   List<Object> get props => [currentPage];
 }
-
-class OnboardingNotCompleted extends OnboardingState {}
 
 class OnboardingError extends OnboardingState {
   final String message;
