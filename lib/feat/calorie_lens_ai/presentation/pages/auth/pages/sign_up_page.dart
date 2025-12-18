@@ -1,6 +1,7 @@
 import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
+import 'package:calorie_lens_ai_app/core/widgets/snackbar/custom_snackbar.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/auth/auth_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/auth/auth_state.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/pages/mixin/sign_up_mixin.dart';
@@ -28,12 +29,10 @@ class _SignUpPageState extends State<SignUpPage> with SignUpMixin {
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Kayıt Hatası: ${state.message}'),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ));
+            CustomSnackbar.showError(
+                context, '${AppTexts.signUpErrorOccured} ${state.message}');
           } else if (state is Authenticated) {
-            Navigation.pushReplacementNamed(root: OnboardingWizardPage.id);
+            Navigation.pushReplacementNamed(root: OnboardingWizardPages.id);
           }
         },
         builder: (context, state) {

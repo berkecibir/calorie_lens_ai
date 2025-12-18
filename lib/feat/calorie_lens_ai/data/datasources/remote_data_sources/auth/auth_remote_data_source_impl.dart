@@ -21,7 +21,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final user = _firebaseAuth.currentUser;
       if (user != null) {
-        await _firestore.collection('users').doc(user.uid).delete();
+        await _firestore
+            .collection(AppTexts.firestoreTableName)
+            .doc(user.uid)
+            .delete();
         // Firebase Auth'tan sil
         await user.delete();
       }
@@ -66,8 +69,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
     } catch (e) {
-      throw ServerException(
-          message: 'Şifre sıfırlama e-postası gönderilemedi: $e');
+      throw ServerException(message: '${AppTexts.passwordResetFailMessage} $e');
     }
   }
 
@@ -78,7 +80,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       final user = userCredential.user;
-      if (user == null) throw ServerException(message: 'Giriş yapılamadı.');
+      if (user == null) {
+        throw ServerException(message: AppTexts.loginFailedMessage);
+      }
       // Last login timestamp'i güncelle
       await updateLastLogin(user.uid);
       return UserModel.fromFirebaseUser(user);
@@ -111,7 +115,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           email: email, password: password);
       final user = userCredential.user;
       if (user == null) {
-        throw ServerException(message: 'Kullanıcı kaydı başarısız.');
+        throw ServerException(message: AppTexts.registrationFailedMessage);
       }
       // Update display name
       await user.updateDisplayName(displayName);
@@ -123,13 +127,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // Firestore'a kullanıcı kayıt et
       final userModel = UserModel.fromFirebaseAuth(
         uid: user.uid,
-        email: user.email ?? '',
+        email: user.email ?? AppTexts.empty,
         displayName: displayName,
         photoUrl: user.photoURL,
         isEmailVerified: user.emailVerified,
       );
 
-      await _firestore.collection('users').doc(user.uid).set(
+      await _firestore
+          .collection(AppTexts.firestoreTableName)
+          .doc(user.uid)
+          .set(
             userModel.toFirestore(),
           );
 
@@ -145,14 +152,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> updateLastLogin(String uid) async {
     try {
-      await _firestore.collection('users').doc(uid).update({
+      await _firestore.collection(AppTexts.firestoreTableName).doc(uid).update({
         AppTexts.lastLogin: Timestamp.fromDate(DateTime.now()),
       });
     } on FirebaseAuthException catch (e) {
       throw ServerException(
-          message: 'Son giriş tarihi güncellenemedi: ${e.message}');
+          message: '${AppTexts.failedToUpdateLastLogin} ${e.message}');
     } catch (e) {
-      throw ServerException(message: 'Son giriş tarihi güncellenemedi: $e');
+      throw ServerException(message: '${AppTexts.failedToUpdateLastLogin} $e');
     }
   }
 
@@ -161,7 +168,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final currentUser = _firebaseAuth.currentUser;
       if (currentUser == null) {
-        throw ServerException(message: 'Kullanıcı oturumu açık değil.');
+        throw ServerException(message: AppTexts.updateUserInfoFailMessage);
       }
 
       // 1. Firebase Auth Kullanıcısını Güncelleme (displayName, photoURL)
@@ -180,7 +187,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       };
 
       await _firestore
-          .collection('users')
+          .collection(AppTexts.firestoreTableName)
           .doc(userModel.uid)
           .update(firestoreData);
 
@@ -190,7 +197,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw _handleAuthException(e);
     } catch (e) {
       if (e is ServerException) rethrow;
-      throw ServerException(message: 'Kullanıcı bilgileri güncellenemedi: $e');
+      throw ServerException(message: '${AppTexts.userInfoFailMessage} $e');
     }
   }
 

@@ -1,17 +1,19 @@
+import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
+import '../../../../../core/error/exceptions.dart';
 
 class NutritionCalculator {
   const NutritionCalculator._();
 
   static Map<String, dynamic> calculate(UserProfileEntity profile) {
-    // ✅ Tüm gerekli alanları kontrol et
+    //  Tüm gerekli alanları kontrol et
     if (profile.weightKg == null ||
         profile.heightCm == null ||
         profile.age == null ||
         profile.gender == null ||
         profile.targetWeightKg == null) {
-      throw Exception(
-        "Eksik profil bilgisi: Ağırlık, boy, yaş, cinsiyet ve hedef kilo gerekli!",
+      throw NutritionCalculationException(
+        message: AppTexts.profileInfoNotCompleted,
       );
     }
 
@@ -47,12 +49,12 @@ class NutritionCalculator {
     final fatGrams = (dailyCalorieGoal * fatPercentage / 9).round();
 
     return {
-      'bmr': bmr,
-      'tdee': tdee,
-      'dailyCalorieGoal': dailyCalorieGoal,
-      'proteinGrams': proteinGrams,
-      'carbGrams': carbGrams,
-      'fatGrams': fatGrams,
+      AppTexts.bmr: bmr,
+      AppTexts.tdee: tdee,
+      AppTexts.dailyCalorieGoal: dailyCalorieGoal,
+      AppTexts.proteinGrams: proteinGrams,
+      AppTexts.carbGrams: carbGrams,
+      AppTexts.fatGrams: fatGrams,
     };
   }
 

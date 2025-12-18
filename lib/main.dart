@@ -3,7 +3,9 @@ import 'package:calorie_lens_ai_app/core/injection/injection_container.dart'
     as di;
 import 'package:calorie_lens_ai_app/core/init/app_init.dart';
 import 'package:calorie_lens_ai_app/core/routes/app_routes.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/pages/onboarding_pages.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/pages/onboarding_wizard_page.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/providers/bloc_providers_set_up.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,7 @@ import 'package:hive_flutter/adapters.dart';
 
 Future<void> main() async {
   try {
-    await dotenv.load(fileName: "assets/.env");
+    await dotenv.load(fileName: AppTexts.envPath);
   } on Exception catch (e) {
     debugPrint(e.toString());
   }
@@ -31,14 +33,14 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: BlocProviderSetUp.providers,
       child: MaterialApp(
-        theme: AppTheme.lightTheme,
+        theme: AppTheme.darkTheme,
         builder: (context, child) {
           AppInit.initDeviceSize(context);
           return child ?? const SizedBox.shrink();
         },
         navigatorKey: Navigation.navigationKey,
         routes: AppRoutes.routes,
-        initialRoute: OnboardingWizardPage.id,
+        initialRoute: OnboardingPages.id,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
+import 'package:calorie_lens_ai_app/core/widgets/snackbar/custom_snackbar.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/home/home_page.dart';
@@ -11,15 +12,15 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onbo
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class OnboardingWizardPage extends StatefulWidget {
+class OnboardingWizardPages extends StatefulWidget {
   static const String id = "onboarding_wizard_page";
-  const OnboardingWizardPage({super.key});
+  const OnboardingWizardPages({super.key});
 
   @override
-  State<OnboardingWizardPage> createState() => _OnboardingWizardPageState();
+  State<OnboardingWizardPages> createState() => _OnboardingWizardPagesState();
 }
 
-class _OnboardingWizardPageState extends State<OnboardingWizardPage> {
+class _OnboardingWizardPagesState extends State<OnboardingWizardPages> {
   @override
   void initState() {
     super.initState();
@@ -74,9 +75,12 @@ class _OnboardingWizardPageState extends State<OnboardingWizardPage> {
             if (state is OnboardingWizardsSuccess) {
               Navigation.pushReplacementNamed(root: HomePage.id);
             } else if (state is OnboardingWizardCompleted) {
+              CustomSnackbar.showSuccess(
+                  context, 'Ana Sayfaya Yönlendiriliyorsunuz');
             } else if (state is OnboardingWizardError) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
+              CustomSnackbar.showError(context, state.message);
+              /* ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(state.message))); */
             }
           },
           builder: (context, state) {

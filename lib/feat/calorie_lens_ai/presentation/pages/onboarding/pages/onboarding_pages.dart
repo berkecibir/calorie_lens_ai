@@ -1,4 +1,5 @@
 import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/onboarding_texts.dart';
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_state.dart';
@@ -20,20 +21,20 @@ class _OnboardingPagesState extends State<OnboardingPages> {
 
   final List<Map<String, dynamic>> _onboardingPages = [
     {
-      'title': AppTexts.onboardingFirstPageTitle,
-      'description': AppTexts.onboardingFirstPageBodyMessage,
+      'title': OnboardingTexts.onboardingFirstPageTitle,
+      'description': OnboardingTexts.onboardingFirstPageBodyMessage,
       'icon': Icons.camera_alt_rounded,
       'gradient': const [Color(0xFF66BB6A), Color(0xFF81C784)],
     },
     {
-      'title': AppTexts.onboardingSecondPageTitle,
-      'description': AppTexts.onboardingSecondPageBodyMessage,
+      'title': OnboardingTexts.onboardingSecondPageTitle,
+      'description': OnboardingTexts.onboardingSecondPageBodyMessage,
       'icon': Icons.track_changes_rounded,
       'gradient': const [Color(0xFF4CAF50), Color(0xFF66BB6A)],
     },
     {
-      'title': AppTexts.onboardingThirdPageTitle,
-      'description': AppTexts.onboardingThirdPageBodyMessage,
+      'title': OnboardingTexts.onboardingThirdPageTitle,
+      'description': OnboardingTexts.onboardingThirdPageBodyMessage,
       'icon': Icons.health_and_safety_rounded,
       'gradient': const [Color(0xFF388E3C), Color(0xFF4CAF50)],
     },

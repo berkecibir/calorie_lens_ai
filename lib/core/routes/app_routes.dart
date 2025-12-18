@@ -10,7 +10,7 @@ class AppRoutes {
     SignUpPage.id: (context) => const SignUpPage(),
     SignInPage.id: (context) => const SignInPage(),
     OnboardingPages.id: (context) => const OnboardingPages(),
-    OnboardingWizardPage.id: (context) => const OnboardingWizardPage(),
+    OnboardingWizardPages.id: (context) => const OnboardingWizardPages(),
     HomePage.id: (context) => const HomePage(),
   };
 }

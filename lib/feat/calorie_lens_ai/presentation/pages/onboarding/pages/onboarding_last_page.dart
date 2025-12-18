@@ -1,4 +1,5 @@
 import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/onboarding_texts.dart';
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +85,7 @@ class OnboardingLastPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                AppTexts.onboardingLastPageBodyMessage,
+                OnboardingTexts.onboardingLastPageBodyMessage,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: colorScheme.onSurface.withOpacity(0.7),
                   height: 1.6,
@@ -116,7 +117,7 @@ class OnboardingLastPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      AppTexts.onboardingLastPageButtonTitle,
+                      OnboardingTexts.onboardingLastPageButtonTitle,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
