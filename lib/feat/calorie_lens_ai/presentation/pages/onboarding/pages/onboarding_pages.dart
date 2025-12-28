@@ -1,9 +1,13 @@
 import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/core/utils/const/onboarding_texts.dart';
+import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_state.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/pages/onboarding_last_page.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/widget/onboarding_button.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/widget/onboarding_header.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/widget/onboarding_page_indicator.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/widget/onboarding_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -96,63 +100,23 @@ class _OnboardingPagesState extends State<OnboardingPages> {
                 child: Column(
                   children: [
                     // Top Bar
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 16,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Logo veya App Name
-                          Text(
-                            'CalorieLens AI',
-                            style: theme.textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: colorScheme.primary,
-                            ),
-                          ),
-
-                          // Skip Button
-                          if (currentPage < _onboardingPages.length)
-                            TextButton(
-                              onPressed: _skipOnboarding,
-                              style: TextButton.styleFrom(
-                                foregroundColor:
-                                    colorScheme.onSurface.withOpacity(0.6),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 8,
-                                ),
-                              ),
-                              child: const Text(
-                                'Atla',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            )
-                          else
-                            const SizedBox(width: 60),
-                        ],
-                      ),
+                    OnboardingHeader(
+                      colorScheme: colorScheme,
+                      currentPage: currentPage,
+                      onSkip: _skipOnboarding,
                     ),
-
                     // PageView
                     Expanded(
                       child: PageView.builder(
                         controller: _pageController,
                         itemCount: _onboardingPages.length + 1,
                         onPageChanged: (index) {
-                          // ✨ setState yerine Cubit'i kullan
                           onboardingCubit.pageChanged(index);
                         },
                         itemBuilder: (context, index) {
                           if (index == _onboardingPages.length) {
                             return const OnboardingLastPage();
                           }
-
                           final page = _onboardingPages[index];
                           return OnboardingWidget(
                             title: page['title'],
@@ -163,75 +127,25 @@ class _OnboardingPagesState extends State<OnboardingPages> {
                         },
                       ),
                     ),
-
                     // Bottom Navigation
                     Padding(
                       padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
                       child: Column(
                         children: [
                           // Page Indicators
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(
-                              _onboardingPages.length + 1,
-                              (index) {
-                                // ✨ Cubit'ten gelen currentPage'i kullan
-                                final isActive = currentPage == index;
-                                return AnimatedContainer(
-                                  duration: const Duration(milliseconds: 300),
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 4),
-                                  width: isActive ? 24 : 8,
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4),
-                                    color: isActive
-                                        ? colorScheme.primary
-                                        : colorScheme.onSurface
-                                            .withOpacity(0.2),
-                                  ),
-                                );
-                              },
-                            ),
+
+                          OnboardingPageIndicator(
+                            currentPage: currentPage,
+                            totalPages: _onboardingPages.length,
+                            colorScheme: colorScheme,
                           ),
-
-                          const SizedBox(height: 24),
-
+                          DeviceSpacing.xlarge.height,
                           // Next/Start Button
                           if (currentPage < _onboardingPages.length)
-                            SizedBox(
-                              width: double.infinity,
-                              height: 56,
-                              child: ElevatedButton(
-                                // ✨ _nextPage metodunu currentPage ile çağır
-                                onPressed: () => _nextPage(currentPage),
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  elevation: 2,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      currentPage == _onboardingPages.length - 1
-                                          ? 'Başla'
-                                          : 'Devam',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        letterSpacing: 0.5,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    const Icon(
-                                      Icons.arrow_forward_rounded,
-                                      size: 20,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            OnboardingButton(
+                              currentPage: currentPage,
+                              totalPages: _onboardingPages.length,
+                              onPressed: () => _nextPage(currentPage),
                             ),
                         ],
                       ),

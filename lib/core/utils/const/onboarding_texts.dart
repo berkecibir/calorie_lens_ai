@@ -7,7 +7,7 @@ class OnboardingTexts {
 
   // Onboarding Pages Texts
   static const String onboardingLastPageBodyMessage =
-      'KaloriLens AI uygulamasını kullanmaya başlamak için aşağıdaki butona tıklayın.';
+      'Calorie Lens AI uygulamasını kullanmaya başlamak için aşağıdaki butona tıklayın.';
   static const String onboardingLastPageButtonTitle = 'Başlayalım';
   static const String onboardingFirstPageTitle = 'Yemeklerinizi Tanıyın';
   static const String onboardingFirstPageBodyMessage =
@@ -19,6 +19,15 @@ class OnboardingTexts {
       'Sağlıklı Yaşamın Kilidine Ulaşın';
   static const String onboardingThirdPageBodyMessage =
       'Kişiye özel önerilerle sağlıklı yaşam hedeflerinize ulaşın.';
+  static const String onboardingLastPageCongratsMessage = '🎉 Tebrikler!';
+  static const String onboardingLastPageTitleMessage = 'Hazırsınız!';
+  static const String onboardingLastPageFeature1Message = 'Besin analizi';
+  static const String onboardingLastPageFeature2Message = 'Kalori Takibi';
+  static const String onboardingLastPageFeature3Message = 'Sağlık Önerileri';
+
+  // Onboarding Button Texts
+  static const String startText = 'Başla';
+  static const String continueText = 'Devam';
 
   // Onboarding Local Data Source Shared Preferences Key
   static const String onboardingCompletedLocalKey = 'onBoardingCompleted';

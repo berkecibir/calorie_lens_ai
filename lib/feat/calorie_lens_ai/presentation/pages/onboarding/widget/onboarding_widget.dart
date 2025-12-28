@@ -1,3 +1,5 @@
+import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingWidget extends StatelessWidget {
@@ -64,16 +66,14 @@ class OnboardingWidget extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-
-          const SizedBox(height: 20),
-
+          DeviceSpacing.large.height,
           // Description
           Text(
             description,
             style: theme.textTheme.bodyLarge?.copyWith(
               color: colorScheme.onSurface.withOpacity(0.7),
               height: 1.6,
-              fontSize: 16,
+              fontSize: AppSizes.s16,
             ),
             textAlign: TextAlign.center,
             maxLines: 4,
