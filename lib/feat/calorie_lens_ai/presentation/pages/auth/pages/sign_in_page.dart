@@ -28,36 +28,49 @@ class _SignInPageState extends State<SignInPage> with SignInMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AuthPageLayout(
-          child: BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) {
-          if (state is AuthError) {
-            CustomSnackbar.showError(
-                context, '${AppTexts.signInErrorOccured} ${state.message}');
-          } else if (state is Authenticated) {
-            Navigation.push(page: HomePage());
-          }
-        },
-        builder: (context, state) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SignInLogoSection(),
-              DeviceSpacing.medium.height,
-              const SignInTitleSection(),
-              DeviceSpacing.large.height,
-              if (state is AuthLoading)
-                const SignInLoadingSection()
-              else
-                SignInFormSection(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Sabit widget'lar - Bir kez çizilir, state değişiminde etkilenmez
+            const SignInLogoSection(),
+            DeviceSpacing.medium.height,
+            const SignInTitleSection(),
+            DeviceSpacing.large.height,
+
+            // Sadece dinamik olan kısım (Loading veya Form)
+            BlocConsumer<AuthCubit, AuthState>(
+              listener: (context, state) {
+                if (state is AuthError) {
+                  CustomSnackbar.showError(context,
+                      '${AppTexts.signInErrorOccured} ${state.message}');
+                } else if (state is Authenticated) {
+                  // Giriş başarılıysa ana sayfaya yönlendir
+                  Navigation.push(page: HomePage());
+                }
+              },
+              // Performans için sadece ilgili state değişimlerinde rebuild yap
+              buildWhen: (previous, current) =>
+                  current is AuthLoading ||
+                  current is AuthError ||
+                  current is Unauthenticated ||
+                  current is AuthInitial,
+              builder: (context, state) {
+                if (state is AuthLoading) {
+                  return const SignInLoadingSection();
+                }
+
+                // Sadece form alanı rebuild olur
+                return SignInFormSection(
                   formKey: key,
                   emailController: emailController,
                   passwordController: passwordController,
                   onSignIn: signIn,
-                ),
-            ],
-          );
-        },
-      )),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

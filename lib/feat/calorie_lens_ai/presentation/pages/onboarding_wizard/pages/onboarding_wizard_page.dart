@@ -1,3 +1,8 @@
+import 'package:calorie_lens_ai_app/core/duration/app_duration.dart';
+import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/ui/border/app_border_radius.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
+import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
 import 'package:calorie_lens_ai_app/core/widgets/snackbar/custom_snackbar.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
@@ -13,7 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OnboardingWizardPages extends StatefulWidget {
-  static const String id = "onboarding_wizard_page";
+  static const String id = AppTexts.onboardingWizardPageId;
   const OnboardingWizardPages({super.key});
 
   @override
@@ -47,7 +52,7 @@ class _OnboardingWizardPagesState extends State<OnboardingWizardPages> {
   void _nextPage() {
     if (_currentPage < 5) {
       _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
+        duration: AppDuration.short,
         curve: Curves.easeInOut,
       );
     }
@@ -56,7 +61,7 @@ class _OnboardingWizardPagesState extends State<OnboardingWizardPages> {
   void _previousPage() {
     if (_currentPage > 0) {
       _pageController.previousPage(
-        duration: const Duration(milliseconds: 300),
+        duration: AppDuration.short,
         curve: Curves.easeInOut,
       );
     }
@@ -79,8 +84,6 @@ class _OnboardingWizardPagesState extends State<OnboardingWizardPages> {
                   context, 'Ana Sayfaya Yönlendiriliyorsunuz');
             } else if (state is OnboardingWizardError) {
               CustomSnackbar.showError(context, state.message);
-              /* ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message))); */
             }
           },
           builder: (context, state) {
@@ -94,8 +97,7 @@ class _OnboardingWizardPagesState extends State<OnboardingWizardPages> {
                   Expanded(
                     child: PageView(
                       controller: _pageController,
-                      physics:
-                          const NeverScrollableScrollPhysics(), // Disable swipe to enforce validaton
+                      physics: const NeverScrollableScrollPhysics(),
                       onPageChanged: (index) {
                         setState(() => _currentPage = index);
                         cubit.pageChanged(index);
@@ -110,20 +112,6 @@ class _OnboardingWizardPagesState extends State<OnboardingWizardPages> {
                       ],
                     ),
                   ),
-
-                  // Navigation Buttons (Managed by individual steps or global?)
-                  // Decision: Each step might have different validation needs.
-                  // However, a global "Next" button simplifies the layout if validation state is shared.
-                  // For now, let's keep navigation control passed down to steps or handled globally.
-                  // Better UX: Steps contain the data, maybe they should drive the "Next" validity?
-                  // Or simplified: This page just holds the view, and steps call `context.read<OnboardingWizardCubit>().nextPage()`?
-                  // Actually, let's pass a callback or let steps assume they are in this generic container.
-                  // Simpler: Steps are just widgets. The "Next" button can be here.
-                  // BUT Validation! The Page doesn't know if Step 2 inputs are valid.
-                  // Solution: Let each step handle its own "Next" button, calling `_nextPage`.
-                  // OR: Use a shared "FormKey" or "IsValid" state in Cubit.
-                  // Approach: Each step will have its own Next button for better control/validation.
-                  // OR: We pass the `onNext` callback to the steps.
                 ],
               ),
             );
@@ -135,7 +123,7 @@ class _OnboardingWizardPagesState extends State<OnboardingWizardPages> {
 
   Widget _buildTopBar(ThemeData theme) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      padding: DevicePadding.medium.allSymtetric,
       child: Row(
         children: [
           if (_currentPage > 0)
@@ -144,20 +132,17 @@ class _OnboardingWizardPagesState extends State<OnboardingWizardPages> {
               onPressed: _previousPage,
             )
           else
-            const SizedBox(
-                width:
-                    48), // Spacer to keep title centered if needed, or just alignment
-
+            const SizedBox(width: AppSizes.s48),
           Expanded(
             child: LinearProgressIndicator(
               value: (_currentPage + 1) / 6,
               backgroundColor: theme.colorScheme.surfaceContainerHighest,
               color: theme.colorScheme.primary,
-              borderRadius: BorderRadius.circular(4),
-              minHeight: 8,
+              borderRadius: AppBorderRadius.circular(AppSizes.s4),
+              minHeight: AppSizes.s8,
             ),
           ),
-          const SizedBox(width: 48),
+          const SizedBox(width: AppSizes.s48),
         ],
       ),
     );

@@ -1,8 +1,9 @@
+import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/ui/border/app_border_radius.dart';
 import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/core/utils/validators/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../cubits/auth/password_visibility_cubit.dart';
 
 class AuthTextFormField extends StatelessWidget {
@@ -131,7 +132,7 @@ class AuthTextFormField extends StatelessWidget {
             suffixIconColor: Colors.grey,
             labelText: labelText,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: AppBorderRadius.circular(AppSizes.s8),
             ),
             suffixIcon: suffix != null
                 ? IconButton(

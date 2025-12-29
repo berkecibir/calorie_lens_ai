@@ -3,6 +3,7 @@ class AppTexts {
   static const String signInPageId = 'sign_in_page_id';
   static const String signUpPageId = 'sign_up_page_id';
   static const String onboardingPageId = 'onboarding_page_id';
+  static const String onboardingWizardPageId = "onboarding_wizard_page";
 
   // UserModel Strings
 
