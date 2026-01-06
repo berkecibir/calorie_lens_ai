@@ -3,6 +3,10 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onb
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../../../core/sizes/app_sizes.dart';
+import '../../../../../../../core/ui/border/app_border_radius.dart';
+import '../../../../../../../core/utils/const/app_texts.dart';
+import '../../../../../../../core/widgets/device_padding/device_padding.dart';
 
 class WeightGoalStep extends StatefulWidget {
   final VoidCallback? onNext;
@@ -150,17 +154,17 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
                   },
                 ),
 
-                const SizedBox(height: 48),
+                const SizedBox(height: AppSizes.s48),
 
                 ElevatedButton(
                   onPressed: _submit,
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: DevicePadding.medium.onlyVertical,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: AppBorderRadius.circular(AppSizes.s16),
                     ),
                   ),
-                  child: const Text('Devam Et'),
+                  child: const Text(AppTexts.continueText),
                 ),
               ],
             ),

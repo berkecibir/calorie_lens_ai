@@ -1,22 +1,31 @@
+import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/buttons/wizard_continue_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../../../../../../core/utils/const/app_texts.dart';
+import '../../../../../../../core/utils/const/onboardin_wizard_texts.dart';
+import '../../../../../../../core/widgets/device_padding/device_padding.dart';
 import '../../../../../../../core/widgets/device_spacing/device_spacing.dart';
+import '../../../../widgets/cards/gender_card.dart';
 
 class GenderSelectionStep extends StatelessWidget {
-  final VoidCallback? onNext; // Optional, if we want to bubble up navigation
-
+  final VoidCallback? onNext;
   const GenderSelectionStep({super.key, this.onNext});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    //final cubit = context.read<OnboardingWizardCubit>();
-
     return BlocBuilder<OnboardingWizardCubit, OnboardingWizardState>(
+      // ✅ YENİ: buildWhen ekle
+      buildWhen: (previous, current) {
+        if (previous is OnboardingWizardLoaded &&
+            current is OnboardingWizardLoaded) {
+          return previous.userProfile.gender != current.userProfile.gender;
+        }
+        return previous != current;
+      },
       builder: (context, state) {
         Gender? currentGender;
         if (state is OnboardingWizardLoaded) {
@@ -24,65 +33,28 @@ class GenderSelectionStep extends StatelessWidget {
         }
 
         return Padding(
-          padding: const EdgeInsets.all(24.0), //bak buna
+          padding: DevicePadding.xlarge.all,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                'Cinsiyetiniz?',
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.onSurface,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Doğru kalori hesaplaması için cinsiyetinizi bilmemiz gerekiyor.',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 48),
+              // ✅ YENİ: Header'ı ayrı const widget yap
+              const HeaderSection(),
+
+              SizedBox(height: AppSizes.s48),
+
+              // ✅ YENİ: Gender selection'ı ayrı widget yap
               Expanded(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _GenderCard(
-                        icon: Icons.male,
-                        label: 'Erkek',
-                        isSelected: currentGender == Gender.male,
-                        onTap: () => context
-                            .read<OnboardingWizardCubit>()
-                            .updateGender(Gender.male),
-                      ),
-                    ),
-                    DeviceSpacing.xlarge.width,
-                    Expanded(
-                      child: _GenderCard(
-                          icon: Icons.female,
-                          label: 'Kadın',
-                          isSelected: currentGender == Gender.female,
-                          onTap: () => context
-                              .read<OnboardingWizardCubit>()
-                              .updateGender(Gender.female)),
-                    ),
-                  ],
+                child: GenderSelectionRow(
+                  currentGender: currentGender,
                 ),
               ),
-              const SizedBox(height: 32),
-              ElevatedButton(
+
+              DeviceSpacing.xxlarge.height,
+              WizardContinueButton(
                 onPressed: currentGender != null ? onNext : null,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                child: const Text('Devam Et'),
+                text: AppTexts.continueText,
               ),
-              const SizedBox(height: 24),
+              DeviceSpacing.medium.height,
             ],
           ),
         );
@@ -91,73 +63,67 @@ class GenderSelectionStep extends StatelessWidget {
   }
 }
 
-class _GenderCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _GenderCard({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
+// ✅ YENİ: Bu widget'ı AYNI DOSYADA ekle (en alta)
+class HeaderSection extends StatelessWidget {
+  const HeaderSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        decoration: BoxDecoration(
-          color:
-              isSelected ? theme.colorScheme.primaryContainer : theme.cardColor,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: isSelected ? theme.colorScheme.primary : Colors.transparent,
-            width: 2,
+    return Column(
+      children: [
+        Text(
+          OnboardinWizardTexts.yourGender,
+          style: theme.textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: theme.colorScheme.onSurface,
           ),
-          boxShadow: [
-            if (isSelected)
-              BoxShadow(
-                color: theme.colorScheme.primary.withOpacity(0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              )
-            else
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-          ],
+          textAlign: TextAlign.center,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 64,
-              color: isSelected
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.onSurfaceVariant,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              label,
-              style: theme.textTheme.titleLarge?.copyWith(
-                color: isSelected
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.onSurfaceVariant,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-              ),
-            ),
-          ],
+        DeviceSpacing.medium.height,
+        Text(
+          OnboardinWizardTexts.genderSelectionbodyTitle,
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+          textAlign: TextAlign.center,
         ),
-      ),
+      ],
+    );
+  }
+}
+
+// ✅ YENİ: Bu widget'ı da AYNI DOSYADA ekle (en alta)
+class GenderSelectionRow extends StatelessWidget {
+  final Gender? currentGender;
+
+  const GenderSelectionRow({super.key, required this.currentGender});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: GenderCard(
+            icon: Icons.male,
+            label: OnboardinWizardTexts.male,
+            isSelected: currentGender == Gender.male,
+            onTap: () =>
+                context.read<OnboardingWizardCubit>().updateGender(Gender.male),
+          ),
+        ),
+        DeviceSpacing.xlarge.width,
+        Expanded(
+          child: GenderCard(
+            icon: Icons.female,
+            label: OnboardinWizardTexts.female,
+            isSelected: currentGender == Gender.female,
+            onTap: () => context
+                .read<OnboardingWizardCubit>()
+                .updateGender(Gender.female),
+          ),
+        ),
+      ],
     );
   }
 }

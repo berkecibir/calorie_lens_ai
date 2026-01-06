@@ -33,13 +33,13 @@ class OnboardingLastPage extends StatelessWidget {
                     end: Alignment.bottomRight,
                     colors: [
                       colorScheme.primary,
-                      colorScheme.primary.withOpacity(0.7),
+                      colorScheme.primary.withValues(alpha: 0.7),
                     ],
                   ),
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: colorScheme.primary.withOpacity(0.3),
+                      color: colorScheme.primary.withValues(alpha: 0.3),
                       blurRadius: AppSizes.s32,
                       offset: const Offset(AppSizes.s0, AppSizes.s12),
                     ),
@@ -57,7 +57,7 @@ class OnboardingLastPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: AppSizes.s20, vertical: AppSizes.s8),
                 decoration: BoxDecoration(
-                  color: colorScheme.primary.withOpacity(0.1),
+                  color: colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -100,7 +100,7 @@ class OnboardingLastPage extends StatelessWidget {
                   color: colorScheme.surface,
                   borderRadius: AppBorderRadius.circular(AppSizes.s16),
                   border: Border.all(
-                    color: colorScheme.primary.withOpacity(0.2),
+                    color: colorScheme.primary.withValues(alpha: 0.2),
                     width: AppSizes.s1,
                   ),
                 ),

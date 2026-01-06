@@ -29,7 +29,7 @@ class OnboardingPageIndicator extends StatelessWidget {
               borderRadius: BorderRadius.circular(4),
               color: isActive
                   ? colorScheme.primary
-                  : colorScheme.onSurface.withOpacity(0.2),
+                  : colorScheme.onSurface.withValues(alpha: 0.2),
             ),
           );
         },

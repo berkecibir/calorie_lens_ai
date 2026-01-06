@@ -134,4 +134,7 @@ class AppTexts {
 
   // Sign Up Page Strings
   static const String signUpErrorOccured = 'Kayıt Hatası:';
+
+  // button title
+  static const String continueText = 'Devam Et';
 }

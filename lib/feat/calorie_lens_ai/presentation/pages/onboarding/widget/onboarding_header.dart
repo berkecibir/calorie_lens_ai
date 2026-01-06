@@ -36,7 +36,7 @@ class OnboardingHeader extends StatelessWidget {
             TextButton(
               onPressed: onSkip,
               style: TextButton.styleFrom(
-                foregroundColor: colorScheme.onSurface.withOpacity(0.6),
+                foregroundColor: colorScheme.onSurface.withValues(alpha: 0.6),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 8,

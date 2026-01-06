@@ -91,7 +91,7 @@ class _OnboardingPagesState extends State<OnboardingPages> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    colorScheme.primary.withOpacity(0.05),
+                    colorScheme.primary.withValues(alpha: 0.05),
                     colorScheme.surface,
                   ],
                 ),
