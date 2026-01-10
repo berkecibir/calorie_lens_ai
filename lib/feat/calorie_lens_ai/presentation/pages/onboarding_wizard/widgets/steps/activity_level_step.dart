@@ -37,7 +37,7 @@ class ActivityLevelStep extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                OnboardinWizardTexts.activityLevelStepTitle,
+                OnboardingWizardTexts.activityLevelStepTitle,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -45,7 +45,7 @@ class ActivityLevelStep extends StatelessWidget {
               ),
               DeviceSpacing.medium.height,
               Text(
-                OnboardinWizardTexts.activityLevelStepDescription,
+                OnboardingWizardTexts.activityLevelStepDescription,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

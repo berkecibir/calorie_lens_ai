@@ -10,6 +10,7 @@ import '../../../../../../../core/utils/const/onboardin_wizard_texts.dart';
 import '../../../../../../../core/widgets/device_padding/device_padding.dart';
 import '../../../../../../../core/widgets/device_spacing/device_spacing.dart';
 import '../../../../widgets/cards/gender_card.dart';
+import '../headers/gender_header_section.dart';
 
 class GenderSelectionStep extends StatelessWidget {
   final VoidCallback? onNext;
@@ -18,7 +19,6 @@ class GenderSelectionStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OnboardingWizardCubit, OnboardingWizardState>(
-      // ✅ YENİ: buildWhen ekle
       buildWhen: (previous, current) {
         if (previous is OnboardingWizardLoaded &&
             current is OnboardingWizardLoaded) {
@@ -37,18 +37,13 @@ class GenderSelectionStep extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // ✅ YENİ: Header'ı ayrı const widget yap
-              const HeaderSection(),
-
+              const GenderHeaderSection(),
               SizedBox(height: AppSizes.s48),
-
-              // ✅ YENİ: Gender selection'ı ayrı widget yap
               Expanded(
                 child: GenderSelectionRow(
                   currentGender: currentGender,
                 ),
               ),
-
               DeviceSpacing.xxlarge.height,
               WizardContinueButton(
                 onPressed: currentGender != null ? onNext : null,
@@ -63,37 +58,6 @@ class GenderSelectionStep extends StatelessWidget {
   }
 }
 
-// ✅ YENİ: Bu widget'ı AYNI DOSYADA ekle (en alta)
-class HeaderSection extends StatelessWidget {
-  const HeaderSection({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Column(
-      children: [
-        Text(
-          OnboardinWizardTexts.yourGender,
-          style: theme.textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: theme.colorScheme.onSurface,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        DeviceSpacing.medium.height,
-        Text(
-          OnboardinWizardTexts.genderSelectionbodyTitle,
-          style: theme.textTheme.bodyLarge?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-}
-
-// ✅ YENİ: Bu widget'ı da AYNI DOSYADA ekle (en alta)
 class GenderSelectionRow extends StatelessWidget {
   final Gender? currentGender;
 
@@ -106,7 +70,7 @@ class GenderSelectionRow extends StatelessWidget {
         Expanded(
           child: GenderCard(
             icon: Icons.male,
-            label: OnboardinWizardTexts.male,
+            label: OnboardingWizardTexts.male,
             isSelected: currentGender == Gender.male,
             onTap: () =>
                 context.read<OnboardingWizardCubit>().updateGender(Gender.male),
@@ -116,7 +80,7 @@ class GenderSelectionRow extends StatelessWidget {
         Expanded(
           child: GenderCard(
             icon: Icons.female,
-            label: OnboardinWizardTexts.female,
+            label: OnboardingWizardTexts.female,
             isSelected: currentGender == Gender.female,
             onTap: () => context
                 .read<OnboardingWizardCubit>()

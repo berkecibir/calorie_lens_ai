@@ -1,3 +1,4 @@
+import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/sizes/app_sizes.dart';
 import '../../../../../../../core/ui/border/app_border_radius.dart';
 import '../../../../../../../core/utils/const/app_texts.dart';
+import '../../../../../../../core/utils/const/onboardin_wizard_texts.dart';
 import '../../../../../../../core/widgets/device_padding/device_padding.dart';
 
 class WeightGoalStep extends StatefulWidget {
@@ -69,21 +71,21 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Kilo ve Hedef',
+                  OnboardingWizardTexts.weightGoalStepTitle,
                   style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 16),
+                DeviceSpacing.medium.height,
                 Text(
-                  'Mevcut kilonuz ve ulaşmak istediğiniz hedef kilo.',
+                  OnboardingWizardTexts.weightGoalStepDescription,
                   style: theme.textTheme.bodyLarge?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: AppSizes.s48),
 
                 // CURRENT WEIGHT
                 TextFormField(
@@ -95,16 +97,18 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
                         RegExp(r'^\d+\.?\d{0,2}')),
                   ],
                   decoration: const InputDecoration(
-                    labelText: 'Mevcut Kilo',
-                    hintText: 'Örn: 70.5',
+                    labelText: OnboardingWizardTexts.currentWeight,
+                    hintText: OnboardingWizardTexts.exampleWeight,
                     prefixIcon: Icon(Icons.monitor_weight_outlined),
-                    suffixText: 'kg',
+                    suffixText: OnboardingWizardTexts.kgSuffix,
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) return 'Kilonuzu girin';
+                    if (value == null || value.isEmpty) {
+                      return OnboardingWizardTexts.enterYourWeight;
+                    }
                     final weight = double.tryParse(value);
                     if (weight == null || weight < 30 || weight > 300) {
-                      return 'Geçerli bir kilo girin';
+                      return OnboardingWizardTexts.enterAValidWeight;
                     }
                     return null;
                   },
@@ -129,18 +133,18 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
                         RegExp(r'^\d+\.?\d{0,2}')),
                   ],
                   decoration: const InputDecoration(
-                    labelText: 'Hedef Kilo',
-                    hintText: 'Örn: 65.0',
+                    labelText: OnboardingWizardTexts.targetWeight,
+                    hintText: OnboardingWizardTexts.exampleWeight2,
                     prefixIcon: Icon(Icons.flag_outlined),
-                    suffixText: 'kg',
+                    suffixText: OnboardingWizardTexts.kgSuffix,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Hedef kiloyu girin';
+                      return OnboardingWizardTexts.enterYourWeight;
                     }
                     final weight = double.tryParse(value);
                     if (weight == null || weight < 30 || weight > 300) {
-                      return 'Geçerli bir kilo girin';
+                      return OnboardingWizardTexts.enterAValidWeight;
                     }
                     return null;
                   },

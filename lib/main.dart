@@ -32,7 +32,7 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: BlocProviderSetUp.providers,
       child: MaterialApp(
-        showPerformanceOverlay: true,
+        showPerformanceOverlay: false,
         theme: AppTheme.darkTheme,
         builder: (context, child) {
           AppInit.initDeviceSize(context);
