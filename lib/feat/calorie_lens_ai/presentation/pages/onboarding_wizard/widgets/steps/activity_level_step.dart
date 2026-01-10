@@ -1,5 +1,4 @@
 import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
-import 'package:calorie_lens_ai_app/core/utils/const/onboardin_wizard_texts.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/activity_level_extension.dart'; // ✅ YENİ IMPORT
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
@@ -9,6 +8,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/bu
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../widgets/cards/selectable_card.dart';
+import '../headers/activity_level_header.dart';
 
 class ActivityLevelStep extends StatelessWidget {
   final VoidCallback? onNext;
@@ -16,7 +16,6 @@ class ActivityLevelStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return BlocBuilder<OnboardingWizardCubit, OnboardingWizardState>(
       buildWhen: (previous, current) {
         if (previous is OnboardingWizardLoaded &&
@@ -36,21 +35,7 @@ class ActivityLevelStep extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                OnboardingWizardTexts.activityLevelStepTitle,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              DeviceSpacing.medium.height,
-              Text(
-                OnboardingWizardTexts.activityLevelStepDescription,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              const ActivityLevelHeader(),
               DeviceSpacing.xxlarge.height,
               ...ActivityLevel.values.map((level) {
                 final isSelected = currentLevel == level;

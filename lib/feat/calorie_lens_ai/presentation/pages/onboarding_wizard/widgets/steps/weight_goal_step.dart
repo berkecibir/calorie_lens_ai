@@ -1,11 +1,11 @@
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/buttons/wizard_continue_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/sizes/app_sizes.dart';
-import '../../../../../../../core/ui/border/app_border_radius.dart';
 import '../../../../../../../core/utils/const/app_texts.dart';
 import '../../../../../../../core/utils/const/onboardin_wizard_texts.dart';
 import '../../../../../../../core/widgets/device_padding/device_padding.dart';
@@ -59,12 +59,11 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    //final cubit = context.read<OnboardingWizardCubit>();
 
     return BlocBuilder<OnboardingWizardCubit, OnboardingWizardState>(
       builder: (context, state) {
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: DevicePadding.xlarge.all,
           child: Form(
             key: _formKey,
             child: Column(
@@ -86,7 +85,6 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: AppSizes.s48),
-
                 // CURRENT WEIGHT
                 TextFormField(
                   controller: _weightController,
@@ -121,8 +119,7 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
                     }
                   },
                 ),
-                const SizedBox(height: 24),
-
+                DeviceSpacing.xlarge.height,
                 // TARGET WEIGHT
                 TextFormField(
                   controller: _goalWeightController,
@@ -157,18 +154,11 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
                     }
                   },
                 ),
-
                 const SizedBox(height: AppSizes.s48),
-
-                ElevatedButton(
+                // Continue Button
+                WizardContinueButton(
                   onPressed: _submit,
-                  style: ElevatedButton.styleFrom(
-                    padding: DevicePadding.medium.onlyVertical,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: AppBorderRadius.circular(AppSizes.s16),
-                    ),
-                  ),
-                  child: const Text(AppTexts.continueText),
+                  text: AppTexts.continueText,
                 ),
               ],
             ),

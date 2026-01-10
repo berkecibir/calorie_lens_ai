@@ -31,25 +31,32 @@ class GenderSelectionStep extends StatelessWidget {
         if (state is OnboardingWizardLoaded) {
           currentGender = state.userProfile.gender;
         }
-
         return Padding(
           padding: DevicePadding.xlarge.all,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const GenderHeaderSection(),
-              SizedBox(height: AppSizes.s48),
-              Expanded(
-                child: GenderSelectionRow(
-                  currentGender: currentGender,
+          child: CustomScrollView(
+            physics: const ClampingScrollPhysics(),
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const GenderHeaderSection(),
+                    SizedBox(height: AppSizes.s48),
+                    Expanded(
+                      child: GenderSelectionRow(
+                        currentGender: currentGender,
+                      ),
+                    ),
+                    DeviceSpacing.xxlarge.height,
+                    WizardContinueButton(
+                      onPressed: currentGender != null ? onNext : null,
+                      text: AppTexts.continueText,
+                    ),
+                    DeviceSpacing.medium.height,
+                  ],
                 ),
               ),
-              DeviceSpacing.xxlarge.height,
-              WizardContinueButton(
-                onPressed: currentGender != null ? onNext : null,
-                text: AppTexts.continueText,
-              ),
-              DeviceSpacing.medium.height,
             ],
           ),
         );
