@@ -1,7 +1,12 @@
+import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/widgets/headers/diet_allergies_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../../../core/sizes/app_sizes.dart';
+import '../../../../../../../core/utils/const/onboarding_wizard_texts.dart';
+import '../../../../../../../core/widgets/device_spacing/device_spacing.dart';
 
 class DietAllergiesStep extends StatefulWidget {
   final VoidCallback? onNext;
@@ -47,36 +52,21 @@ class _DietAllergiesStepState extends State<DietAllergiesStep> {
           currentAllergies = state.userProfile.allergies;
         }
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: DevicePadding.xlarge.all,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                'Beslenme Tercihleri',
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Size en uygun beslenme programını hazırlayabilmemiz için tercihlerinizi seçin.',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 32),
-
+              const DietAllergiesHeader(),
+              DeviceSpacing.xxlarge.height,
               // DIET TYPE SECTION
               Text(
-                'Diyet Tipi',
+                OnboardingWizardTexts.dietType,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.primary,
                 ),
               ),
-              const SizedBox(height: 12),
+              DeviceSpacing.medium.height,
               Wrap(
                 spacing: 8.0,
                 runSpacing: 8.0,
@@ -103,9 +93,7 @@ class _DietAllergiesStepState extends State<DietAllergiesStep> {
                   );
                 }).toList(),
               ),
-
-              const SizedBox(height: 32),
-
+              DeviceSpacing.xlarge.height,
               // ALLERGIES SECTION
               Text(
                 'Alerjiler & Hassasiyetler',
@@ -145,8 +133,7 @@ class _DietAllergiesStepState extends State<DietAllergiesStep> {
                   );
                 }).toList(),
               ),
-
-              const SizedBox(height: 48),
+              const SizedBox(height: AppSizes.s48),
               ElevatedButton(
                 onPressed: currentDiet != null ? widget.onNext : null,
                 style: ElevatedButton.styleFrom(

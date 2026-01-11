@@ -1,6 +1,6 @@
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:flutter/material.dart';
-import '../../../../../../../core/utils/const/onboardin_wizard_texts.dart';
+import '../../../../../../../core/utils/const/onboarding_wizard_texts.dart';
 
 class ActivityLevelHeader extends StatelessWidget {
   const ActivityLevelHeader({super.key});

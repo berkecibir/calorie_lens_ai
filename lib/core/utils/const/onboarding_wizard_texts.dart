@@ -30,4 +30,8 @@ class OnboardingWizardTexts {
   static const String cmSuffix = 'cm';
   static const String enterYourHeight = 'Lütfen boyunuzu girin';
   static const String enterAValidHeight = 'Geçerli bir boy girin';
+  static const String dietPreferences = 'Beslenme Tercihleri';
+  static const String dietPreferencesDescription =
+      'Beslenme tercihlerinizi ve alerjilerinizi seçerek, yemek fotoğraflarınızdan yapılan AI analizlerinin size özel ve daha doğru olmasını sağlayın.';
+  static const String dietType = 'Diyet Tipi';
 }

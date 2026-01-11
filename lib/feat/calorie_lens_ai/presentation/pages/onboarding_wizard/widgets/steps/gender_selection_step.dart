@@ -6,7 +6,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/bu
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/utils/const/app_texts.dart';
-import '../../../../../../../core/utils/const/onboardin_wizard_texts.dart';
+import '../../../../../../../core/utils/const/onboarding_wizard_texts.dart';
 import '../../../../../../../core/widgets/device_padding/device_padding.dart';
 import '../../../../../../../core/widgets/device_spacing/device_spacing.dart';
 import '../../../../widgets/cards/gender_card.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../../core/utils/const/onboardin_wizard_texts.dart';
+import '../../../../../../../core/utils/const/onboarding_wizard_texts.dart';
 import '../../../../../../../core/widgets/device_spacing/device_spacing.dart';
 
 class AgeHeightHeader extends StatelessWidget {
