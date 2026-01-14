@@ -1,8 +1,15 @@
+import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/onboarding_wizard_texts.dart';
+import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/widgets/row/summary_row.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/buttons/wizard_continue_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../../../core/utils/const/app_texts.dart';
+import '../../../../../../../core/widgets/device_spacing/device_spacing.dart';
 
 class SummaryStep extends StatelessWidget {
   const SummaryStep({super.key});
@@ -27,59 +34,71 @@ class SummaryStep extends StatelessWidget {
           );
         }
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: DevicePadding.xlarge.all,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Özet',
+                OnboardingWizardTexts.summary,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
+              DeviceSpacing.medium.height,
               Text(
-                'Bilgilerinizi kontrol edin ve başlamaya hazır olun!',
+                OnboardingWizardTexts.checkInfoAndReadyText,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 32),
+              DeviceSpacing.xxlarge.height,
               _SummaryCard(
-                title: 'Kişisel Bilgiler',
+                title: OnboardingWizardTexts.personalInfo,
                 icon: Icons.person_outline,
                 children: [
-                  _SummaryRow(
-                      label: 'Cinsiyet',
-                      value: profile.gender == Gender.male ? 'Erkek' : 'Kadın'),
-                  _SummaryRow(label: 'Yaş', value: '${profile.age} Yıl'),
-                  _SummaryRow(label: 'Boy', value: '${profile.heightCm} cm'),
+                  SummaryRow(
+                      label: OnboardingWizardTexts.gender,
+                      value: profile.gender == Gender.male
+                          ? OnboardingWizardTexts.male
+                          : OnboardingWizardTexts.female),
+                  SummaryRow(
+                      label: OnboardingWizardTexts.age,
+                      value: '${profile.age} ${OnboardingWizardTexts.year}'),
+                  SummaryRow(
+                      label: OnboardingWizardTexts.height,
+                      value:
+                          '${profile.heightCm} ${OnboardingWizardTexts.cmSuffix}'),
                 ],
               ),
-              const SizedBox(height: 16),
+              DeviceSpacing.medium.height,
               _SummaryCard(
-                title: 'Hedefler',
+                title: OnboardingWizardTexts.goals,
                 icon: Icons.track_changes_outlined,
                 children: [
-                  _SummaryRow(
-                      label: 'Mevcut Kilo', value: '${profile.weightKg} kg'),
-                  _SummaryRow(
-                      label: 'Hedef Kilo',
-                      value: '${profile.targetWeightKg} kg'),
-                  _SummaryRow(
-                      label: 'Aktivite',
+                  SummaryRow(
+                      label: OnboardingWizardTexts.currentweightInfoCard,
+                      value:
+                          '${profile.weightKg} ${OnboardingWizardTexts.kgSuffix}'),
+                  SummaryRow(
+                      label: OnboardingWizardTexts.targetWeightInfoCard,
+                      value:
+                          '${profile.targetWeightKg} ${OnboardingWizardTexts.kgSuffix}'),
+                  SummaryRow(
+                      label: OnboardingWizardTexts.activityInfoCard,
                       value: _getActivityLabel(profile.activityLevel)),
                 ],
               ),
-              const SizedBox(height: 16),
+              DeviceSpacing.medium.height,
               _SummaryCard(
-                title: 'Beslenme',
+                title: OnboardingWizardTexts.diet,
                 icon: Icons.restaurant_menu,
                 children: [
-                  _SummaryRow(
-                      label: 'Diyet Tipi', value: profile.dietType ?? '-'),
+                  SummaryRow(
+                      label: OnboardingWizardTexts.dietType,
+                      value: profile.dietType ??
+                          OnboardingWizardTexts.dietTypeEmptyText),
                   if (profile.allergies.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
@@ -87,15 +106,15 @@ class SummaryStep extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Alerjiler:',
+                            OnboardingWizardTexts.allergies,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          DeviceSpacing.small.height,
                           Wrap(
-                            spacing: 8,
+                            spacing: AppSizes.s8,
                             children: profile.allergies
                                 .map((a) => Chip(
                                       label: Text(a,
@@ -110,26 +129,17 @@ class SummaryStep extends StatelessWidget {
                     ),
                 ],
               ),
-              const SizedBox(height: 48),
+              const SizedBox(height: AppSizes.s48),
               if (isLoading)
                 const Center(child: CircularProgressIndicator())
               else
-                ElevatedButton(
-                  onPressed: () {
-                    context
-                        .read<OnboardingWizardCubit>()
-                        .finishOnboardingWizard();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: theme.colorScheme.primary,
-                    foregroundColor: theme.colorScheme.onPrimary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: const Text('Hesapla ve Başla'),
-                ),
+                WizardContinueButton(
+                    onPressed: () {
+                      context
+                          .read<OnboardingWizardCubit>()
+                          .finishOnboardingWizard();
+                    },
+                    text: AppTexts.calculateAndStartText)
             ],
           ),
         );
@@ -178,7 +188,7 @@ class _SummaryCard extends StatelessWidget {
             color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5)),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: DevicePadding.medium.all,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -199,39 +209,6 @@ class _SummaryCard extends StatelessWidget {
             ...children,
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _SummaryRow extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const _SummaryRow({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-          Text(
-            value,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: theme.colorScheme.onSurface,
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -34,4 +34,17 @@ class OnboardingWizardTexts {
   static const String dietPreferencesDescription =
       'Beslenme tercihlerinizi ve alerjilerinizi seçerek, yemek fotoğraflarınızdan yapılan AI analizlerinin size özel ve daha doğru olmasını sağlayın.';
   static const String dietType = 'Diyet Tipi';
+  static const String allergiesAndIntolerance = 'Alerjiler ve Hassasiyetler';
+  static const String summary = 'Özet';
+  static const String checkInfoAndReadyText =
+      'Bilgilerinizi kontrol edin ve başlamaya hazır olun!';
+  static const String personalInfo = 'Kişisel Bilgiler';
+  static const String gender = 'Cinsiyet';
+  static const String goals = 'Hedefler';
+  static const String currentweightInfoCard = 'MEvcut Kilo';
+  static const String targetWeightInfoCard = 'Hedef Kilo';
+  static const String activityInfoCard = 'Aktivite';
+  static const String diet = 'Beslenme';
+  static const String dietTypeEmptyText = '-';
+  static const String allergies = 'Alerjiler:';
 }

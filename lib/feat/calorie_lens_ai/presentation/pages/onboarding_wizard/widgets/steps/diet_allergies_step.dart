@@ -96,13 +96,14 @@ class _DietAllergiesStepState extends State<DietAllergiesStep> {
               DeviceSpacing.xlarge.height,
               // ALLERGIES SECTION
               Text(
-                'Alerjiler & Hassasiyetler',
+                OnboardingWizardTexts.allergiesAndIntolerance,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.primary,
                 ),
               ),
-              const SizedBox(height: 12),
+              DeviceSpacing.medium.height,
+
               Wrap(
                 spacing: 8.0,
                 runSpacing: 8.0,

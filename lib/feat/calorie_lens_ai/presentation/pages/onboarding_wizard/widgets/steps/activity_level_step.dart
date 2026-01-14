@@ -1,4 +1,4 @@
-import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/activity_level_extension.dart'; // ✅ YENİ IMPORT
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
@@ -7,6 +7,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onb
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/buttons/wizard_continue_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../../../core/utils/const/app_texts.dart';
 import '../../../../widgets/cards/selectable_card.dart';
 import '../headers/activity_level_header.dart';
 
@@ -31,7 +32,7 @@ class ActivityLevelStep extends StatelessWidget {
           currentLevel = state.userProfile.activityLevel;
         }
         return SingleChildScrollView(
-          padding: EdgeInsets.all(AppSizes.s24),
+          padding: DevicePadding.xlarge.all,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -40,7 +41,7 @@ class ActivityLevelStep extends StatelessWidget {
               ...ActivityLevel.values.map((level) {
                 final isSelected = currentLevel == level;
                 return Padding(
-                  padding: EdgeInsets.only(bottom: AppSizes.s12),
+                  padding: DevicePadding.small.onlyBottom,
                   child: SelectableCard(
                     title: level.title,
                     description: level.description,
@@ -57,6 +58,7 @@ class ActivityLevelStep extends StatelessWidget {
               DeviceSpacing.xlarge.height,
               WizardContinueButton(
                 onPressed: currentLevel != null ? onNext : null,
+                text: AppTexts.continueText,
               ),
             ],
           ),

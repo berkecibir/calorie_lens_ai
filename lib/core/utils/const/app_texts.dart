@@ -137,4 +137,5 @@ class AppTexts {
 
   // button title
   static const String continueText = 'Devam Et';
+  static const String calculateAndStartText = 'Hesapla ve Başla';
 }

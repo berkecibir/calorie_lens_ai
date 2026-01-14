@@ -10,7 +10,7 @@ class WizardContinueButton extends StatelessWidget {
   const WizardContinueButton(
       {super.key,
       required this.onPressed,
-      this.text = 'Devam Et',
+      required this.text,
       this.isLoading = false});
 
   @override

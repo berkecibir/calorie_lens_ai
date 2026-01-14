@@ -1,6 +1,7 @@
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/widgets/steps/mixin/weight_goal_mixin.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/buttons/wizard_continue_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,43 +20,7 @@ class WeightGoalStep extends StatefulWidget {
   State<WeightGoalStep> createState() => _WeightGoalStepState();
 }
 
-class _WeightGoalStepState extends State<WeightGoalStep> {
-  final _formKey = GlobalKey<FormState>();
-  late TextEditingController _weightController;
-  late TextEditingController _goalWeightController;
-
-  @override
-  void initState() {
-    super.initState();
-    final cubitState = context.read<OnboardingWizardCubit>().state;
-    double initialWeight = 0;
-    double initialGoalWeight = 0;
-
-    if (cubitState is OnboardingWizardLoaded) {
-      initialWeight = cubitState.userProfile.weightKg ?? 0;
-      initialGoalWeight = cubitState.userProfile.targetWeightKg ?? 0;
-    }
-
-    _weightController = TextEditingController(
-      text: initialWeight > 0 ? initialWeight.toString() : '',
-    );
-    _goalWeightController = TextEditingController(
-        text: initialGoalWeight > 0 ? initialGoalWeight.toString() : '');
-  }
-
-  @override
-  void dispose() {
-    _weightController.dispose();
-    _goalWeightController.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
-      widget.onNext?.call();
-    }
-  }
-
+class _WeightGoalStepState extends State<WeightGoalStep> with WeightGoalMixin {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -65,7 +30,7 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
         return SingleChildScrollView(
           padding: DevicePadding.xlarge.all,
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -87,7 +52,7 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
                 const SizedBox(height: AppSizes.s48),
                 // CURRENT WEIGHT
                 TextFormField(
-                  controller: _weightController,
+                  controller: weightController,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [
@@ -122,7 +87,7 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
                 DeviceSpacing.xlarge.height,
                 // TARGET WEIGHT
                 TextFormField(
-                  controller: _goalWeightController,
+                  controller: goalWeightController,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [
@@ -157,7 +122,7 @@ class _WeightGoalStepState extends State<WeightGoalStep> {
                 const SizedBox(height: AppSizes.s48),
                 // Continue Button
                 WizardContinueButton(
-                  onPressed: _submit,
+                  onPressed: submit,
                   text: AppTexts.continueText,
                 ),
               ],

@@ -2,14 +2,13 @@ import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/widgets/row/gender_selection_row.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/buttons/wizard_continue_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/utils/const/app_texts.dart';
-import '../../../../../../../core/utils/const/onboarding_wizard_texts.dart';
 import '../../../../../../../core/widgets/device_padding/device_padding.dart';
 import '../../../../../../../core/widgets/device_spacing/device_spacing.dart';
-import '../../../../widgets/cards/gender_card.dart';
 import '../headers/gender_header_section.dart';
 
 class GenderSelectionStep extends StatelessWidget {
@@ -61,40 +60,6 @@ class GenderSelectionStep extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class GenderSelectionRow extends StatelessWidget {
-  final Gender? currentGender;
-
-  const GenderSelectionRow({super.key, required this.currentGender});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: GenderCard(
-            icon: Icons.male,
-            label: OnboardingWizardTexts.male,
-            isSelected: currentGender == Gender.male,
-            onTap: () =>
-                context.read<OnboardingWizardCubit>().updateGender(Gender.male),
-          ),
-        ),
-        DeviceSpacing.xlarge.width,
-        Expanded(
-          child: GenderCard(
-            icon: Icons.female,
-            label: OnboardingWizardTexts.female,
-            isSelected: currentGender == Gender.female,
-            onTap: () => context
-                .read<OnboardingWizardCubit>()
-                .updateGender(Gender.female),
-          ),
-        ),
-      ],
     );
   }
 }
