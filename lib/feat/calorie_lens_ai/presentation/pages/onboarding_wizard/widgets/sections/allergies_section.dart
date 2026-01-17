@@ -30,7 +30,8 @@ class AllergiesSection extends StatelessWidget {
             spacing: AppSizes.s8,
             children: allergies
                 .map((a) => Chip(
-                      label: Text(a, style: const TextStyle(fontSize: 10)),
+                      label: Text(a,
+                          style: const TextStyle(fontSize: AppSizes.s10)),
                       padding: EdgeInsets.zero,
                       visualDensity: VisualDensity.compact,
                     ))

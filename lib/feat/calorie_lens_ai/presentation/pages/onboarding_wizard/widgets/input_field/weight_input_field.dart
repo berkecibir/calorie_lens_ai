@@ -3,6 +3,7 @@ import 'package:calorie_lens_ai_app/core/utils/const/onboarding_wizard_texts.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../../../core/utils/validators/body_validator.dart';
 import '../../../../cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 
 class WeightInputField extends StatelessWidget {
@@ -22,16 +23,7 @@ class WeightInputField extends StatelessWidget {
         prefixIcon: Icon(Icons.monitor_weight_outlined),
         suffixText: OnboardingWizardTexts.kgSuffix,
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return OnboardingWizardTexts.enterYourWeight;
-        }
-        final weight = double.tryParse(value);
-        if (weight == null || weight < 30 || weight > 300) {
-          return OnboardingWizardTexts.enterAValidWeight;
-        }
-        return null;
-      },
+      validator: BodyValidator.validateWeight,
       onChanged: (value) {
         final weight = double.tryParse(value);
         if (weight != null) {

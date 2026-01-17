@@ -132,6 +132,12 @@ class AppTexts {
 
   // Sign in Page Strings
   static const String signInErrorOccured = 'Giriş Hatası:';
+  static const String signInTitleSectionWelcomeAgain = 'Tekrar Hoş Geldiniz';
+  static const String signInTitleSectionWelcomeAgainSubTitle =
+      'Hesabınıza giriş yapın';
+  static const String signInLoadingSectionLoadingText = 'Giriş yapılıyor...';
+  static const String signInFormForgotPasswordText = 'Şifremi Unuttum?';
+  static const String dontHaveAccountText = 'Hesabınız yok mu? ';
 
   // Sign Up Page Strings
   static const String signUpErrorOccured = 'Kayıt Hatası:';
@@ -139,4 +145,6 @@ class AppTexts {
   // button title
   static const String continueText = 'Devam Et';
   static const String calculateAndStartText = 'Hesapla ve Başla';
+  static const String signInText = 'Giriş Yap';
+  static const String signUpText = 'Kayıt Ol';
 }

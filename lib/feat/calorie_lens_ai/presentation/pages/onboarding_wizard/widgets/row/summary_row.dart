@@ -1,3 +1,4 @@
+import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:flutter/material.dart';
 
 class SummaryRow extends StatelessWidget {
@@ -10,7 +11,7 @@ class SummaryRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: DevicePadding.small.onlyBottom,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

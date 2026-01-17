@@ -2,8 +2,8 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onb
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../../../../core/utils/const/onboarding_wizard_texts.dart';
+import '../../../../../../../core/utils/validators/body_validator.dart';
 
 class AgeInputField extends StatelessWidget {
   final TextEditingController controller;
@@ -22,16 +22,7 @@ class AgeInputField extends StatelessWidget {
         prefixIcon: Icon(Icons.cake_outlined),
         suffixText: OnboardingWizardTexts.year,
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return OnboardingWizardTexts.enterYourAge;
-        }
-        final age = int.tryParse(value);
-        if (age == null || age < 10 || age > 120) {
-          return OnboardingWizardTexts.enterAValidAge;
-        }
-        return null;
-      },
+      validator: BodyValidator.validateAge,
       onChanged: (value) {
         final age = int.tryParse(value);
         if (age != null) {

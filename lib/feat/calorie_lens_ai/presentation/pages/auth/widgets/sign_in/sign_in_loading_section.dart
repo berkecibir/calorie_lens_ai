@@ -1,3 +1,4 @@
+import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class SignInLoadingSection extends StatelessWidget {
         ),
         DeviceSpacing.medium.height,
         Text(
-          'Giriş yapılıyor...',
+          AppTexts.signInLoadingSectionLoadingText,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: colorScheme.onSurface.withValues(alpha: 0.6),
           ),

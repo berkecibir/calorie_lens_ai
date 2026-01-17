@@ -56,9 +56,9 @@ class SignInFormSection extends StatelessWidget {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               child: Text(
-                'Şifremi Unuttum?',
+                AppTexts.signInFormForgotPasswordText,
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: AppSizes.s13,
                   fontWeight: FontWeight.w500,
                   color: colorScheme.primary,
                 ),
@@ -71,22 +71,22 @@ class SignInFormSection extends StatelessWidget {
           // Giriş Yap Butonu
           SizedBox(
             width: double.infinity,
-            height: 56,
+            height: AppSizes.s56,
             child: ElevatedButton(
               onPressed: onSignIn,
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                elevation: 2,
+                elevation: AppSizes.s2,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Giriş Yap',
+                  Text(
+                    AppTexts.signInText,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: AppSizes.s16,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.5,
                     ),
@@ -104,7 +104,7 @@ class SignInFormSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Hesabınız yok mu? ',
+                AppTexts.dontHaveAccountText,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
@@ -119,7 +119,7 @@ class SignInFormSection extends StatelessWidget {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Text(
-                  'Kayıt Ol',
+                  AppTexts.signUpText,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: colorScheme.primary,

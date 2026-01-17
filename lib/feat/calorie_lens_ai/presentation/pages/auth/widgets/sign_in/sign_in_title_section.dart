@@ -1,5 +1,6 @@
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:flutter/material.dart';
+import '../../../../../../../core/utils/const/app_texts.dart';
 
 class SignInTitleSection extends StatelessWidget {
   const SignInTitleSection({super.key});
@@ -12,7 +13,7 @@ class SignInTitleSection extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Tekrar Hoş Geldiniz',
+          AppTexts.signInTitleSectionWelcomeAgain,
           style: theme.textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             color: colorScheme.onSurface,
@@ -20,7 +21,7 @@ class SignInTitleSection extends StatelessWidget {
         ),
         DeviceSpacing.small.height,
         Text(
-          'Hesabınıza giriş yapın',
+          AppTexts.signInTitleSectionWelcomeAgainSubTitle,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: colorScheme.onSurface.withValues(alpha: 0.6),
           ),

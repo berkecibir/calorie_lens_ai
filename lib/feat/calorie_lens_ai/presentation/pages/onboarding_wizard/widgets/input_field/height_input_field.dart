@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/utils/const/onboarding_wizard_texts.dart';
+import '../../../../../../../core/utils/validators/body_validator.dart';
 
 class HeightInputField extends StatelessWidget {
   final TextEditingController controller;
@@ -20,16 +21,7 @@ class HeightInputField extends StatelessWidget {
         prefixIcon: Icon(Icons.height_outlined),
         suffixText: OnboardingWizardTexts.cmSuffix,
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return OnboardingWizardTexts.enterYourHeight;
-        }
-        final height = int.tryParse(value);
-        if (height == null || height < 50 || height > 300) {
-          return OnboardingWizardTexts.enterAValidHeight;
-        }
-        return null;
-      },
+      validator: BodyValidator.validateHeight,
       onChanged: (value) {
         final height = int.tryParse(value);
         if (height != null) {

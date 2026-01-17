@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/utils/const/onboarding_wizard_texts.dart';
+import '../../../../../../../core/utils/validators/body_validator.dart';
 
 class TargetWeightInputField extends StatelessWidget {
   final TextEditingController controller;
@@ -24,16 +25,7 @@ class TargetWeightInputField extends StatelessWidget {
         prefixIcon: Icon(Icons.flag_outlined),
         suffixText: OnboardingWizardTexts.kgSuffix,
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return OnboardingWizardTexts.enterYourWeight;
-        }
-        final weight = double.tryParse(value);
-        if (weight == null || weight < 30 || weight > 300) {
-          return OnboardingWizardTexts.enterAValidWeight;
-        }
-        return null;
-      },
+      validator: BodyValidator.validateWeight,
       onChanged: (value) {
         final weight = double.tryParse(value);
         if (weight != null) {
