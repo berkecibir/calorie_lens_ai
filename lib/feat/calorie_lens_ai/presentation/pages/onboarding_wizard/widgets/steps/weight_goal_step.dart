@@ -1,14 +1,15 @@
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/widgets/headers/weight_and_target_header.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/widgets/input_field/target_weight_input_field.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/widgets/input_field/weight_input_field.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/widgets/steps/mixin/weight_goal_mixin.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/buttons/wizard_continue_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/sizes/app_sizes.dart';
 import '../../../../../../../core/utils/const/app_texts.dart';
-import '../../../../../../../core/utils/const/onboarding_wizard_texts.dart';
 import '../../../../../../../core/widgets/device_padding/device_padding.dart';
 
 class WeightGoalStep extends StatefulWidget {
@@ -23,9 +24,9 @@ class WeightGoalStep extends StatefulWidget {
 class _WeightGoalStepState extends State<WeightGoalStep> with WeightGoalMixin {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return BlocBuilder<OnboardingWizardCubit, OnboardingWizardState>(
+      buildWhen: (previous, current) =>
+          previous.runtimeType != current.runtimeType,
       builder: (context, state) {
         return SingleChildScrollView(
           padding: DevicePadding.xlarge.all,
@@ -34,91 +35,13 @@ class _WeightGoalStepState extends State<WeightGoalStep> with WeightGoalMixin {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  OnboardingWizardTexts.weightGoalStepTitle,
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                DeviceSpacing.medium.height,
-                Text(
-                  OnboardingWizardTexts.weightGoalStepDescription,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                const WeightAndTargetHeader(),
                 const SizedBox(height: AppSizes.s48),
                 // CURRENT WEIGHT
-                TextFormField(
-                  controller: weightController,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,2}')),
-                  ],
-                  decoration: const InputDecoration(
-                    labelText: OnboardingWizardTexts.currentWeight,
-                    hintText: OnboardingWizardTexts.exampleWeight,
-                    prefixIcon: Icon(Icons.monitor_weight_outlined),
-                    suffixText: OnboardingWizardTexts.kgSuffix,
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return OnboardingWizardTexts.enterYourWeight;
-                    }
-                    final weight = double.tryParse(value);
-                    if (weight == null || weight < 30 || weight > 300) {
-                      return OnboardingWizardTexts.enterAValidWeight;
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    final weight = double.tryParse(value);
-                    if (weight != null) {
-                      context
-                          .read<OnboardingWizardCubit>()
-                          .updateWeight(weight);
-                    }
-                  },
-                ),
+                WeightInputField(controller: weightController),
                 DeviceSpacing.xlarge.height,
                 // TARGET WEIGHT
-                TextFormField(
-                  controller: goalWeightController,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,2}')),
-                  ],
-                  decoration: const InputDecoration(
-                    labelText: OnboardingWizardTexts.targetWeight,
-                    hintText: OnboardingWizardTexts.exampleWeight2,
-                    prefixIcon: Icon(Icons.flag_outlined),
-                    suffixText: OnboardingWizardTexts.kgSuffix,
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return OnboardingWizardTexts.enterYourWeight;
-                    }
-                    final weight = double.tryParse(value);
-                    if (weight == null || weight < 30 || weight > 300) {
-                      return OnboardingWizardTexts.enterAValidWeight;
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    final weight = double.tryParse(value);
-                    if (weight != null) {
-                      context
-                          .read<OnboardingWizardCubit>()
-                          .updateTargetWeight(weight);
-                    }
-                  },
-                ),
+                TargetWeightInputField(controller: goalWeightController),
                 const SizedBox(height: AppSizes.s48),
                 // Continue Button
                 WizardContinueButton(

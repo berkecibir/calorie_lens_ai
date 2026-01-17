@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/utils/const/app_texts.dart';
 import '../../../../../../../core/widgets/device_spacing/device_spacing.dart';
+import '../headers/summary_step_header.dart';
 
 class SummaryStep extends StatelessWidget {
   const SummaryStep({super.key});
@@ -38,21 +39,7 @@ class SummaryStep extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                OnboardingWizardTexts.summary,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              DeviceSpacing.medium.height,
-              Text(
-                OnboardingWizardTexts.checkInfoAndReadyText,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              const SummaryStepHeader(),
               DeviceSpacing.xxlarge.height,
               _SummaryCard(
                 title: OnboardingWizardTexts.personalInfo,

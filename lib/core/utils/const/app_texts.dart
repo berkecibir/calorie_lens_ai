@@ -125,6 +125,7 @@ class AppTexts {
   static const validatePasswordMessage = 'Şifre boş geçilemez';
   // Validator RegExp Strings
   static const authRegExp = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+  static const decimalWeightRegExp = r'^\d+(\.\d{1,2})?$';
   static String validatePasswordLengthMessage(int minLength) {
     return 'Şifre en az $minLength karakter olmalıdır';
   }
