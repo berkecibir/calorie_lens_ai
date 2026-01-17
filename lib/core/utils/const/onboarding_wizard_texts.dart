@@ -47,4 +47,25 @@ class OnboardingWizardTexts {
   static const String diet = 'Beslenme';
   static const String dietTypeEmptyText = '-';
   static const String allergies = 'Alerjiler:';
+
+  static const List<String> dietTypes = [
+    'Standart / Hepçil',
+    'Vejetaryen',
+    'Vegan',
+    'Pesketaryen',
+    'Ketojenik',
+    'Paleo',
+    'Glutensiz',
+  ];
+
+  static const List<String> commonAllergies = [
+    'Süt Ürünleri',
+    'Yumurta',
+    'Gluten',
+    'Fıstık',
+    'Kuruyemiş',
+    'Soya',
+    'Balık',
+    'Kabuklu Deniz Ürünleri',
+  ];
 }
