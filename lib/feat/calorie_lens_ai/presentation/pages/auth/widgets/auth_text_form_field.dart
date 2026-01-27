@@ -74,7 +74,7 @@ class AuthTextFormField extends StatelessWidget {
 
         // 2. Parolaların eşleşip eşleşmediğini kontrol et
         if (value != passwordController.text) {
-          return 'Parolalar eşleşmiyor';
+          return AppTexts.passwordDoNotMatch;
         }
         return null;
       },
@@ -95,10 +95,10 @@ class AuthTextFormField extends StatelessWidget {
       // Ad Soyad için gerekli olan tüm ayarlar ve validasyon buraya taşındı
       validator: (value) {
         if (value == null || value.trim().isEmpty) {
-          return 'Ad Soyad alanı boş bırakılamaz';
+          return AppTexts.nameAndSurnameCantBeEmpty;
         }
         if (value.trim().length < 3) {
-          return 'Ad Soyad en az 3 karakter olmalıdır';
+          return AppTexts.atLeastThreeCharacters;
         }
         return null;
       },

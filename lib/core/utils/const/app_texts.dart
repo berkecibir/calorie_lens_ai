@@ -130,6 +130,10 @@ class AppTexts {
     return 'Şifre en az $minLength karakter olmalıdır';
   }
 
+  static const String nameAndSurnameCantBeEmpty = 'Ad ve soyad boş geçilemez';
+  static const String atLeastThreeCharacters = 'En az 3 karakter olmalıdır';
+  static const String passwordDoNotMatch = 'Parolalar eşleşmiyor';
+
   // Sign in Page Strings
   static const String signInErrorOccured = 'Giriş Hatası:';
   static const String signInTitleSectionWelcomeAgain = 'Tekrar Hoş Geldiniz';
@@ -141,10 +145,14 @@ class AppTexts {
 
   // Sign Up Page Strings
   static const String signUpErrorOccured = 'Kayıt Hatası:';
+  static const String createAnAccount = 'Hesap Oluştur';
+  static const String signUpDescriptionText = 'Hemen başlamak için kayıt olun';
+  static const String creatingAccountText = 'Hesabınız oluşturuluyor...';
 
   // button title
   static const String continueText = 'Devam Et';
   static const String calculateAndStartText = 'Hesapla ve Başla';
   static const String signInText = 'Giriş Yap';
   static const String signUpText = 'Kayıt Ol';
+  static const String haveAccountText = 'Zaten hesabınız var mı? ';
 }

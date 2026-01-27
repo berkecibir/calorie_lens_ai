@@ -51,7 +51,7 @@ class SignInFormSection extends StatelessWidget {
                 // TODO: Şifremi unuttum sayfasına git
               },
               style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+                padding: DevicePadding.small.onlyVertical,
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),

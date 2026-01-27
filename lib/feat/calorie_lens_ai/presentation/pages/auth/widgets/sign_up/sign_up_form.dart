@@ -5,7 +5,7 @@ import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.d
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/pages/sign_in_page.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/widgets/auth_text_form_field.dart';
 import 'package:flutter/material.dart';
-
+import '../../../../../../../core/utils/const/app_texts.dart';
 import '../../../../../../../core/widgets/navigation_helper/navigation_helper.dart';
 
 class SignUpFormSection extends StatelessWidget {
@@ -78,7 +78,7 @@ class SignUpFormSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    'Kayıt Ol',
+                    AppTexts.signUpText,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -98,7 +98,7 @@ class SignUpFormSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Zaten hesabınız var mı? ',
+                AppTexts.haveAccountText,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
@@ -113,7 +113,7 @@ class SignUpFormSection extends StatelessWidget {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Text(
-                  'Giriş Yap',
+                  AppTexts.signInText,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: colorScheme.primary,
