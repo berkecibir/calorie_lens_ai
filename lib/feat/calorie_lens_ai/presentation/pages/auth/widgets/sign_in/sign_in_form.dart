@@ -5,6 +5,7 @@ import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.d
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/widgets/auth_text_form_field.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/buttons/auth_action_button.dart';
 import 'package:flutter/material.dart';
 
 class SignInFormSection extends StatelessWidget {
@@ -69,36 +70,12 @@ class SignInFormSection extends StatelessWidget {
           DeviceSpacing.large.height,
 
           // Giriş Yap Butonu
-          SizedBox(
-            width: double.infinity,
-            height: AppSizes.s56,
-            child: ElevatedButton(
-              onPressed: onSignIn,
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: AppSizes.s2,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    AppTexts.signInText,
-                    style: TextStyle(
-                      fontSize: AppSizes.s16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  DeviceSpacing.small.width,
-                  const Icon(Icons.arrow_forward_rounded, size: AppSizes.s20),
-                ],
-              ),
-            ),
+          AuthActionButton(
+            onPressed: onSignIn,
+            text: AppTexts.signInText,
+            isLoading: false,
           ),
           DeviceSpacing.medium.height,
-
           // Kayıt Ol Linki
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
