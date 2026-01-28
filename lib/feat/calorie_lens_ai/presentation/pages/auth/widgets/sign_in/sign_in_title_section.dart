@@ -13,6 +13,7 @@ class SignInTitleSection extends StatelessWidget {
     return Column(
       children: [
         Text(
+          textAlign: TextAlign.center,
           AppTexts.signInTitleSectionWelcomeAgain,
           style: theme.textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
@@ -21,6 +22,7 @@ class SignInTitleSection extends StatelessWidget {
         ),
         DeviceSpacing.small.height,
         Text(
+          textAlign: TextAlign.center,
           AppTexts.signInTitleSectionWelcomeAgainSubTitle,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: colorScheme.onSurface.withValues(alpha: 0.6),
