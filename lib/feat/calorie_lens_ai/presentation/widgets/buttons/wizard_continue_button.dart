@@ -15,6 +15,7 @@ class WizardContinueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
@@ -28,7 +29,7 @@ class WizardContinueButton extends StatelessWidget {
                 width: AppSizes.s20,
                 child: CircularProgressIndicator(
                   strokeWidth: AppSizes.s2,
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: theme.colorScheme.onPrimary,
                 ),
               )
             : Text(text));

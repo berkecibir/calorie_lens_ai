@@ -69,32 +69,40 @@ class SignUpFormSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                AppTexts.haveAccountText,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigation.pushNamed(root: SignInPage.id);
-                },
-                style: TextButton.styleFrom(
-                  padding: DevicePadding.small.onlyHorizontal,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Text(
-                  AppTexts.signInText,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.primary,
-                  ),
-                ),
-              ),
+              _buildHaveAccountText(theme, colorScheme),
+              _buildSignInButton(colorScheme),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Text _buildHaveAccountText(ThemeData theme, ColorScheme colorScheme) {
+    return Text(
+      AppTexts.haveAccountText,
+      style: theme.textTheme.bodyMedium?.copyWith(
+        color: colorScheme.onSurface.withValues(alpha: 0.6),
+      ),
+    );
+  }
+
+  TextButton _buildSignInButton(ColorScheme colorScheme) {
+    return TextButton(
+      onPressed: () {
+        Navigation.pushNamed(root: SignInPage.id);
+      },
+      style: TextButton.styleFrom(
+        padding: DevicePadding.small.onlyHorizontal,
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      child: Text(
+        AppTexts.signInText,
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: colorScheme.primary,
+        ),
       ),
     );
   }
