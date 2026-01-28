@@ -67,17 +67,8 @@ class AuthTextFormField extends StatelessWidget {
           .confirmPasswordLabelText, // 'Parola Onay' için yeni bir text tanımlayabilirsiniz
       isObscure: true,
       controller: confirmPasswordController,
-      validator: (value) {
-        // 1. Önce standart parola validasyonlarını uygula
-        final passwordValidation = FormValidator.validatePassword(value);
-        if (passwordValidation != null) return passwordValidation;
-
-        // 2. Parolaların eşleşip eşleşmediğini kontrol et
-        if (value != passwordController.text) {
-          return AppTexts.passwordDoNotMatch;
-        }
-        return null;
-      },
+      validator: (value) =>
+          FormValidator.validateConfirmPassword(value, passwordController.text),
       suffix: Icons.visibility,
       textInputType: TextInputType.visiblePassword,
       textInputAction: TextInputAction.done,
@@ -89,19 +80,10 @@ class AuthTextFormField extends StatelessWidget {
     required TextEditingController controller,
   }) {
     return AuthTextFormField(
-      labelText: AppTexts.fullNameLabelText, // Veya 'Ad Soyad'
+      labelText: AppTexts.fullNameLabelText,
       isObscure: false,
       controller: controller,
-      // Ad Soyad için gerekli olan tüm ayarlar ve validasyon buraya taşındı
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return AppTexts.nameAndSurnameCantBeEmpty;
-        }
-        if (value.trim().length < 3) {
-          return AppTexts.atLeastThreeCharacters;
-        }
-        return null;
-      },
+      validator: FormValidator.validateFullName,
       suffix: Icons.person_rounded, // Opsiyonel olarak ikon ekleyebiliriz
       textInputType: TextInputType.name,
       textInputAction: TextInputAction.next,
