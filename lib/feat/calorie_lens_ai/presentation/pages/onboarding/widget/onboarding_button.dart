@@ -1,4 +1,5 @@
 import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/ui/shape/app_shapes.dart';
 import 'package:calorie_lens_ai_app/core/utils/const/onboarding_texts.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:flutter/material.dart';
@@ -22,15 +23,13 @@ class OnboardingButton extends StatelessWidget {
 
     return SizedBox(
       width: double.infinity,
-      height: 56,
+      height: AppSizes.s56,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
             backgroundColor: colorScheme.primary,
             foregroundColor: colorScheme.onPrimary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
+            shape: AppShapes.largeButton,
             elevation: AppSizes.s2),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

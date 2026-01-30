@@ -15,6 +15,10 @@ abstract class AppShapes {
     borderRadius: AppBorderRadius.circular(AppSizes.s10),
   );
 
+  static final RoundedRectangleBorder largeButton = RoundedRectangleBorder(
+    borderRadius: AppBorderRadius.circular(AppSizes.s16),
+  );
+
   static final RoundedRectangleBorder bottomSheet = RoundedRectangleBorder(
     borderRadius: AppBorderRadius.vertical(AppSizes.s16),
   );
