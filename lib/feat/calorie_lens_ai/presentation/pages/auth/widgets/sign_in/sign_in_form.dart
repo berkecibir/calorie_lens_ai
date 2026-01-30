@@ -1,6 +1,5 @@
 import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
 import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
-import 'package:calorie_lens_ai_app/core/utils/validators/form_validator.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
@@ -34,14 +33,14 @@ class SignInFormSection extends StatelessWidget {
           // E-posta
           AuthTextFormField.email(
             controller: emailController,
-            validator: (email) => FormValidator.validateEmail(email),
+            //  validator: (email) => FormValidator.validateEmail(email),
           ),
           DeviceSpacing.medium.height,
 
           // Parola
           AuthTextFormField.password(
             controller: passwordController,
-            validator: (password) => FormValidator.validatePassword(password),
+            //   validator: (password) => FormValidator.validatePassword(password),
           ),
 
           // Şifremi Unuttum

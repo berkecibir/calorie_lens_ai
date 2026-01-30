@@ -1,4 +1,3 @@
-import 'package:calorie_lens_ai_app/core/utils/validators/form_validator.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/pages/sign_in_page.dart';
@@ -43,13 +42,13 @@ class SignUpFormSection extends StatelessWidget {
           // E-posta
           AuthTextFormField.email(
             controller: emailController,
-            validator: (email) => FormValidator.validateEmail(email),
+            // validator: (email) => FormValidator.validateEmail(email),
           ),
           DeviceSpacing.medium.height,
           // Parola
           AuthTextFormField.password(
             controller: passwordController,
-            validator: (password) => FormValidator.validatePassword(password),
+            // validator: (password) => FormValidator.validatePassword(password),
           ),
           DeviceSpacing.medium.height,
           // Parola Onay

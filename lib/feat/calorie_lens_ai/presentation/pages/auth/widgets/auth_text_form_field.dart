@@ -3,10 +3,8 @@ import 'package:calorie_lens_ai_app/core/ui/border/app_border_radius.dart';
 import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/core/utils/validators/form_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../cubits/auth/password_visibility_cubit.dart';
 
-class AuthTextFormField extends StatelessWidget {
+class AuthTextFormField extends StatefulWidget {
   final String labelText;
   final bool isObscure;
   final TextInputType textInputType;
@@ -28,14 +26,13 @@ class AuthTextFormField extends StatelessWidget {
   });
 
   factory AuthTextFormField.email({
-    required String? Function(String? email) validator,
     TextEditingController? controller,
   }) {
     return AuthTextFormField(
       labelText: AppTexts.emailLabelText,
       isObscure: false,
       controller: controller,
-      validator: validator,
+      validator: FormValidator.validateEmail,
       suffix: Icons.email,
       textInputType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
@@ -44,14 +41,13 @@ class AuthTextFormField extends StatelessWidget {
   }
 
   factory AuthTextFormField.password({
-    required String? Function(String? password) validator,
     TextEditingController? controller,
   }) {
     return AuthTextFormField(
         labelText: AppTexts.passwordLabelText,
         isObscure: true,
         controller: controller,
-        validator: validator,
+        validator: FormValidator.validatePassword,
         suffix: Icons.visibility,
         textInputType: TextInputType.visiblePassword,
         textInputAction: TextInputAction.done,
@@ -63,8 +59,7 @@ class AuthTextFormField extends StatelessWidget {
     required TextEditingController confirmPasswordController,
   }) {
     return AuthTextFormField(
-      labelText: AppTexts
-          .confirmPasswordLabelText, // 'Parola Onay' için yeni bir text tanımlayabilirsiniz
+      labelText: AppTexts.confirmPasswordLabelText,
       isObscure: true,
       controller: confirmPasswordController,
       validator: (value) =>
@@ -84,7 +79,7 @@ class AuthTextFormField extends StatelessWidget {
       isObscure: false,
       controller: controller,
       validator: FormValidator.validateFullName,
-      suffix: Icons.person_rounded, // Opsiyonel olarak ikon ekleyebiliriz
+      suffix: Icons.person_rounded,
       textInputType: TextInputType.name,
       textInputAction: TextInputAction.next,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -92,50 +87,51 @@ class AuthTextFormField extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final isPasswordField = textInputType == TextInputType.visiblePassword;
+  State<AuthTextFormField> createState() => _AuthTextFormFieldState();
+}
 
-    return isPasswordField
-        ? BlocProvider(
-            create: (_) => PasswordVisibilityCubit(),
-            child: buildTextField(context, isPasswordField),
-          )
-        : buildTextField(context, isPasswordField);
+class _AuthTextFormFieldState extends State<AuthTextFormField> {
+  late bool _isObscure;
+  @override
+  void initState() {
+    super.initState();
+    _isObscure = widget.isObscure;
   }
 
-  Widget buildTextField(BuildContext context, bool isPasswordField) {
-    return BlocBuilder<PasswordVisibilityCubit, bool>(
-      builder: (context, isObscureState) {
-        return TextFormField(
-          controller: controller,
-          validator: validator,
-          obscureText: isPasswordField ? isObscureState : isObscure,
-          decoration: InputDecoration(
-            suffixIconColor: Colors.grey,
-            labelText: labelText,
-            border: OutlineInputBorder(
-              borderRadius: AppBorderRadius.circular(AppSizes.s8),
-            ),
-            suffixIcon: suffix != null
-                ? IconButton(
-                    icon: Icon(
-                      isPasswordField
-                          ? (isObscureState
-                              ? Icons.visibility_off
-                              : Icons.visibility)
-                          : suffix,
-                    ),
-                    onPressed: isPasswordField
-                        ? () => context.read<PasswordVisibilityCubit>().toggle()
-                        : null,
-                  )
-                : null,
-          ),
-          keyboardType: textInputType,
-          textInputAction: textInputAction,
-          autovalidateMode: autovalidateMode,
-        );
-      },
+  void _toggleVisibility() {
+    setState(() {
+      _isObscure = !_isObscure;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isPasswordField =
+        widget.textInputType == TextInputType.visiblePassword;
+    return TextFormField(
+      controller: widget.controller,
+      validator: widget.validator,
+      obscureText: isPasswordField ? _isObscure : widget.isObscure,
+      decoration: InputDecoration(
+        suffixIconColor: Colors.grey,
+        labelText: widget.labelText,
+        border: OutlineInputBorder(
+          borderRadius: AppBorderRadius.circular(AppSizes.s8),
+        ),
+        suffixIcon: widget.suffix != null
+            ? IconButton(
+                icon: Icon(
+                  isPasswordField
+                      ? (_isObscure ? Icons.visibility : Icons.visibility_off)
+                      : widget.suffix,
+                ),
+                onPressed: isPasswordField ? _toggleVisibility : null,
+              )
+            : null,
+      ),
+      keyboardType: widget.textInputType,
+      textInputAction: widget.textInputAction,
+      autovalidateMode: widget.autovalidateMode,
     );
   }
 }
