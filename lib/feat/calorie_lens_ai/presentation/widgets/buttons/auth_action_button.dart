@@ -6,57 +6,43 @@ import 'package:flutter/material.dart';
 class AuthActionButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String text;
-  final bool isLoading;
   final IconData? icon;
-
   const AuthActionButton({
     super.key,
     required this.onPressed,
     required this.text,
-    this.isLoading = false,
     this.icon = Icons.arrow_forward_rounded,
   });
-
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return SizedBox(
       width: double.infinity,
       height: AppSizes.s56,
       child: ElevatedButton(
-        onPressed: isLoading ? null : onPressed,
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: AppBorderRadius.circular(AppSizes.s16),
           ),
           elevation: AppSizes.s2,
         ),
-        child: isLoading
-            ? SizedBox(
-                height: AppSizes.s20,
-                width: AppSizes.s20,
-                child: CircularProgressIndicator(
-                  strokeWidth: AppSizes.s2,
-                  color: theme.colorScheme.onPrimary,
-                ),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    text,
-                    style: const TextStyle(
-                      fontSize: AppSizes.s16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  if (icon != null) ...[
-                    DeviceSpacing.small.width,
-                    Icon(icon, size: AppSizes.s20),
-                  ],
-                ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              style: const TextStyle(
+                fontSize: AppSizes.s16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.5,
               ),
+            ),
+            if (icon != null) ...[
+              DeviceSpacing.small.width,
+              Icon(icon, size: AppSizes.s20),
+            ],
+          ],
+        ),
       ),
     );
   }

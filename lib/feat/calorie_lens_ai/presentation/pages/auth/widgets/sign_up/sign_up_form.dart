@@ -61,7 +61,6 @@ class SignUpFormSection extends StatelessWidget {
           AuthActionButton(
             onPressed: onSignUp,
             text: AppTexts.signUpText,
-            isLoading: false,
           ),
           DeviceSpacing.medium.height,
           // Giriş Yap Linki
@@ -89,7 +88,7 @@ class SignUpFormSection extends StatelessWidget {
   TextButton _buildSignInButton(ColorScheme colorScheme) {
     return TextButton(
       onPressed: () {
-        Navigation.pushNamed(root: SignInPage.id);
+        Navigation.pushReplacementNamed(root: SignInPage.id);
       },
       style: TextButton.styleFrom(
         padding: DevicePadding.small.onlyHorizontal,

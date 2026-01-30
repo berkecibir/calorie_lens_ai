@@ -72,7 +72,6 @@ class SignInFormSection extends StatelessWidget {
           AuthActionButton(
             onPressed: onSignIn,
             text: AppTexts.signInText,
-            isLoading: false,
           ),
           DeviceSpacing.medium.height,
           // Kayıt Ol Linki
@@ -87,7 +86,7 @@ class SignInFormSection extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  Navigation.pushNamed(root: AppTexts.signUpPageId);
+                  Navigation.pushReplacementNamed(root: AppTexts.signUpPageId);
                 },
                 style: TextButton.styleFrom(
                   padding: DevicePadding.small.onlyHorizontal,
