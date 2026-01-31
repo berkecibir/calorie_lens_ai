@@ -5,7 +5,7 @@ import 'package:calorie_lens_ai_app/core/init/app_init.dart';
 import 'package:calorie_lens_ai_app/core/routes/app_routes.dart';
 import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
-import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/pages/onboarding_pages.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/splash/page/splash_page.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/providers/bloc_providers_set_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,13 +34,9 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         showPerformanceOverlay: false,
         theme: AppTheme.darkTheme,
-        builder: (context, child) {
-          AppInit.initDeviceSize(context);
-          return child ?? const SizedBox.shrink();
-        },
         navigatorKey: Navigation.navigationKey,
         routes: AppRoutes.routes,
-        initialRoute: OnboardingPages.id,
+        initialRoute: SplashPage.id,
       ),
     );
   }

@@ -5,6 +5,8 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onbo
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/pages/onboarding_wizard_page.dart';
 import 'package:flutter/material.dart';
 
+import '../../feat/calorie_lens_ai/presentation/pages/splash/page/splash_page.dart';
+
 class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     SignUpPage.id: (context) => const SignUpPage(),
@@ -12,5 +14,6 @@ class AppRoutes {
     OnboardingPages.id: (context) => const OnboardingPages(),
     OnboardingWizardPages.id: (context) => const OnboardingWizardPages(),
     HomePage.id: (context) => const HomePage(),
+    SplashPage.id: (context) => const SplashPage(),
   };
 }

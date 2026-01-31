@@ -28,6 +28,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboard
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/auth/auth_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/splash/splash_cubit.dart';
 // Gerekli Firebase importları
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -162,6 +163,13 @@ Future<void> init() async {
   );
 
   sl.registerFactory(() => PasswordVisibilityCubit());
+
+  // splash cubit
+  sl.registerFactory(() => SplashCubit(
+        checkOnboardingStatus: sl(),
+        getCurrentUser: sl(),
+        checkOnboardingWizardStatus: sl(),
+      ));
 
   await Future<void>.value();
 }
