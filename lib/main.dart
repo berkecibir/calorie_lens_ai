@@ -13,15 +13,22 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/adapters.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await _loadEnvironment();
+  await Future.wait([
+    AppInit.initializeApp(),
+    Hive.initFlutter(),
+  ]);
+  await di.init();
+  runApp(const MainApp());
+}
+
+Future<void> _loadEnvironment() async {
   try {
     await dotenv.load(fileName: AppTexts.envPath);
   } on Exception catch (e) {
-    debugPrint(e.toString());
+    debugPrint('${AppTexts.envError} $e');
   }
-  await AppInit.initializeApp();
-  await di.init();
-  await Hive.initFlutter();
-  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
@@ -32,11 +39,15 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: BlocProviderSetUp.providers,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         showPerformanceOverlay: false,
         theme: AppTheme.darkTheme,
         navigatorKey: Navigation.navigationKey,
         routes: AppRoutes.routes,
         initialRoute: SplashPage.id,
+        scrollBehavior: const MaterialScrollBehavior().copyWith(
+          physics: const BouncingScrollPhysics(),
+        ),
       ),
     );
   }

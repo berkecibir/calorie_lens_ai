@@ -18,6 +18,7 @@ class AppTexts {
 
   // Env Assets path String
   static const String envPath = "assets/.env";
+  static const String envError = "⚠️ Environment loading error:";
 
   // Auth Pages Strings
 

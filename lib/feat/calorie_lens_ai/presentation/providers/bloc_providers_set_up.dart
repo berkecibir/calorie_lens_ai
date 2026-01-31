@@ -10,18 +10,24 @@ import '../cubits/auth/password_visibility_cubit.dart';
 class BlocProviderSetUp {
   static final providers = [
     BlocProvider<OnboardingCubit>(
-      create: (_) => di.sl<OnboardingCubit>(), //  Auto-check kaldırıldı
+      create: (_) => di.sl<OnboardingCubit>(),
+      lazy: true,
     ),
     BlocProvider<AuthCubit>(
-      create: (_) => di.sl<AuthCubit>(), // ✅ Auto-check kaldırıldı
+      create: (_) => di.sl<AuthCubit>(),
+      lazy: true,
     ),
     BlocProvider<PasswordVisibilityCubit>(
       create: (_) => di.sl<PasswordVisibilityCubit>(),
+      lazy: true,
     ),
     BlocProvider<OnboardingWizardCubit>(
-        create: (_) => di.sl<OnboardingWizardCubit>()),
+      create: (_) => di.sl<OnboardingWizardCubit>(),
+      lazy: true,
+    ),
     BlocProvider<SplashCubit>(
       create: (_) => di.sl<SplashCubit>()..initializeApp(),
+      lazy: false,
     ),
   ];
 }
