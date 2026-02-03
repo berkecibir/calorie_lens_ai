@@ -1,4 +1,6 @@
+import 'package:calorie_lens_ai_app/core/duration/app_duration.dart';
 import 'package:calorie_lens_ai_app/core/usecases/usecases.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/get_current_user.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding/check_onboarding_status.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/check_onboarding_wizard_status.dart';
@@ -20,7 +22,7 @@ class SplashCubit extends Cubit<SplashState> {
     emit(SplashLoading());
 
     // Give splash screen time to render smoothly
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(AppDuration.medium);
 
     try {
       // Onboarding status kontrolü
@@ -57,7 +59,7 @@ class SplashCubit extends Cubit<SplashState> {
       // 4. Her şey tamam, ana sayfaya git
       emit(SplashNavigateToHome());
     } catch (e) {
-      emit(SplashError(message: 'Başlatma sırasında hata oluştu: $e'));
+      emit(SplashError(message: '${AppTexts.splashError} $e'));
     }
   }
 }

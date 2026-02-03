@@ -29,12 +29,10 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/aut
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/splash/splash_cubit.dart';
-// Gerekli Firebase importları
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../feat/calorie_lens_ai/presentation/cubits/auth/password_visibility_cubit.dart';
 
 final sl = GetIt.instance;

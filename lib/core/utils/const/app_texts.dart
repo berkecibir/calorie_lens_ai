@@ -6,6 +6,9 @@ class AppTexts {
   static const String onboardingWizardPageId = "onboarding_wizard_page";
   static const String splashPageId = 'splash_page';
 
+  // App Name
+  static const String appName = 'CalorieLens AI';
+
   // UserModel Strings
 
   static const String email = 'email';
@@ -94,6 +97,9 @@ class AppTexts {
   static const String checkWizardStatusFailedMessage =
       'Wizard durumu kontrol edilemedi:';
   static const String wizardCompletedAlready = "Wizard zaten tamamlanmış";
+
+  // Splash Cubit Strings
+  static const String splashError = 'Başlatma sırasında hata oluştu:';
 
   // Debug Check Profile
   static const String profileBeingSaved = '📋 Profile being saved:';
