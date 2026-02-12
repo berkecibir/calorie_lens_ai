@@ -15,6 +15,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/onb
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/onboarding_wizard/onboarding_wizard_repository.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/get_current_user.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/send_email_verification.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/send_password_reset_email.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_in_with_email_and_password.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_out.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_up_with_email_and_password.dart';
@@ -94,6 +95,9 @@ Future<void> init() async {
   sl.registerLazySingleton<CompleteOnboarding>(
     () => CompleteOnboardingImpl(repository: sl()),
   );
+  sl.registerLazySingleton<SendPasswordResetEmail>(
+    () => SendPasswordResetEmail(repository: sl()),
+  );
 
   // Yeni eklenen use caseler
   // Onboarding Wizard
@@ -157,6 +161,7 @@ Future<void> init() async {
       signUpWithEmailAndPassword: sl(),
       signOut: sl(),
       getCurrentUser: sl(),
+      sendPasswordResetEmail: sl(),
     ),
   );
 

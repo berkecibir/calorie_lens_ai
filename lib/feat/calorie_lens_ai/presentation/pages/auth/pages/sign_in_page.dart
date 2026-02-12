@@ -53,6 +53,7 @@ class _SignInPageState extends State<SignInPage> with SignInMixin {
                   current is AuthLoading ||
                   current is AuthError ||
                   current is Unauthenticated ||
+                  current is PasswordResetMailSent ||
                   current is AuthInitial,
               builder: (context, state) {
                 if (state is AuthLoading) {

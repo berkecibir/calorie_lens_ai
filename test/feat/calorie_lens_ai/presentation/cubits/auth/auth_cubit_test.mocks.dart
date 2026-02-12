@@ -13,6 +13,8 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/aut
     as _i2;
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/get_current_user.dart'
     as _i11;
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/send_password_reset_email.dart'
+    as _i12;
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_in_with_email_and_password.dart'
     as _i4;
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_out.dart'
@@ -199,4 +201,41 @@ class MockGetCurrentUser extends _i1.Mock implements _i11.GetCurrentUser {
           ),
         )),
       ) as _i5.Future<_i3.Either<_i6.Failure, _i7.UserEntity?>>);
+}
+
+/// A class which mocks [SendPasswordResetEmail].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSendPasswordResetEmail extends _i1.Mock
+    implements _i12.SendPasswordResetEmail {
+  MockSendPasswordResetEmail() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.AuthRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeAuthRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.AuthRepository);
+
+  @override
+  _i5.Future<_i3.Either<_i6.Failure, void>> call(
+          _i12.PasswordResetParams? params) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #call,
+          [params],
+        ),
+        returnValue: _i5.Future<_i3.Either<_i6.Failure, void>>.value(
+            _FakeEither_1<_i6.Failure, void>(
+          this,
+          Invocation.method(
+            #call,
+            [params],
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i6.Failure, void>>);
 }

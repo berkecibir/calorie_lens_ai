@@ -5,6 +5,7 @@ class AppTexts {
   static const String onboardingPageId = 'onboarding_page_id';
   static const String onboardingWizardPageId = "onboarding_wizard_page";
   static const String splashPageId = 'splash_page';
+  static const String forgotPasswordPageId = 'forgot_password_page';
 
   // App Name
   static const String appName = 'CalorieLens AI';
@@ -163,4 +164,13 @@ class AppTexts {
   static const String signInText = 'Giriş Yap';
   static const String signUpText = 'Kayıt Ol';
   static const String haveAccountText = 'Zaten hesabınız var mı? ';
+
+  // Forgot Password Page Strings
+  static const String resetPasswordTitle = 'Şifre Sıfırlama';
+  static const String resetPasswordSubtitle =
+      'E-posta adresinize sıfırlama bağlantısı gönderelim';
+  static const String sendResetLinkButtonText = 'Bağlantı Gönder';
+  static const String backToSignInText = 'Giriş ekranına dön';
+  static const String resetEmailSentMessage =
+      'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.';
 }

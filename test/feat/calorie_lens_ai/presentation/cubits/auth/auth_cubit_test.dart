@@ -15,11 +15,14 @@ import 'package:mockito/mockito.dart';
 
 import 'auth_cubit_test.mocks.dart';
 
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/send_password_reset_email.dart';
+
 @GenerateMocks([
   SignInWithEmailAndPassword,
   SignUpWithEmailAndPassword,
   SignOut,
   GetCurrentUser,
+  SendPasswordResetEmail,
 ])
 void main() {
   late AuthCubit cubit;
@@ -27,18 +30,21 @@ void main() {
   late MockSignUpWithEmailAndPassword mockSignUp;
   late MockSignOut mockSignOut;
   late MockGetCurrentUser mockGetCurrentUser;
+  late MockSendPasswordResetEmail mockSendPasswordResetEmail;
 
   setUp(() {
     mockSignIn = MockSignInWithEmailAndPassword();
     mockSignUp = MockSignUpWithEmailAndPassword();
     mockSignOut = MockSignOut();
     mockGetCurrentUser = MockGetCurrentUser();
+    mockSendPasswordResetEmail = MockSendPasswordResetEmail();
 
     cubit = AuthCubit(
       signInWithEmailAndPassword: mockSignIn,
       signUpWithEmailAndPassword: mockSignUp,
       signOut: mockSignOut,
       getCurrentUser: mockGetCurrentUser,
+      sendPasswordResetEmail: mockSendPasswordResetEmail,
     );
   });
 
@@ -245,6 +251,45 @@ void main() {
           (state) => state.message,
           'message',
           contains('Logout error'),
+        ),
+      ],
+    );
+  });
+
+  group('resetPassword', () {
+    blocTest<AuthCubit, AuthState>(
+      'should emit [AuthLoading, PasswordResetMailSent] when success',
+      build: () {
+        when(mockSendPasswordResetEmail.call(any))
+            .thenAnswer((_) async => const Right(null));
+        return cubit;
+      },
+      act: (cubit) => cubit.resetPassword(tEmail),
+      expect: () => [
+        isA<AuthLoading>(),
+        isA<PasswordResetMailSent>(),
+      ],
+      verify: (_) {
+        verify(mockSendPasswordResetEmail.call(argThat(
+          predicate<PasswordResetParams>((params) => params.email == tEmail),
+        ))).called(1);
+      },
+    );
+
+    blocTest<AuthCubit, AuthState>(
+      'should emit [AuthLoading, AuthError] when failure',
+      build: () {
+        when(mockSendPasswordResetEmail.call(any)).thenAnswer(
+            (_) async => const Left(ServerFailure(message: 'Error')));
+        return cubit;
+      },
+      act: (cubit) => cubit.resetPassword(tEmail),
+      expect: () => [
+        isA<AuthLoading>(),
+        isA<AuthError>().having(
+          (state) => state.message,
+          'message',
+          contains('Error'),
         ),
       ],
     );
