@@ -6,6 +6,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onb
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/splash/splash_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubits/auth/password_visibility_cubit.dart';
+import '../cubits/bottom_nav/bottom_nav_cubit.dart';
 
 class BlocProviderSetUp {
   static final providers = [
@@ -28,6 +29,10 @@ class BlocProviderSetUp {
     BlocProvider<SplashCubit>(
       create: (_) => di.sl<SplashCubit>()..initializeApp(),
       lazy: false,
+    ),
+    BlocProvider<BottomNavCubit>(
+      create: (_) => di.sl<BottomNavCubit>(),
+      lazy: true,
     ),
   ];
 }

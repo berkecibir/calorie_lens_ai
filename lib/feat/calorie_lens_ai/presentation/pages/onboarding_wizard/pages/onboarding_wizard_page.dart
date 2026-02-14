@@ -7,7 +7,7 @@ import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_he
 import 'package:calorie_lens_ai_app/core/widgets/snackbar/custom_snackbar.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
-import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/home/home_page.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/main_page.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/widgets/steps/activity_level_step.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/widgets/steps/age_height_step.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/widgets/steps/diet_allergies_step.dart';
@@ -78,7 +78,7 @@ class _OnboardingWizardPagesState extends State<OnboardingWizardPages> {
         body: BlocConsumer<OnboardingWizardCubit, OnboardingWizardState>(
           listener: (context, state) {
             if (state is OnboardingWizardsSuccess) {
-              Navigation.pushReplacementNamed(root: HomePage.id);
+              Navigation.pushReplacementNamed(root: MainPage.id);
             } else if (state is OnboardingWizardCompleted) {
               CustomSnackbar.showSuccess(
                   context, 'Ana Sayfaya Yönlendiriliyorsunuz');

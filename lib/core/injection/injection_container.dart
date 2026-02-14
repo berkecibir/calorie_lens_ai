@@ -35,6 +35,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../feat/calorie_lens_ai/presentation/cubits/auth/password_visibility_cubit.dart';
+import '../../feat/calorie_lens_ai/presentation/cubits/bottom_nav/bottom_nav_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -166,6 +167,9 @@ Future<void> init() async {
   );
 
   sl.registerFactory(() => PasswordVisibilityCubit());
+
+  // bottom nav cubit
+  sl.registerFactory(() => BottomNavCubit());
 
   // splash cubit
   sl.registerFactory(() => SplashCubit(
