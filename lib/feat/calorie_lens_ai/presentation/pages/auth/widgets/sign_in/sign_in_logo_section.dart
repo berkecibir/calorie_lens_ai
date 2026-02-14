@@ -1,4 +1,5 @@
 import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:flutter/material.dart';
 
 class SignInLogoSection extends StatelessWidget {
@@ -9,7 +10,7 @@ class SignInLogoSection extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: DevicePadding.medium.all,
       decoration: BoxDecoration(
         color: colorScheme.primary.withValues(alpha: 0.1),
         shape: BoxShape.circle,

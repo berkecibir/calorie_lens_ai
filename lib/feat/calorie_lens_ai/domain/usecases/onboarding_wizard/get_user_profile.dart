@@ -8,6 +8,7 @@ class GetUserProfile implements UseCase<UserProfileEntity, NoParams> {
   final OnboardingWizardRepository repository;
 
   GetUserProfile({required this.repository});
+  @override
   Future<Either<Failure, UserProfileEntity>> call(NoParams params) async {
     return await repository.getUserProfile();
   }

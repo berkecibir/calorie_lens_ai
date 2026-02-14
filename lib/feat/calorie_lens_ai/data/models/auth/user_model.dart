@@ -91,7 +91,7 @@ class UserModel extends UserEntity {
   factory UserModel.fromFirebaseUser(User user) {
     return UserModel(
       uid: user.uid,
-      email: user.email ?? '',
+      email: user.email ?? AppTexts.empty,
       displayName: user.displayName,
       photoUrl: user.photoURL,
       createdAt: user.metadata.creationTime ?? DateTime.now(),

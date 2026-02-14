@@ -3,15 +3,18 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/models/onboarding_wizard/user_profile_model.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import '../../../../../../core/utils/const/app_texts.dart';
 
 class OnboardingWizardLocalDataSourceImpl
     implements OnboardingWizardLocalDataSource {
   // ignore: constant_identifier_names
-  static const String BOX_NAME = 'onboarding_wizard_box';
+  static const String BOX_NAME = AppTexts.onboardingWizarBoxName;
   // ignore: constant_identifier_names
-  static const String USER_PROFILE_KEY = 'userProfile';
+  static const String USER_PROFILE_KEY =
+      AppTexts.onboardingWizardUserProfileKey;
   // ignore: constant_identifier_names
-  static const String WIZARD_COMPLETED_KEY = 'wizardCompleted';
+  static const String WIZARD_COMPLETED_KEY =
+      AppTexts.onboardingWizardCompletedKey;
 
   final SharedPreferencesHelper
       sharedPreferencesHelper; // Keeping to match injection, though unused for main data now

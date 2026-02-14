@@ -1,0 +1,56 @@
+{
+  // Dart & Flutter Settings
+  "dart.flutterSdkPath": null,
+  "dart.lineLength": 100,
+  "dart.previewFlutterUiGuides": true,
+  "dart.previewFlutterUiGuidesCustomTracking": true,
+  "dart.closingLabels": true,
+  
+  // Auto-suggestions
+  "editor.suggestSelection": "first",
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  },
+  "editor.suggest.showKeywords": true,
+  "editor.suggest.showSnippets": true,
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.tabCompletion": "on",
+  
+  // Format on save
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [100],
+    "editor.selectionHighlight": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off"
+  },
+  
+  // File associations
+  "files.associations": {
+    "*.dart": "dart"
+  },
+  
+  // Exclude from search
+  "files.exclude": {
+    "**/.git": true,
+    "**/.dart_tool": true,
+    "**/build": true,
+    "**/*.g.dart": false,
+    "**/*.freezed.dart": false
+  },
+  
+  // Search exclude
+  "search.exclude": {
+    "**/build": true,
+    "**/.dart_tool": true,
+    "**/ios/Pods": true,
+    "**/android/.gradle": true
+  }
+}

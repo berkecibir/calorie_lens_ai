@@ -1,12 +1,13 @@
 import 'dart:convert';
+import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/core/utils/helpers/shared/shared_helper.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/auth/auth_local_data_source.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/models/auth/user_model.dart';
 import '../../../../../../core/error/exceptions.dart';
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
-  static const String _userSessionKey = 'user_session';
-  static const String _authTokenKey = 'auth_token';
+  static const String _userSessionKey = AppTexts.authUserSession;
+  static const String _authTokenKey = AppTexts.authToken;
 
   final SharedPreferencesHelper _sharedPreferencesHelper;
 
@@ -18,7 +19,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       final userJson = jsonEncode(user.toJson());
       await _sharedPreferencesHelper.setString(_userSessionKey, userJson);
     } catch (e) {
-      throw CacheException(message: 'Failed to save user session: $e');
+      throw CacheException(message: '${AppTexts.failedToSaveUserSession} $e');
     }
   }
 
@@ -32,7 +33,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       final decodedJson = jsonDecode(userJson) as Map<String, dynamic>;
       return UserModel.fromJson(decodedJson);
     } catch (e) {
-      throw CacheException(message: 'Failed to get cached user session: $e');
+      throw CacheException(message: '${AppTexts.failedCachedUserSession} $e');
     }
   }
 
@@ -41,7 +42,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     try {
       await _sharedPreferencesHelper.remove(_userSessionKey);
     } catch (e) {
-      throw CacheException(message: 'Failed to clear user session: $e');
+      throw CacheException(message: '${AppTexts.failedToClearUserSession} $e');
     }
   }
 
@@ -61,7 +62,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     try {
       await saveUserSession(user);
     } catch (e) {
-      throw CacheException(message: 'Failed to update cached user: $e');
+      throw CacheException(message: '${AppTexts.failedUpdateCachedUser} $e');
     }
   }
 
@@ -70,7 +71,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     try {
       await _sharedPreferencesHelper.setString(_authTokenKey, token);
     } catch (e) {
-      throw CacheException(message: 'Failed to save auth token: $e');
+      throw CacheException(message: '${AppTexts.failedToSaveAuthToken} $e');
     }
   }
 
@@ -79,7 +80,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     try {
       return await _sharedPreferencesHelper.getString(_authTokenKey);
     } catch (e) {
-      throw CacheException(message: 'Failed to get auth token: $e');
+      throw CacheException(message: '${AppTexts.failedToGetAuthToken} $e');
     }
   }
 
@@ -88,7 +89,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     try {
       await _sharedPreferencesHelper.remove(_authTokenKey);
     } catch (e) {
-      throw CacheException(message: 'Failed to clear auth token: $e');
+      throw CacheException(message: '${AppTexts.failedToClearAuthToken} $e');
     }
   }
 }

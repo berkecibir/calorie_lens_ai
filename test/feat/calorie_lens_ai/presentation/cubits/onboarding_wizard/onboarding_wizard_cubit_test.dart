@@ -1,5 +1,4 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:calorie_lens_ai_app/core/usecases/usecases.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/calculate_and_save_nutrition_data.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/check_onboarding_wizard_status.dart';
@@ -9,6 +8,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboard
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -82,12 +82,14 @@ void main() {
         // IMPORTANT: Set initial state with data!
         // We simulate that the user has already entered data by calling update methods
         // or directly setting state if we could (but we use the cubit methods)
-        cubit.updateAge(30);
-        cubit.updateGender(Gender.male);
-        cubit.updateHeight(180);
-        cubit.updateWeight(80);
-        cubit.updateTargetWeight(75);
-        cubit.updateActivityLevel(ActivityLevel.moderate);
+        cubit.updateAge(tProfile.age!);
+        cubit.updateGender(tProfile.gender!);
+        cubit.updateHeight(tProfile.heightCm!);
+        cubit.updateWeight(tProfile.weightKg!);
+        cubit.updateTargetWeight(tProfile.targetWeightKg!);
+        cubit.updateActivityLevel(tProfile.activityLevel!);
+        cubit.updateDietType(tProfile.dietType!);
+        cubit.updateAllergies(tProfile.allergies);
 
         return cubit;
       },
@@ -101,7 +103,7 @@ void main() {
         // VERIFY that saveUserProfile was called with the CORRECT profile
         verify(mockSaveUserProfile.call(argThat(
           predicate<UserProfileEntity>((profile) {
-            print("Verifying saved profile: ${profile.age}");
+            debugPrint("Verifying saved profile: ${profile.age}");
             return profile.age == 30 &&
                 profile.heightCm == 180 &&
                 profile.weightKg == 80;

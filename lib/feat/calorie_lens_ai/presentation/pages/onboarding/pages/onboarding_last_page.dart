@@ -1,8 +1,12 @@
-import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
-import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
-import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
+import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/ui/border/app_border_radius.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/onboarding_texts.dart';
+import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
+import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/widget/feature_item.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/widget/onboarding_last_page_body_text.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/widget/onboarding_success_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OnboardingLastPage extends StatelessWidget {
   const OnboardingLastPage({super.key});
@@ -12,206 +16,108 @@ class OnboardingLastPage extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Success Icon with Animation Effect
-            Container(
-              width: 180,
-              height: 180,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    colorScheme.primary,
-                    colorScheme.primary.withOpacity(0.7),
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: DevicePadding.xxlarge.onlyHorizontal,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Success Icon with Animation Effect
+              Container(
+                width: 180,
+                height: 180,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      colorScheme.primary,
+                      colorScheme.primary.withValues(alpha: 0.7),
+                    ],
+                  ),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: colorScheme.primary.withValues(alpha: 0.3),
+                      blurRadius: AppSizes.s32,
+                      offset: const Offset(AppSizes.s0, AppSizes.s12),
+                    ),
                   ],
                 ),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.primary.withOpacity(0.3),
-                    blurRadius: 32,
-                    offset: const Offset(0, 12),
-                  ),
-                ],
-              ),
-              child: const Icon(
-                Icons.check_circle_rounded,
-                size: 100,
-                color: Colors.white,
-              ),
-            ),
-
-            const SizedBox(height: 56),
-
-            // Congratulations Badge
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              decoration: BoxDecoration(
-                color: colorScheme.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                '🎉 Tebrikler!',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: colorScheme.primary,
-                  fontWeight: FontWeight.w600,
+                child: const Icon(
+                  Icons.check_circle_rounded,
+                  size: AppSizes.s100,
+                  color: Colors.white,
                 ),
               ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // Title
-            Text(
-              'Hazırsınız!',
-              style: theme.textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
-                height: 1.2,
+              const SizedBox(height: AppSizes.s56),
+              // Congratulations Badge
+              Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.s20, vertical: AppSizes.s8),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  OnboardingTexts.onboardingLastPageCongratsMessage,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
-              textAlign: TextAlign.center,
-            ),
-
-            const SizedBox(height: 20),
-
-            // Description
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                AppTexts.onboardingLastPageBodyMessage,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: colorScheme.onSurface.withOpacity(0.7),
-                  height: 1.6,
-                  fontSize: 16,
+              DeviceSpacing.xlarge.height,
+              // Title
+              Text(
+                OnboardingTexts.onboardingLastPageTitleMessage,
+                style: theme.textTheme.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onSurface,
+                  height: 1.2,
                 ),
                 textAlign: TextAlign.center,
-                maxLines: 4,
               ),
-            ),
 
-            const SizedBox(height: 56),
+              DeviceSpacing.large.height,
 
-            // Start Button
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () {
-                  context.read<OnboardingCubit>().completeOnboardingProcess();
-                  Navigation.pushReplacementNamed(root: AppTexts.signUpPageId);
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+              // Description
+              Padding(
+                padding: DevicePadding.medium.onlyHorizontal,
+                child: const OnboardingLastPageBodyText(),
+              ),
+              DeviceSpacing.xlarge.height,
+              // Start Button
+              OnboardingSuccessButton(),
+              DeviceSpacing.xlarge.height,
+
+              // Features List (Optional Enhancement)
+
+              Container(
+                padding: DevicePadding.large.all,
+                decoration: BoxDecoration(
+                  color: colorScheme.surface,
+                  borderRadius: AppBorderRadius.circular(AppSizes.s16),
+                  border: Border.all(
+                    color: colorScheme.primary.withValues(alpha: 0.2),
+                    width: AppSizes.s1,
                   ),
-                  elevation: 4,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Column(
                   children: [
-                    Text(
-                      AppTexts.onboardingLastPageButtonTitle,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    const Icon(
-                      Icons.rocket_launch_rounded,
-                      size: 22,
-                    ),
+                    FeatureItem.nutritionAnalyze(colorScheme: colorScheme),
+                    DeviceSpacing.small.height,
+                    FeatureItem.calorieTrack(colorScheme: colorScheme),
+                    DeviceSpacing.small.height,
+                    FeatureItem.healthAndSafety(colorScheme: colorScheme)
                   ],
                 ),
               ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // Features List (Optional Enhancement)
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: colorScheme.primary.withOpacity(0.2),
-                  width: 1,
-                ),
-              ),
-              child: Column(
-                children: [
-                  _FeatureItem(
-                    icon: Icons.camera_alt_rounded,
-                    text: 'Besin analizi',
-                    colorScheme: colorScheme,
-                  ),
-                  const SizedBox(height: 12),
-                  _FeatureItem(
-                    icon: Icons.track_changes_rounded,
-                    text: 'Kalori takibi',
-                    colorScheme: colorScheme,
-                  ),
-                  const SizedBox(height: 12),
-                  _FeatureItem(
-                    icon: Icons.health_and_safety_rounded,
-                    text: 'Sağlık önerileri',
-                    colorScheme: colorScheme,
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    );
-  }
-}
-
-class _FeatureItem extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final ColorScheme colorScheme;
-
-  const _FeatureItem({
-    required this.icon,
-    required this.text,
-    required this.colorScheme,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: colorScheme.primary.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(
-            icon,
-            size: 20,
-            color: colorScheme.primary,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: colorScheme.onSurface.withOpacity(0.8),
-          ),
-        ),
-      ],
     );
   }
 }

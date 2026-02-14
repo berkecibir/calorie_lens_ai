@@ -1,3 +1,5 @@
+import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/ui/border/app_border_radius.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +37,7 @@ class AuthPageLayout extends StatelessWidget {
                     elevation: 8,
                     shadowColor: colorScheme.primary.withValues(alpha: 0.2),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24)),
+                        borderRadius: AppBorderRadius.circular(AppSizes.s24)),
                     child: Padding(
                       padding: DevicePadding.xxlarge.all,
                       child: child,
