@@ -51,20 +51,18 @@ class AppTheme {
         secondaryContainer:
             lightAccentColor, // Vurgu varyantı yoksa secondary ile aynı olabilir
         surface: lightSurfaceColor,
-        background: lightBackgroundColor,
         error: lightErrorColor,
         onPrimary: Colors.white, // Primary üzerinde görünen metin/ikon rengi
         onSecondary:
             Colors.white, // Secondary üzerinde görünen metin/ikon rengi
         onSurface: lightTextColor, // Surface üzerinde görünen metin/ikon rengi
-        onBackground:
-            lightTextColor, // Background üzerinde görünen metin/ikon rengi
         onError: Colors.white, // Error üzerinde görünen metin/ikon rengi
         brightness: Brightness.light,
       ),
       scaffoldBackgroundColor: lightBackgroundColor,
       cardColor: lightSurfaceColor, // Kartların rengi
-      dialogBackgroundColor: lightSurfaceColor, // Dialogların rengi
+      dialogTheme: const DialogThemeData(
+          backgroundColor: lightSurfaceColor), // Dialogların rengi
       dividerColor: Colors.grey[300], // Bölücü çizgilerin rengi
       hoverColor:
           lightPrimaryColor.withValues(alpha: 0.1), // Üzerine gelindiğinde
@@ -136,7 +134,7 @@ class AppTheme {
 
       // AppBar Teması
       appBarTheme: AppBarTheme(
-        color: lightPrimaryColor,
+        backgroundColor: lightPrimaryColor,
         elevation: AppSizes.s0, // Gölge olmasın
         foregroundColor: Colors.white, // AppBar üzerindeki ikon ve metin rengi
         systemOverlayStyle: SystemUiOverlayStyle
@@ -287,18 +285,16 @@ class AppTheme {
         secondary: darkAccentColor,
         secondaryContainer: darkAccentColor,
         surface: darkSurfaceColor,
-        background: darkBackgroundColor,
         error: darkErrorColor,
         onPrimary: Colors.black, // Koyu tema primary üzerinde metin siyah
         onSecondary: Colors.black,
         onSurface: darkTextColor,
-        onBackground: darkTextColor,
         onError: Colors.black,
         brightness: Brightness.dark,
       ),
       scaffoldBackgroundColor: darkBackgroundColor,
       cardColor: darkSurfaceColor,
-      dialogBackgroundColor: darkSurfaceColor,
+      dialogTheme: const DialogThemeData(backgroundColor: darkSurfaceColor),
       dividerColor: Colors.grey[700],
       hoverColor: darkPrimaryColor.withValues(alpha: 0.1),
       splashColor: darkPrimaryColor.withValues(alpha: 0.2),
@@ -369,7 +365,7 @@ class AppTheme {
 
       // AppBar Teması
       appBarTheme: AppBarTheme(
-        color:
+        backgroundColor:
             darkSurfaceColor, // Koyu temada AppBar yüzey rengiyle aynı olabilir
         elevation: AppSizes.s0,
         foregroundColor: darkTextColor,
