@@ -1,3 +1,5 @@
+import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/ui/shape/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // AppBar için SystemUiOverlayStyle
 
@@ -6,7 +8,8 @@ class AppTheme {
   static const Color lightPrimaryColor =
       Color(0xFF66BB6A); // Açık tema ana rengi (yeşil tonu)
   static const Color lightPrimaryVariant = Color(0xFF388E3C);
-  static const Color lightAccentColor = Color(0xFFFF9800); // Vurgu rengi (Turuncu)
+  static const Color lightAccentColor =
+      Color(0xFFFF9800); // Vurgu rengi (Turuncu)
   static const Color lightBackgroundColor = Color(0xFFF0F2F5); // Arka plan
   static const Color lightSurfaceColor = Colors.white; // Kartlar, dialoglar vb.
   static const Color lightTextColor = Color(0xFF212121); // Ana metin
@@ -48,20 +51,18 @@ class AppTheme {
         secondaryContainer:
             lightAccentColor, // Vurgu varyantı yoksa secondary ile aynı olabilir
         surface: lightSurfaceColor,
-        background: lightBackgroundColor,
         error: lightErrorColor,
         onPrimary: Colors.white, // Primary üzerinde görünen metin/ikon rengi
         onSecondary:
             Colors.white, // Secondary üzerinde görünen metin/ikon rengi
         onSurface: lightTextColor, // Surface üzerinde görünen metin/ikon rengi
-        onBackground:
-            lightTextColor, // Background üzerinde görünen metin/ikon rengi
         onError: Colors.white, // Error üzerinde görünen metin/ikon rengi
         brightness: Brightness.light,
       ),
       scaffoldBackgroundColor: lightBackgroundColor,
       cardColor: lightSurfaceColor, // Kartların rengi
-      dialogBackgroundColor: lightSurfaceColor, // Dialogların rengi
+      dialogTheme: const DialogThemeData(
+          backgroundColor: lightSurfaceColor), // Dialogların rengi
       dividerColor: Colors.grey[300], // Bölücü çizgilerin rengi
       hoverColor:
           lightPrimaryColor.withValues(alpha: 0.1), // Üzerine gelindiğinde
@@ -70,61 +71,77 @@ class AppTheme {
       // Metin Temaları
       textTheme: const TextTheme(
         displayLarge: TextStyle(
-            fontSize: 96.0, fontWeight: FontWeight.w300, color: lightTextColor),
+            fontSize: AppSizes.s96,
+            fontWeight: FontWeight.w300,
+            color: lightTextColor),
         displayMedium: TextStyle(
-            fontSize: 60.0, fontWeight: FontWeight.w400, color: lightTextColor),
+            fontSize: AppSizes.s60,
+            fontWeight: FontWeight.w400,
+            color: lightTextColor),
         displaySmall: TextStyle(
-            fontSize: 48.0, fontWeight: FontWeight.w400, color: lightTextColor),
+            fontSize: AppSizes.s48,
+            fontWeight: FontWeight.w400,
+            color: lightTextColor),
         headlineLarge: TextStyle(
-            fontSize: 40.0, fontWeight: FontWeight.w500, color: lightTextColor),
+            fontSize: AppSizes.s40,
+            fontWeight: FontWeight.w500,
+            color: lightTextColor),
         headlineMedium: TextStyle(
-            fontSize: 34.0, fontWeight: FontWeight.w400, color: lightTextColor),
+            fontSize: AppSizes.s34,
+            fontWeight: FontWeight.w400,
+            color: lightTextColor),
         headlineSmall: TextStyle(
-            fontSize: 24.0, fontWeight: FontWeight.w400, color: lightTextColor),
+            fontSize: AppSizes.s24,
+            fontWeight: FontWeight.w400,
+            color: lightTextColor),
         titleLarge: TextStyle(
-            fontSize: 20.0,
+            fontSize: AppSizes.s20,
             fontWeight: FontWeight.w500,
             color: lightTextColor), // App bar title vb.
         titleMedium: TextStyle(
-            fontSize: 16.0, fontWeight: FontWeight.w500, color: lightTextColor),
+            fontSize: AppSizes.s16,
+            fontWeight: FontWeight.w500,
+            color: lightTextColor),
         titleSmall: TextStyle(
-            fontSize: 14.0, fontWeight: FontWeight.w500, color: lightTextColor),
+            fontSize: AppSizes.s14,
+            fontWeight: FontWeight.w500,
+            color: lightTextColor),
         bodyLarge: TextStyle(
-            fontSize: 16.0,
+            fontSize: AppSizes.s16,
             fontWeight: FontWeight.w400,
             color: lightTextColor), // Varsayılan metin
         bodyMedium: TextStyle(
-            fontSize: 14.0,
+            fontSize: AppSizes.s14,
             fontWeight: FontWeight.w400,
             color: lightTextColor), // Varsayılan metin
         bodySmall: TextStyle(
-            fontSize: 12.0,
+            fontSize: AppSizes.s12,
             fontWeight: FontWeight.w400,
             color: lightSecondaryTextColor),
         labelLarge: TextStyle(
-            fontSize: 14.0,
+            fontSize: AppSizes.s14,
             fontWeight: FontWeight.w500,
             color: Colors.white), // Buton metinleri
         labelMedium: TextStyle(
-            fontSize: 12.0,
+            fontSize: AppSizes.s12,
             fontWeight: FontWeight.w400,
             color: lightSecondaryTextColor),
         labelSmall: TextStyle(
-            fontSize: 10.0,
+            fontSize: AppSizes.s10,
             fontWeight: FontWeight.w400,
             color: lightSecondaryTextColor),
       ),
 
       // AppBar Teması
       appBarTheme: AppBarTheme(
-        color: lightPrimaryColor,
-        elevation: 0, // Gölge olmasın
+        backgroundColor: lightPrimaryColor,
+        elevation: AppSizes.s0, // Gölge olmasın
         foregroundColor: Colors.white, // AppBar üzerindeki ikon ve metin rengi
         systemOverlayStyle: SystemUiOverlayStyle
             .light, // Status bar ikonları açık temada açık renkli olsun
         titleTextStyle: const TextStyle(
           color: Colors.white,
-          fontSize: 20,
+          fontSize: AppSizes.s20,
           fontWeight: FontWeight.w500,
         ),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -136,25 +153,31 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: lightButtonColor, // Buton arka plan rengi
           foregroundColor: Colors.white, // Buton metin/ikon rengi
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          elevation: 2,
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.s24, vertical: AppSizes.s12),
+          shape: AppShapes.button,
+          textStyle: const TextStyle(
+              fontSize: AppSizes.s16, fontWeight: FontWeight.w500),
+          elevation: AppSizes.s2,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: lightPrimaryColor,
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          textStyle: const TextStyle(
+              fontSize: AppSizes.s16, fontWeight: FontWeight.w500),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: lightPrimaryColor,
           side: const BorderSide(color: lightPrimaryColor, width: 1.5),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.s24, vertical: AppSizes.s12),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppSizes.s8)),
+          textStyle: const TextStyle(
+              fontSize: AppSizes.s16, fontWeight: FontWeight.w500),
         ),
       ),
 
@@ -166,38 +189,41 @@ class AppTheme {
             TextStyle(color: lightSecondaryTextColor.withValues(alpha: 0.7)),
         labelStyle: const TextStyle(color: lightPrimaryColor),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSizes.s8),
           borderSide: BorderSide.none, // Varsayılan olarak çerçevesiz
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: lightPrimaryColor, width: 2),
+          borderRadius: BorderRadius.circular(AppSizes.s8),
+          borderSide:
+              const BorderSide(color: lightPrimaryColor, width: AppSizes.s2),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey[300]!, width: 1),
+          borderRadius: BorderRadius.circular(AppSizes.s8),
+          borderSide: BorderSide(color: Colors.grey[300]!, width: AppSizes.s1),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: lightErrorColor, width: 2),
+          borderRadius: BorderRadius.circular(AppSizes.s8),
+          borderSide:
+              const BorderSide(color: lightErrorColor, width: AppSizes.s2),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: lightErrorColor, width: 2),
+          borderRadius: BorderRadius.circular(AppSizes.s8),
+          borderSide:
+              const BorderSide(color: lightErrorColor, width: AppSizes.s2),
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(
+            vertical: AppSizes.s14, horizontal: AppSizes.s16),
       ),
 
       // Icon Teması
-      iconTheme: const IconThemeData(color: lightIconColor, size: 24),
+      iconTheme: const IconThemeData(color: lightIconColor, size: AppSizes.s24),
 
       // Card Teması
       cardTheme: CardThemeData(
         color: lightSurfaceColor,
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.all(8),
+        elevation: AppSizes.s2,
+        shape: AppShapes.card,
+        margin: const EdgeInsets.all(AppSizes.s8),
       ),
 
       // BottomNavigationBar Teması
@@ -205,10 +231,10 @@ class AppTheme {
         backgroundColor: lightSurfaceColor,
         selectedItemColor: lightPrimaryColor,
         unselectedItemColor: lightSecondaryTextColor,
-        selectedLabelStyle:
-            const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-        unselectedLabelStyle: const TextStyle(fontSize: 12),
-        elevation: 8,
+        selectedLabelStyle: const TextStyle(
+            fontSize: AppSizes.s12, fontWeight: FontWeight.w500),
+        unselectedLabelStyle: const TextStyle(fontSize: AppSizes.s12),
+        elevation: AppSizes.s8,
         type: BottomNavigationBarType.fixed, // Eğer 4+ öğe varsa
       ),
 
@@ -227,7 +253,7 @@ class AppTheme {
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: lightAccentColor,
         foregroundColor: Colors.white,
-        elevation: 4,
+        elevation: AppSizes.s4,
       ),
 
       // Progress Indicator Teması
@@ -259,18 +285,16 @@ class AppTheme {
         secondary: darkAccentColor,
         secondaryContainer: darkAccentColor,
         surface: darkSurfaceColor,
-        background: darkBackgroundColor,
         error: darkErrorColor,
         onPrimary: Colors.black, // Koyu tema primary üzerinde metin siyah
         onSecondary: Colors.black,
         onSurface: darkTextColor,
-        onBackground: darkTextColor,
         onError: Colors.black,
         brightness: Brightness.dark,
       ),
       scaffoldBackgroundColor: darkBackgroundColor,
       cardColor: darkSurfaceColor,
-      dialogBackgroundColor: darkSurfaceColor,
+      dialogTheme: const DialogThemeData(backgroundColor: darkSurfaceColor),
       dividerColor: Colors.grey[700],
       hoverColor: darkPrimaryColor.withValues(alpha: 0.1),
       splashColor: darkPrimaryColor.withValues(alpha: 0.2),
@@ -278,56 +302,78 @@ class AppTheme {
       // Metin Temaları
       textTheme: const TextTheme(
         displayLarge: TextStyle(
-            fontSize: 96.0, fontWeight: FontWeight.w300, color: darkTextColor),
+            fontSize: AppSizes.s96,
+            fontWeight: FontWeight.w300,
+            color: darkTextColor),
         displayMedium: TextStyle(
-            fontSize: 60.0, fontWeight: FontWeight.w400, color: darkTextColor),
+            fontSize: AppSizes.s60,
+            fontWeight: FontWeight.w400,
+            color: darkTextColor),
         displaySmall: TextStyle(
-            fontSize: 48.0, fontWeight: FontWeight.w400, color: darkTextColor),
+            fontSize: AppSizes.s48,
+            fontWeight: FontWeight.w400,
+            color: darkTextColor),
         headlineLarge: TextStyle(
-            fontSize: 40.0, fontWeight: FontWeight.w500, color: darkTextColor),
+            fontSize: AppSizes.s40,
+            fontWeight: FontWeight.w500,
+            color: darkTextColor),
         headlineMedium: TextStyle(
-            fontSize: 34.0, fontWeight: FontWeight.w400, color: darkTextColor),
+            fontSize: AppSizes.s34,
+            fontWeight: FontWeight.w400,
+            color: darkTextColor),
         headlineSmall: TextStyle(
-            fontSize: 24.0, fontWeight: FontWeight.w400, color: darkTextColor),
+            fontSize: AppSizes.s24,
+            fontWeight: FontWeight.w400,
+            color: darkTextColor),
         titleLarge: TextStyle(
-            fontSize: 20.0, fontWeight: FontWeight.w500, color: darkTextColor),
+            fontSize: AppSizes.s20,
+            fontWeight: FontWeight.w500,
+            color: darkTextColor),
         titleMedium: TextStyle(
-            fontSize: 16.0, fontWeight: FontWeight.w500, color: darkTextColor),
+            fontSize: AppSizes.s16,
+            fontWeight: FontWeight.w500,
+            color: darkTextColor),
         titleSmall: TextStyle(
-            fontSize: 14.0, fontWeight: FontWeight.w500, color: darkTextColor),
+            fontSize: AppSizes.s14,
+            fontWeight: FontWeight.w500,
+            color: darkTextColor),
         bodyLarge: TextStyle(
-            fontSize: 16.0, fontWeight: FontWeight.w400, color: darkTextColor),
+            fontSize: AppSizes.s16,
+            fontWeight: FontWeight.w400,
+            color: darkTextColor),
         bodyMedium: TextStyle(
-            fontSize: 14.0, fontWeight: FontWeight.w400, color: darkTextColor),
+            fontSize: AppSizes.s14,
+            fontWeight: FontWeight.w400,
+            color: darkTextColor),
         bodySmall: TextStyle(
-            fontSize: 12.0,
+            fontSize: AppSizes.s12,
             fontWeight: FontWeight.w400,
             color: darkSecondaryTextColor),
         labelLarge: TextStyle(
-            fontSize: 14.0,
+            fontSize: AppSizes.s14,
             fontWeight: FontWeight.w500,
             color: Colors.black), // Koyu temada buton metni siyah
         labelMedium: TextStyle(
-            fontSize: 12.0,
+            fontSize: AppSizes.s12,
             fontWeight: FontWeight.w400,
             color: darkSecondaryTextColor),
         labelSmall: TextStyle(
-            fontSize: 10.0,
+            fontSize: AppSizes.s10,
             fontWeight: FontWeight.w400,
             color: darkSecondaryTextColor),
       ),
 
       // AppBar Teması
       appBarTheme: AppBarTheme(
-        color:
+        backgroundColor:
             darkSurfaceColor, // Koyu temada AppBar yüzey rengiyle aynı olabilir
-        elevation: 0,
+        elevation: AppSizes.s0,
         foregroundColor: darkTextColor,
         systemOverlayStyle: SystemUiOverlayStyle
             .dark, // Status bar ikonları koyu temada koyu renkli olsun
         titleTextStyle: const TextStyle(
           color: darkTextColor,
-          fontSize: 20,
+          fontSize: AppSizes.s20,
           fontWeight: FontWeight.w500,
         ),
         iconTheme: const IconThemeData(color: darkTextColor),
@@ -340,25 +386,31 @@ class AppTheme {
           backgroundColor: darkButtonColor,
           foregroundColor:
               Colors.black, // Koyu temada buton metni/ikon rengi siyah
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          elevation: 2,
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.s24, vertical: AppSizes.s12),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppSizes.s8)),
+          textStyle: const TextStyle(
+              fontSize: AppSizes.s16, fontWeight: FontWeight.w500),
+          elevation: AppSizes.s2,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: darkPrimaryColor,
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          textStyle: const TextStyle(
+              fontSize: AppSizes.s16, fontWeight: FontWeight.w500),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: darkPrimaryColor,
           side: const BorderSide(color: darkPrimaryColor, width: 1.5),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.s24, vertical: AppSizes.s12),
+          shape: AppShapes.button,
+          textStyle: const TextStyle(
+              fontSize: AppSizes.s16, fontWeight: FontWeight.w500),
         ),
       ),
 
@@ -401,7 +453,7 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: darkSurfaceColor,
         elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: AppShapes.card,
         margin: const EdgeInsets.all(8),
       ),
 
@@ -410,10 +462,10 @@ class AppTheme {
         backgroundColor: darkSurfaceColor,
         selectedItemColor: darkPrimaryColor,
         unselectedItemColor: darkSecondaryTextColor,
-        selectedLabelStyle:
-            const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-        unselectedLabelStyle: const TextStyle(fontSize: 12),
-        elevation: 8,
+        selectedLabelStyle: const TextStyle(
+            fontSize: AppSizes.s12, fontWeight: FontWeight.w500),
+        unselectedLabelStyle: const TextStyle(fontSize: AppSizes.s12),
+        elevation: AppSizes.s8,
         type: BottomNavigationBarType.fixed,
       ),
 
@@ -432,7 +484,7 @@ class AppTheme {
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: darkAccentColor,
         foregroundColor: Colors.black, // Koyu temada FAB metni siyah
-        elevation: 4,
+        elevation: AppSizes.s4,
       ),
 
       // Progress Indicator Teması

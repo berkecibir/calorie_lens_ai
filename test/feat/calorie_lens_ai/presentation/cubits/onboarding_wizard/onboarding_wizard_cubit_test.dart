@@ -8,6 +8,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboard
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -102,7 +103,7 @@ void main() {
         // VERIFY that saveUserProfile was called with the CORRECT profile
         verify(mockSaveUserProfile.call(argThat(
           predicate<UserProfileEntity>((profile) {
-            print("Verifying saved profile: ${profile.age}");
+            debugPrint("Verifying saved profile: ${profile.age}");
             return profile.age == 30 &&
                 profile.heightCm == 180 &&
                 profile.weightKg == 80;

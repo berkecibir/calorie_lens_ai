@@ -1,4 +1,5 @@
 import 'package:calorie_lens_ai_app/core/usecases/usecases.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/check_onboarding_wizard_status.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/complete_onboarding_wizard.dart';
@@ -46,7 +47,7 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
     result.fold(
       (failure) => emit(
         OnboardingWizardError(
-          message: "Profil yüklenemedi: ${failure.toString()}",
+          message: "${AppTexts.profileLoadFailedMessage} ${failure.toString()}",
         ),
       ),
       (profile) {
@@ -66,14 +67,15 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
     result.fold(
       (failure) => emit(
         OnboardingWizardError(
-          message: "Wizard durumu kontrol edilemedi: ${failure.toString()}",
+          message:
+              "${AppTexts.checkWizardStatusFailedMessage} ${failure.toString()}",
         ),
       ),
       (isCompleted) {
         if (isCompleted) {
           emit(
             OnboardingWizardsSuccess(
-              message: "Wizard zaten tamamlanmış",
+              message: AppTexts.wizardCompletedAlready,
             ),
           );
         } else {
@@ -158,27 +160,28 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
     ));
   }
 
-  /// ✅ Tüm onboarding akışını tamamlar
+  ///  Tüm onboarding akışını tamamlar
   Future<void> finishOnboardingWizard() async {
     final currentProfile = _getCurrentProfile();
 
     emit(OnboardingWizardLoading());
 
     // DEBUG: Profili kontrol et
-    debugPrint('📋 Profile being saved:');
-    debugPrint('  - Gender: ${currentProfile.gender}');
-    debugPrint('  - Age: ${currentProfile.age}');
-    debugPrint('  - Height: ${currentProfile.heightCm}');
-    debugPrint('  - Weight: ${currentProfile.weightKg}');
-    debugPrint('  - Target Weight: ${currentProfile.targetWeightKg}');
-    debugPrint('  - Activity: ${currentProfile.activityLevel}');
+    debugPrint(AppTexts.profileBeingSaved);
+    debugPrint('  ${AppTexts.genderDebug} ${currentProfile.gender}');
+    debugPrint('  ${AppTexts.ageDebug} ${currentProfile.age}');
+    debugPrint('  ${AppTexts.heightDebug} ${currentProfile.heightCm}');
+    debugPrint('  ${AppTexts.weightDebug} ${currentProfile.weightKg}');
+    debugPrint(
+        '  ${AppTexts.targetWeightDebug} ${currentProfile.targetWeightKg}');
+    debugPrint('  ${AppTexts.activityDebug} ${currentProfile.activityLevel}');
 
     // 1️⃣ Profil kaydet
     final saveResult = await saveUserProfile(currentProfile);
     if (saveResult.isLeft()) {
       emit(
         OnboardingWizardError(
-          message: "Profil kaydedilemedi",
+          message: AppTexts.profileSavedFailedMessage,
         ),
       );
       return;
@@ -188,10 +191,12 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
     final nutritionResult = await calculateAndSaveNutritionData(currentProfile);
     nutritionResult.fold(
       (failure) {
-        debugPrint('❌ Nutrition calculation failed: ${failure.toString()}');
+        debugPrint(
+            '${AppTexts.nutritionCalculationFailedMessage} ${failure.toString()}');
         emit(
           OnboardingWizardError(
-            message: "Besin hesaplama hatası: ${failure.toString()}",
+            message:
+                "${AppTexts.nutritionCalculationErrorMessage} ${failure.toString()}",
           ),
         );
       },
@@ -202,20 +207,19 @@ class OnboardingWizardCubit extends Cubit<OnboardingWizardState> {
         completeResult.fold(
           (failure) => emit(
             OnboardingWizardError(
-              message: "Wizard durumu güncellenemedi: ${failure.toString()}",
+              message:
+                  "${AppTexts.wizardCouldNotUpdateMessage} ${failure.toString()}",
             ),
           ),
           (_) => emit(
             OnboardingWizardsSuccess(
-              message: "Wizard başarıyla tamamlandı!",
+              message: AppTexts.wizardCompletedSuccessfully,
             ),
           ),
         );
       },
     );
   }
-
-
 
   void pageChanged(int index) {
     emit(OnboardingWizardLoaded(

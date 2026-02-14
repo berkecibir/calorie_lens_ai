@@ -1,6 +1,6 @@
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
 import 'package:hive/hive.dart';
-
+import '../../../../../core/utils/const/app_texts.dart';
 part 'user_profile_model.g.dart';
 
 @HiveType(typeId: 0)
@@ -87,37 +87,37 @@ class UserProfileModel {
       allergies: allergies ?? this.allergies,
     );
   }
+
   Map<String, dynamic> toJson() {
     return {
-      'gender': gender?.name,
-      'activityLevel': activityLevel?.name,
-      'age': age,
-      'heightCm': heightCm,
-      'weightKg': weightKg,
-      'targetWeightKg': targetWeightKg,
-      'dietType': dietType,
-      'allergies': allergies,
+      AppTexts.gender: gender?.name,
+      AppTexts.activityLevel: activityLevel?.name,
+      AppTexts.age: age,
+      AppTexts.heightCm: heightCm,
+      AppTexts.weightKg: weightKg,
+      AppTexts.targetWeightKg: targetWeightKg,
+      AppTexts.dietType: dietType,
+      AppTexts.allergies: allergies,
     };
   }
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
     return UserProfileModel(
-      gender: json['gender'] != null
-          ? Gender.values.firstWhere((e) => e.name == json['gender'])
+      gender: json[AppTexts.gender] != null
+          ? Gender.values.firstWhere((e) => e.name == json[AppTexts.gender])
           : null,
-      activityLevel: json['activityLevel'] != null
+      activityLevel: json[AppTexts.activityLevel] != null
           ? ActivityLevel.values
-              .firstWhere((e) => e.name == json['activityLevel'])
+              .firstWhere((e) => e.name == json[AppTexts.activityLevel])
           : null,
-      age: json['age'],
-      heightCm: json['heightCm'],
-      weightKg: json['weightKg'],
-      targetWeightKg: json['targetWeightKg'],
-      dietType: json['dietType'],
-      allergies: json['allergies'] != null
-          ? List<String>.from(json['allergies'])
+      age: json[AppTexts.age],
+      heightCm: json[AppTexts.heightCm],
+      weightKg: json[AppTexts.weightKg],
+      targetWeightKg: json[AppTexts.targetWeightKg],
+      dietType: json[AppTexts.dietType],
+      allergies: json[AppTexts.allergies] != null
+          ? List<String>.from(json[AppTexts.allergies])
           : null,
     );
   }
 }
-

@@ -26,4 +26,28 @@ class FormValidator {
     }
     return null;
   }
+
+  // Confirm Password Validator
+  static String? validateConfirmPassword(
+      String? confirmPassword, String password) {
+    final passwordValidation = validatePassword(password);
+    if (passwordValidation != null) {
+      return passwordValidation;
+    }
+    if (confirmPassword != password) {
+      return AppTexts.passwordDoNotMatch;
+    }
+    return null;
+  }
+
+  // Full Name Validator
+  static String? validateFullName(String? fullName) {
+    if (fullName == null || fullName.trim().isEmpty) {
+      return AppTexts.nameAndSurnameCantBeEmpty;
+    }
+    if (fullName.trim().length < 3) {
+      return AppTexts.atLeastThreeCharacters;
+    }
+    return null;
+  }
 }

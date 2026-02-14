@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class AppInit {
   static Future<void> initializeApp() async {
-    WidgetsFlutterBinding.ensureInitialized();
+    // WidgetsFlutterBinding already called in main.dart
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );

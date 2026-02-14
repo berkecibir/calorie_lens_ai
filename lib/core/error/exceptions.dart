@@ -1,6 +1,6 @@
 class ServerException implements Exception {
   final String message;
-  ServerException({required this.message});
+  const ServerException({required this.message});
 
   @override
   String toString() => message;
@@ -8,7 +8,7 @@ class ServerException implements Exception {
 
 class CacheException implements Exception {
   final String message;
-  CacheException({required this.message});
+  const CacheException({required this.message});
 
   @override
   String toString() => message;
@@ -16,7 +16,15 @@ class CacheException implements Exception {
 
 class AuthException implements Exception {
   final String message;
-  AuthException({required this.message});
+  const AuthException({required this.message});
+
+  @override
+  String toString() => message;
+}
+
+class NutritionCalculationException implements Exception {
+  final String message;
+  const NutritionCalculationException({required this.message});
 
   @override
   String toString() => message;

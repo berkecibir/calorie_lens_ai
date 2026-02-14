@@ -1,11 +1,10 @@
-import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
-import 'package:calorie_lens_ai_app/core/utils/validators/form_validator.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/pages/sign_in_page.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/widgets/auth_text_form_field.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/buttons/auth_action_button.dart';
 import 'package:flutter/material.dart';
-
+import '../../../../../../../core/utils/const/app_texts.dart';
 import '../../../../../../../core/widgets/navigation_helper/navigation_helper.dart';
 
 class SignUpFormSection extends StatelessWidget {
@@ -40,89 +39,68 @@ class SignUpFormSection extends StatelessWidget {
             controller: fullNameController,
           ),
           DeviceSpacing.medium.height,
-
           // E-posta
           AuthTextFormField.email(
             controller: emailController,
-            validator: (email) => FormValidator.validateEmail(email),
+            // validator: (email) => FormValidator.validateEmail(email),
           ),
           DeviceSpacing.medium.height,
-
           // Parola
           AuthTextFormField.password(
             controller: passwordController,
-            validator: (password) => FormValidator.validatePassword(password),
+            // validator: (password) => FormValidator.validatePassword(password),
           ),
           DeviceSpacing.medium.height,
-
           // Parola Onay
           AuthTextFormField.confirmPassword(
             passwordController: passwordController,
             confirmPasswordController: confirmPasswordController,
           ),
           DeviceSpacing.large.height,
-
           // Kayıt Ol Butonu
-          SizedBox(
-            width: double.infinity,
-            height: 56,
-            child: ElevatedButton(
-              onPressed: onSignUp,
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: 2,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Kayıt Ol',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  DeviceSpacing.small.width,
-                  const Icon(Icons.arrow_forward_rounded, size: AppSizes.s20),
-                ],
-              ),
-            ),
+          AuthActionButton(
+            onPressed: onSignUp,
+            text: AppTexts.signUpText,
           ),
           DeviceSpacing.medium.height,
-
           // Giriş Yap Linki
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Zaten hesabınız var mı? ',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigation.pushNamed(root: SignInPage.id);
-                },
-                style: TextButton.styleFrom(
-                  padding: DevicePadding.small.onlyHorizontal,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Text(
-                  'Giriş Yap',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.primary,
-                  ),
-                ),
-              ),
+              _buildHaveAccountText(theme, colorScheme),
+              _buildSignInButton(colorScheme),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Text _buildHaveAccountText(ThemeData theme, ColorScheme colorScheme) {
+    return Text(
+      AppTexts.haveAccountText,
+      style: theme.textTheme.bodyMedium?.copyWith(
+        color: colorScheme.onSurface.withValues(alpha: 0.6),
+      ),
+    );
+  }
+
+  TextButton _buildSignInButton(ColorScheme colorScheme) {
+    return TextButton(
+      onPressed: () {
+        Navigation.pushReplacementNamed(root: SignInPage.id);
+      },
+      style: TextButton.styleFrom(
+        padding: DevicePadding.small.onlyHorizontal,
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      child: Text(
+        AppTexts.signInText,
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: colorScheme.primary,
+        ),
       ),
     );
   }

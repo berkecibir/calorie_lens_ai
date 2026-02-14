@@ -1,5 +1,6 @@
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:flutter/material.dart';
+import '../../../../../../../core/utils/const/app_texts.dart';
 
 class SignUpLoadingSection extends StatelessWidget {
   const SignUpLoadingSection({super.key});
@@ -16,7 +17,7 @@ class SignUpLoadingSection extends StatelessWidget {
         ),
         DeviceSpacing.medium.height,
         Text(
-          'Hesabınız oluşturuluyor...',
+          AppTexts.creatingAccountText,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: colorScheme.onSurface.withValues(alpha: 0.6),
           ),
