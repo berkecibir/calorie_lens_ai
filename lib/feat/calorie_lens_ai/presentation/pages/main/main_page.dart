@@ -1,6 +1,6 @@
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/bottom_nav/bottom_nav_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/tabs/analysis_tab.dart';
-import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/tabs/home_tab.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/tabs/home/home_tab.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/tabs/profile_tab.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/tabs/tracker_tab.dart';
 import 'package:flutter/material.dart';

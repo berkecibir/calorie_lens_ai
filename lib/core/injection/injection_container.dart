@@ -27,6 +27,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboard
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/save_user_profile.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/calculate_and_save_nutrition_data.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/auth/auth_cubit.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/main/main_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/splash/splash_cubit.dart';
@@ -177,6 +178,10 @@ Future<void> init() async {
         getCurrentUser: sl(),
         checkOnboardingWizardStatus: sl(),
       ));
+
+  sl.registerFactory(
+    () => MainCubit(getCurrentUser: sl(), getUserProfile: sl()),
+  );
 
   await Future<void>.value();
 }
