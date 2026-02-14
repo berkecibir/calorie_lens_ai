@@ -44,7 +44,29 @@ class OnboardingWizardRepositoryImpl implements OnboardingWizardRepository {
   @override
   Future<Either<Failure, UserProfileEntity>> getUserProfile() async {
     try {
-      final profile = await localDataSource.getUserProfile();
+      // 1. check local data
+      var profile = await localDataSource.getUserProfile();
+
+      // 2. if local data is empty and user is signed in, get data from remote
+      if (profile == const UserProfileEntity(allergies: []) &&
+          auth.currentUser != null) {
+        final doc = await firestore
+            .collection('users')
+            .doc(auth.currentUser!.uid)
+            .get();
+
+        if (doc.exists && doc.data() != null) {
+          // 3. convert Firebase data to Model
+          final data = doc.data()!;
+          final model = UserProfileModel.fromJson(data);
+
+          // 4. save for next time (Cache)
+          await localDataSource.saveUserProfile(model.toEntity());
+
+          profile = model.toEntity();
+        }
+      }
+
       return Right(profile);
     } on Exception catch (e) {
       return Left(CacheFailure(e.toString()));
