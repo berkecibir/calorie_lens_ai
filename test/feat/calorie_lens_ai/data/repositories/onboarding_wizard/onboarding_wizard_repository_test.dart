@@ -66,14 +66,17 @@ void main() {
       'should return UserProfileEntity when local data source succeeds',
       () async {
         // Arrange
-        when(mockLocalDataSource.getUserProfile())
+        const tUserId = 'test-user-id';
+        when(mockAuth.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn(tUserId);
+        when(mockLocalDataSource.getUserProfile(userId: tUserId))
             .thenAnswer((_) async => tProfile);
 
         // Act
         final result = await repository.getUserProfile();
 
         // Assert
-        verify(mockLocalDataSource.getUserProfile());
+        verify(mockLocalDataSource.getUserProfile(userId: tUserId));
         expect(result, Right(tProfile));
       },
     );
@@ -82,14 +85,17 @@ void main() {
       'should return CacheFailure when local data source throws exception',
       () async {
         // Arrange
-        when(mockLocalDataSource.getUserProfile())
+        const tUserId = 'test-user-id';
+        when(mockAuth.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn(tUserId);
+        when(mockLocalDataSource.getUserProfile(userId: tUserId))
             .thenThrow(Exception('Cache error'));
 
         // Act
         final result = await repository.getUserProfile();
 
         // Assert
-        verify(mockLocalDataSource.getUserProfile());
+        verify(mockLocalDataSource.getUserProfile(userId: tUserId));
         expect(result, isA<Left>());
         result.fold(
           (failure) => expect(failure, isA<CacheFailure>()),
@@ -104,14 +110,17 @@ void main() {
       'should save user profile successfully',
       () async {
         // Arrange
-        when(mockLocalDataSource.saveUserProfile(tProfile))
+        const tUserId = 'test-user-id';
+        when(mockAuth.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn(tUserId);
+        when(mockLocalDataSource.saveUserProfile(tProfile, userId: tUserId))
             .thenAnswer((_) async => {});
 
         // Act
         final result = await repository.saveUserProfile(tProfile);
 
         // Assert
-        verify(mockLocalDataSource.saveUserProfile(tProfile));
+        verify(mockLocalDataSource.saveUserProfile(tProfile, userId: tUserId));
         expect(result, const Right(null));
       },
     );
@@ -120,14 +129,17 @@ void main() {
       'should return CacheFailure when local data source throws exception',
       () async {
         // Arrange
-        when(mockLocalDataSource.saveUserProfile(tProfile))
+        const tUserId = 'test-user-id';
+        when(mockAuth.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn(tUserId);
+        when(mockLocalDataSource.saveUserProfile(tProfile, userId: tUserId))
             .thenThrow(Exception('Cache error'));
 
         // Act
         final result = await repository.saveUserProfile(tProfile);
 
         // Assert
-        verify(mockLocalDataSource.saveUserProfile(tProfile));
+        verify(mockLocalDataSource.saveUserProfile(tProfile, userId: tUserId));
         expect(result, isA<Left>());
         result.fold(
           (failure) => expect(failure, isA<CacheFailure>()),
@@ -145,7 +157,7 @@ void main() {
         const tUserId = 'test-user-id';
         when(mockAuth.currentUser).thenReturn(mockUser);
         when(mockUser.uid).thenReturn(tUserId);
-        when(mockLocalDataSource.saveUserProfile(any))
+        when(mockLocalDataSource.saveUserProfile(any, userId: tUserId))
             .thenAnswer((_) async => {});
         when(mockFirestore.collection('users')).thenReturn(mockCollectionRef);
         when(mockCollectionRef.doc(tUserId)).thenReturn(mockDocumentRef);
@@ -158,7 +170,7 @@ void main() {
         );
 
         // Assert
-        verify(mockLocalDataSource.saveUserProfile(tProfile));
+        verify(mockLocalDataSource.saveUserProfile(tProfile, userId: tUserId));
         verify(mockFirestore.collection('users'));
         verify(mockCollectionRef.doc(tUserId));
         verify(mockDocumentRef.set(any, any));
@@ -171,7 +183,7 @@ void main() {
       () async {
         // Arrange
         when(mockAuth.currentUser).thenReturn(null);
-        when(mockLocalDataSource.saveUserProfile(any))
+        when(mockLocalDataSource.saveUserProfile(any, userId: null))
             .thenAnswer((_) async => {});
 
         // Act
@@ -181,7 +193,7 @@ void main() {
         );
 
         // Assert
-        verify(mockLocalDataSource.saveUserProfile(tProfile));
+        verify(mockLocalDataSource.saveUserProfile(tProfile, userId: null));
         verifyNever(mockFirestore.collection(any));
         expect(result, const Right(null));
       },
@@ -191,7 +203,10 @@ void main() {
       'should return CacheFailure when local data source throws exception',
       () async {
         // Arrange
-        when(mockLocalDataSource.saveUserProfile(any))
+        const tUserId = 'test-user-id';
+        when(mockAuth.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn(tUserId);
+        when(mockLocalDataSource.saveUserProfile(any, userId: tUserId))
             .thenThrow(Exception('Cache error'));
 
         // Act
@@ -201,7 +216,7 @@ void main() {
         );
 
         // Assert
-        verify(mockLocalDataSource.saveUserProfile(tProfile));
+        verify(mockLocalDataSource.saveUserProfile(tProfile, userId: tUserId));
         expect(result, isA<Left>());
         result.fold(
           (failure) => expect(failure, isA<CacheFailure>()),
@@ -216,14 +231,18 @@ void main() {
       'should return true when wizard is completed',
       () async {
         // Arrange
-        when(mockLocalDataSource.checkOnboardingWizardStatus())
+        const tUserId = 'test-user-id';
+        when(mockAuth.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn(tUserId);
+        when(mockLocalDataSource.checkOnboardingWizardStatus(userId: tUserId))
             .thenAnswer((_) async => true);
 
         // Act
         final result = await repository.checkOnboardingWizardStatus();
 
         // Assert
-        verify(mockLocalDataSource.checkOnboardingWizardStatus());
+        verify(
+            mockLocalDataSource.checkOnboardingWizardStatus(userId: tUserId));
         expect(result, const Right(true));
       },
     );
@@ -232,14 +251,18 @@ void main() {
       'should return false when wizard is not completed',
       () async {
         // Arrange
-        when(mockLocalDataSource.checkOnboardingWizardStatus())
+        const tUserId = 'test-user-id';
+        when(mockAuth.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn(tUserId);
+        when(mockLocalDataSource.checkOnboardingWizardStatus(userId: tUserId))
             .thenAnswer((_) async => false);
 
         // Act
         final result = await repository.checkOnboardingWizardStatus();
 
         // Assert
-        verify(mockLocalDataSource.checkOnboardingWizardStatus());
+        verify(
+            mockLocalDataSource.checkOnboardingWizardStatus(userId: tUserId));
         expect(result, const Right(false));
       },
     );
@@ -248,14 +271,18 @@ void main() {
       'should return CacheFailure when local data source throws exception',
       () async {
         // Arrange
-        when(mockLocalDataSource.checkOnboardingWizardStatus())
+        const tUserId = 'test-user-id';
+        when(mockAuth.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn(tUserId);
+        when(mockLocalDataSource.checkOnboardingWizardStatus(userId: tUserId))
             .thenThrow(Exception('Cache error'));
 
         // Act
         final result = await repository.checkOnboardingWizardStatus();
 
         // Assert
-        verify(mockLocalDataSource.checkOnboardingWizardStatus());
+        verify(
+            mockLocalDataSource.checkOnboardingWizardStatus(userId: tUserId));
         expect(result, isA<Left>());
         result.fold(
           (failure) => expect(failure, isA<CacheFailure>()),
@@ -270,14 +297,17 @@ void main() {
       'should complete onboarding wizard successfully',
       () async {
         // Arrange
-        when(mockLocalDataSource.completeOnboardingWizard())
+        const tUserId = 'test-user-id';
+        when(mockAuth.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn(tUserId);
+        when(mockLocalDataSource.completeOnboardingWizard(userId: tUserId))
             .thenAnswer((_) async => {});
 
         // Act
         final result = await repository.completeOnboardingWizard();
 
         // Assert
-        verify(mockLocalDataSource.completeOnboardingWizard());
+        verify(mockLocalDataSource.completeOnboardingWizard(userId: tUserId));
         expect(result, const Right(null));
       },
     );
@@ -286,14 +316,17 @@ void main() {
       'should return CacheFailure when local data source throws exception',
       () async {
         // Arrange
-        when(mockLocalDataSource.completeOnboardingWizard())
+        const tUserId = 'test-user-id';
+        when(mockAuth.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn(tUserId);
+        when(mockLocalDataSource.completeOnboardingWizard(userId: tUserId))
             .thenThrow(Exception('Cache error'));
 
         // Act
         final result = await repository.completeOnboardingWizard();
 
         // Assert
-        verify(mockLocalDataSource.completeOnboardingWizard());
+        verify(mockLocalDataSource.completeOnboardingWizard(userId: tUserId));
         expect(result, isA<Left>());
         result.fold(
           (failure) => expect(failure, isA<CacheFailure>()),

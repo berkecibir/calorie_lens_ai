@@ -17,14 +17,17 @@ class MainLoaded extends MainState {
   final int carbTarget;
   final int fatTarget;
   final int consumedCalories;
+  final String insightMessage; // Yeni alan
 
-  const MainLoaded(
-      {required this.userName,
-      required this.dailyCalorieGoal,
-      required this.proteinTarget,
-      required this.carbTarget,
-      required this.fatTarget,
-      this.consumedCalories = 0});
+  const MainLoaded({
+    required this.userName,
+    required this.dailyCalorieGoal,
+    required this.proteinTarget,
+    required this.carbTarget,
+    required this.fatTarget,
+    this.consumedCalories = 0,
+    this.insightMessage = '',
+  });
 
   @override
   List<Object?> get props => [
@@ -34,6 +37,7 @@ class MainLoaded extends MainState {
         carbTarget,
         fatTarget,
         consumedCalories,
+        insightMessage,
       ];
 }
 

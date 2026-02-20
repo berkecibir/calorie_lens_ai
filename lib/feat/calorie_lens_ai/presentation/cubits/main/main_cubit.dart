@@ -44,6 +44,7 @@ class MainCubit extends Cubit<MainState> {
                 carbTarget: (nutritionData[AppTexts.carbGrams] as num).toInt(),
                 fatTarget: (nutritionData[AppTexts.fatGrams] as num).toInt(),
                 consumedCalories: 0, // Henüz yemek takibi yok
+                insightMessage: nutritionData['insightMessage'] ?? '',
               ));
             } catch (e) {
               emit(const MainError(

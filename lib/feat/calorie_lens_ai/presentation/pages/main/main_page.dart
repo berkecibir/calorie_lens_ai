@@ -1,3 +1,5 @@
+import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/home_page_texts.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/bottom_nav/bottom_nav_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/tabs/analysis_tab.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/tabs/home/home_tab.dart';
@@ -7,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainPage extends StatelessWidget {
-  static const String id = 'main_page';
+  static const String id = AppTexts.mainPageId;
   const MainPage({super.key});
 
   static const List<Widget> _tabs = [
@@ -41,22 +43,22 @@ class MainPage extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.home_rounded),
           activeIcon: Icon(Icons.home_rounded),
-          label: 'Ana Sayfa',
+          label: HomePageTexts.homeLabel,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.camera_alt_outlined),
           activeIcon: Icon(Icons.camera_alt_rounded),
-          label: 'Analiz',
+          label: HomePageTexts.analysisLabel,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.bar_chart_outlined),
           activeIcon: Icon(Icons.bar_chart_rounded),
-          label: 'Takip',
+          label: HomePageTexts.trackerLabel,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person_outline_rounded),
           activeIcon: Icon(Icons.person_rounded),
-          label: 'Profil',
+          label: HomePageTexts.profileLabel,
         ),
       ],
     );

@@ -6,7 +6,7 @@ class NutritionCalculator {
   const NutritionCalculator._();
 
   static Map<String, dynamic> calculate(UserProfileEntity profile) {
-    //  Tüm gerekli alanları kontrol et
+    // 1. Gerekli alanların kontrolü (Mevcut yapıyı koruduk)
     if (profile.weightKg == null ||
         profile.heightCm == null ||
         profile.age == null ||
@@ -17,36 +17,54 @@ class NutritionCalculator {
       );
     }
 
-    // 1. BMR Hesaplama (Mifflin-St Jeor)
+    // 2. BMR ve TDEE Hesaplama
     double bmr;
     if (profile.gender == Gender.male) {
-      bmr = 10 * profile.weightKg! +
-          6.25 * profile.heightCm! -
-          5 * profile.age! +
+      bmr = (10 * profile.weightKg!) +
+          (6.25 * profile.heightCm!) -
+          (5 * profile.age!) +
           5;
     } else {
-      bmr = 10 * profile.weightKg! +
-          6.25 * profile.heightCm! -
-          5 * profile.age! -
+      bmr = (10 * profile.weightKg!) +
+          (6.25 * profile.heightCm!) -
+          (5 * profile.age!) -
           161;
     }
 
-    // 2. TDEE Hesaplama (Aktivite Çarpanı)
     double activityMultiplier = _getActivityMultiplier(profile.activityLevel);
-    final tdee = bmr * activityMultiplier;
+    final double tdee = bmr * activityMultiplier;
 
-    // 3. Hedef Belirleme (Kilo alma/verme durumuna göre)
-    final isWeightLoss = profile.targetWeightKg! < profile.weightKg!;
-    final dailyCalorieGoal = isWeightLoss ? tdee - 500 : tdee + 500;
+    // 3. Hedef Kalori ve Insight Mesajı Belirleme
+    double dailyCalorieGoal;
+    String insightMessage = "Kilonuzu korumak için ideal.";
+    final double diff = profile.targetWeightKg! - profile.weightKg!;
 
-    // 4. Makro Dağılımı (%30 Protein, %40 Carb, %30 Fat)
-    const proteinPercentage = 0.3;
-    const carbPercentage = 0.4;
-    const fatPercentage = 0.3;
+    if (diff.abs() < 1.0) {
+      dailyCalorieGoal = tdee;
+    } else if (diff < 0) {
+      // KİLO VERME (Ağırsağlam Mantığı)
+      double calculatedGoal = tdee - 500;
+      if (calculatedGoal < bmr) {
+        dailyCalorieGoal = bmr;
+        insightMessage =
+            "Metabolizmanı korumak için kalorini yaşamsal sınırın (BMR) altına düşürmedik. Yağ yakımı bu seviyede daha sağlıklı olacaktır.";
+      } else {
+        dailyCalorieGoal = calculatedGoal;
+        insightMessage =
+            "Sürdürülebilir yağ yakımı için günlük 500 kcal açık oluşturduk. Haftalık ~0.5kg kayıp hedefleniyor.";
+      }
+    } else {
+      // KİLO ALMA
+      dailyCalorieGoal = tdee + 300; // Kas kazanımı için +300-500 kcal idealdir
+      insightMessage =
+          "Sağlıklı kas kazanımı için TDEE üzerine küçük bir fazlalık ekledik.";
+    }
 
-    final proteinGrams = (dailyCalorieGoal * proteinPercentage / 4).round();
-    final carbGrams = (dailyCalorieGoal * carbPercentage / 4).round();
-    final fatGrams = (dailyCalorieGoal * fatPercentage / 9).round();
+    // 4. Makro Hesaplama (g/kg mantığı)
+    final proteinGrams = (profile.weightKg! * 2.0).round();
+    final fatGrams = (profile.weightKg! * 0.8).round();
+    final remainingCals = dailyCalorieGoal - (proteinGrams * 4 + fatGrams * 9);
+    final carbGrams = (remainingCals / 4).round();
 
     return {
       AppTexts.bmr: bmr,
@@ -55,9 +73,11 @@ class NutritionCalculator {
       AppTexts.proteinGrams: proteinGrams,
       AppTexts.carbGrams: carbGrams,
       AppTexts.fatGrams: fatGrams,
+      'insightMessage': insightMessage,
     };
   }
 
+  // Aktivite Seviyesi Çarpanları (Bilimsel Standart - Harris Benedict)
   static double _getActivityMultiplier(ActivityLevel? level) {
     switch (level) {
       case ActivityLevel.sedentary:

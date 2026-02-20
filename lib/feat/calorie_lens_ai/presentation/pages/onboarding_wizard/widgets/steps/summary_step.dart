@@ -3,6 +3,7 @@ import 'package:calorie_lens_ai_app/core/utils/const/onboarding_wizard_texts.dar
 import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/activity_level_extension.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/onboarding_wizard/user_profile_entity.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/utils/nutrition_calculator/nutrition_calculator.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_state.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/widgets/row/summary_row.dart';
@@ -53,6 +54,8 @@ class SummaryStep extends StatelessWidget {
               DeviceSpacing.medium.height,
               // Diet Card
               _buildDietCard(profile),
+              // Insight Card
+              _buildPlanInsightCard(context, profile),
               const SizedBox(height: AppSizes.s48),
               // Submit Button
               _buildSubmitButton(context, isLoading),
@@ -117,6 +120,45 @@ class SummaryStep extends StatelessWidget {
           value: profile.dietType ?? OnboardingWizardTexts.dietTypeEmptyText,
         ),
         AllergiesSection(allergies: profile.allergies),
+      ],
+    );
+  }
+
+  Widget _buildPlanInsightCard(
+      BuildContext context, UserProfileEntity profile) {
+    // Hesaplamayı yap
+    final nutritionData = NutritionCalculator.calculate(profile);
+
+    final tdee = (nutritionData[AppTexts.tdee] as num).toInt();
+    final goal = (nutritionData[AppTexts.dailyCalorieGoal] as num).toInt();
+
+    // Mesajı artık manuel yazmıyoruz, calculator'dan çekiyoruz
+    final String insightMessage = nutritionData['insightMessage'] ?? '';
+
+    return SummaryCard(
+      title: 'Önerilen Plan',
+      icon: Icons.insights_rounded,
+      children: [
+        SummaryRow(
+          label: 'Günlük İhtiyaç (TDEE)',
+          value: '$tdee kcal',
+        ),
+        SummaryRow(
+          label: 'Hedeflenen',
+          value: '$goal kcal',
+        ),
+        const Divider(), // Görsel ayırıcı
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+          child: Text(
+            insightMessage,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
+        )
       ],
     );
   }

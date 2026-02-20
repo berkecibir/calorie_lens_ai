@@ -1,6 +1,8 @@
 import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/home_page_texts.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/main/main_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/main/main_state.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/tabs/home/mixin/home_tab_mixin.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/tabs/home/widgets/daily_calorie_card.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/tabs/home/widgets/home_greeting_section.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/tabs/home/widgets/home_quick_actions.dart';
@@ -15,18 +17,7 @@ class HomeTab extends StatefulWidget {
   State<HomeTab> createState() => _HomeTabState();
 }
 
-class _HomeTabState extends State<HomeTab> {
-  @override
-  void initState() {
-    super.initState();
-    // Sayfa ilk açıldığında veriyi yükle
-    // (Eğer MainCubit lazy:false ise buna gerek kalmayabilir ama garanti olsun)
-    final cubit = context.read<MainCubit>();
-    if (cubit.state is MainInitial) {
-      cubit.loadMainScreenData();
-    }
-  }
-
+class _HomeTabState extends State<HomeTab> with HomeTabMixin {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MainCubit, MainState>(
@@ -64,6 +55,12 @@ class _HomeTabState extends State<HomeTab> {
                   _buildMacroRow(state),
                   const SizedBox(height: AppSizes.s24),
 
+                  // --- Günlük İçgörü (Insight) ---
+                  if (state.insightMessage.isNotEmpty) ...[
+                    _buildInsightCard(context, state.insightMessage),
+                    const SizedBox(height: AppSizes.s24),
+                  ],
+
                   // --- Hızlı Erişim ---
                   const HomeQuickActions(),
                 ],
@@ -76,12 +73,47 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
+  Widget _buildInsightCard(BuildContext context, String message) {
+    return Container(
+      padding: const EdgeInsets.all(AppSizes.s16),
+      decoration: BoxDecoration(
+        color: Theme.of(context)
+            .colorScheme
+            .primaryContainer
+            .withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(AppSizes.s12),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.insights_rounded,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(width: AppSizes.s12),
+          Expanded(
+            child: Text(
+              message,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildMacroRow(MainLoaded state) {
     return Row(
       children: [
         Expanded(
           child: NutrientCard(
-            label: 'Protein',
+            label: HomePageTexts.proteinLabel,
             current: 0, // TODO: state.consumedProtein
             target: state.proteinTarget,
             color: const Color(0xFF42A5F5),
@@ -90,7 +122,7 @@ class _HomeTabState extends State<HomeTab> {
         const SizedBox(width: AppSizes.s8),
         Expanded(
           child: NutrientCard(
-            label: 'Karbonhidrat',
+            label: HomePageTexts.carbLabel,
             current: 0, // TODO: state.consumedCarb
             target: state.carbTarget,
             color: const Color(0xFFFFA726),
@@ -99,7 +131,7 @@ class _HomeTabState extends State<HomeTab> {
         const SizedBox(width: AppSizes.s8),
         Expanded(
           child: NutrientCard(
-            label: 'Yağ',
+            label: HomePageTexts.fatLabel,
             current: 0, // TODO: state.consumedFat
             target: state.fatTarget,
             color: const Color(0xFFEF5350),

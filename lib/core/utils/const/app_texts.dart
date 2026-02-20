@@ -6,6 +6,7 @@ class AppTexts {
   static const String onboardingWizardPageId = "onboarding_wizard_page";
   static const String splashPageId = 'splash_page';
   static const String forgotPasswordPageId = 'forgot_password_page';
+  static const String mainPageId = 'main_page_id';
 
   // App Name
   static const String appName = 'CalorieLens AI';

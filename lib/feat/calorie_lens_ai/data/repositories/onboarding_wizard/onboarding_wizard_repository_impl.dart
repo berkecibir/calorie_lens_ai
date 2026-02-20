@@ -20,12 +20,13 @@ class OnboardingWizardRepositoryImpl implements OnboardingWizardRepository {
   Future<Either<Failure, void>> saveNutritionData(
       UserProfileEntity profile, Map<String, dynamic> calculatedData) async {
     try {
-      await localDataSource.saveUserProfile(profile);
-      if (auth.currentUser != null) {
+      final userId = auth.currentUser?.uid;
+      await localDataSource.saveUserProfile(profile, userId: userId);
+      if (userId != null) {
         final profileModel = UserProfileModel.fromEntity(profile);
         final profileJson = profileModel.toJson();
 
-        await firestore.collection('users').doc(auth.currentUser!.uid).set({
+        await firestore.collection('users').doc(userId).set({
           ...profileJson,
           ...calculatedData,
           'onboardingCompleted': true,
@@ -44,16 +45,13 @@ class OnboardingWizardRepositoryImpl implements OnboardingWizardRepository {
   @override
   Future<Either<Failure, UserProfileEntity>> getUserProfile() async {
     try {
+      final userId = auth.currentUser?.uid;
       // 1. check local data
-      var profile = await localDataSource.getUserProfile();
+      var profile = await localDataSource.getUserProfile(userId: userId);
 
       // 2. if local data is empty and user is signed in, get data from remote
-      if (profile == const UserProfileEntity(allergies: []) &&
-          auth.currentUser != null) {
-        final doc = await firestore
-            .collection('users')
-            .doc(auth.currentUser!.uid)
-            .get();
+      if (profile == const UserProfileEntity(allergies: []) && userId != null) {
+        final doc = await firestore.collection('users').doc(userId).get();
 
         if (doc.exists && doc.data() != null) {
           // 3. convert Firebase data to Model
@@ -61,7 +59,8 @@ class OnboardingWizardRepositoryImpl implements OnboardingWizardRepository {
           final model = UserProfileModel.fromJson(data);
 
           // 4. save for next time (Cache)
-          await localDataSource.saveUserProfile(model.toEntity());
+          await localDataSource.saveUserProfile(model.toEntity(),
+              userId: userId);
 
           profile = model.toEntity();
         }
@@ -77,7 +76,8 @@ class OnboardingWizardRepositoryImpl implements OnboardingWizardRepository {
   Future<Either<Failure, void>> saveUserProfile(
       UserProfileEntity profile) async {
     try {
-      await localDataSource.saveUserProfile(profile);
+      final userId = auth.currentUser?.uid;
+      await localDataSource.saveUserProfile(profile, userId: userId);
       return const Right(null);
     } on Exception catch (e) {
       return Left(CacheFailure(e.toString()));
@@ -87,7 +87,9 @@ class OnboardingWizardRepositoryImpl implements OnboardingWizardRepository {
   @override
   Future<Either<Failure, bool>> checkOnboardingWizardStatus() async {
     try {
-      final status = await localDataSource.checkOnboardingWizardStatus();
+      final userId = auth.currentUser?.uid;
+      final status =
+          await localDataSource.checkOnboardingWizardStatus(userId: userId);
       return Right(status);
     } on Exception catch (e) {
       return Left(CacheFailure(e.toString()));
@@ -97,7 +99,8 @@ class OnboardingWizardRepositoryImpl implements OnboardingWizardRepository {
   @override
   Future<Either<Failure, void>> completeOnboardingWizard() async {
     try {
-      await localDataSource.completeOnboardingWizard();
+      final userId = auth.currentUser?.uid;
+      await localDataSource.completeOnboardingWizard(userId: userId);
       return const Right(null);
     } on Exception catch (e) {
       return Left(CacheFailure(e.toString()));
