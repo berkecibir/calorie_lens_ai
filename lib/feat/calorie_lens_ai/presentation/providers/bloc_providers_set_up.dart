@@ -1,6 +1,7 @@
 import 'package:calorie_lens_ai_app/core/injection/injection_container.dart'
     as di;
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/auth/auth_cubit.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/food_analysis/food_analysis_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/main/main_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
@@ -37,6 +38,10 @@ class BlocProviderSetUp {
     ),
     BlocProvider<MainCubit>(
       create: (_) => di.sl<MainCubit>(),
+      lazy: true,
+    ),
+    BlocProvider<FoodAnalysisCubit>(
+      create: (_) => di.sl<FoodAnalysisCubit>(),
       lazy: true,
     ),
   ];

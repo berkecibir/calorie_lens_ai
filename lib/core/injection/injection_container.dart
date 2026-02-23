@@ -7,10 +7,14 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/local_data_sources/onboarding_wizard/onboarding_wizard_local_data_source_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/auth/auth_remote_data_source.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/auth/auth_remote_data_source_impl.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/food_analysis/food_analysis_remote_data_source.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/food_analysis/food_analysis_remote_data_source_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/repositories/auth/auth_repository_impl.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/repositories/food_analysis/food_analysis_repository_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/repositories/onboarding/onboarding_repository_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/repositories/onboarding_wizard/onboarding_wizard_repository_impl.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/auth/auth_repository.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/food_analysis/food_analysis_repository.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/onboarding/onboarding_repository.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/onboarding_wizard/onboarding_wizard_repository.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/get_current_user.dart';
@@ -19,6 +23,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/se
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_in_with_email_and_password.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_out.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_up_with_email_and_password.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/food_analysis/analyze_food.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding/check_onboarding_status.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding/complete_onboarding.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/check_onboarding_wizard_status.dart';
@@ -27,13 +32,16 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboard
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/save_user_profile.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/calculate_and_save_nutrition_data.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/auth/auth_cubit.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/food_analysis/food_analysis_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/main/main_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding_wizard/onboarding_wizard_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/splash/splash_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../feat/calorie_lens_ai/presentation/cubits/auth/password_visibility_cubit.dart';
 import '../../feat/calorie_lens_ai/presentation/cubits/bottom_nav/bottom_nav_cubit.dart';
@@ -71,6 +79,18 @@ Future<void> init() async {
     () => AuthLocalDataSourceImpl(sl()),
   );
 
+  // Gemini Model — FoodAnalysisRemoteDataSource'dan önce kayıt edilmeli
+  sl.registerLazySingleton<GenerativeModel>(
+    () => GenerativeModel(
+      model: 'gemini-1.5-flash-latest',
+      apiKey: dotenv.env['GEMINI_API_KEY']!,
+    ),
+  );
+
+  sl.registerLazySingleton<FoodAnalysisRemoteDataSource>(
+    () => FoodAnalysisRemoteDataSourceImpl(model: sl()),
+  );
+
   // Repositories
   // ---
   sl.registerLazySingleton<OnboardingRepository>(
@@ -88,6 +108,10 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerLazySingleton<FoodAnalysisRepository>(
+    () => FoodAnalysisRepositoryImpl(remoteDataSource: sl()),
+  );
+
   // Use cases (Onboarding & Auth)
   // ---
   // Onboarding
@@ -99,6 +123,11 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<SendPasswordResetEmail>(
     () => SendPasswordResetEmail(repository: sl()),
+  );
+
+  // Food Analysis
+  sl.registerLazySingleton<AnalyzeFood>(
+    () => AnalyzeFood(repository: sl()),
   );
 
   // Yeni eklenen use caseler
@@ -181,6 +210,10 @@ Future<void> init() async {
 
   sl.registerFactory(
     () => MainCubit(getCurrentUser: sl(), getUserProfile: sl()),
+  );
+
+  sl.registerFactory<FoodAnalysisCubit>(
+    () => FoodAnalysisCubit(analyzeFood: sl()),
   );
 
   await Future<void>.value();

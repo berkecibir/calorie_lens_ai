@@ -73,7 +73,7 @@ class NutritionCalculator {
       AppTexts.proteinGrams: proteinGrams,
       AppTexts.carbGrams: carbGrams,
       AppTexts.fatGrams: fatGrams,
-      'insightMessage': insightMessage,
+      AppTexts.insightMessage: insightMessage,
     };
   }
 

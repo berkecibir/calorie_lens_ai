@@ -93,6 +93,7 @@ class AppTexts {
   static const String proteinGrams = 'proteinGrams';
   static const String carbGrams = 'carbGrams';
   static const String fatGrams = 'fatGrams';
+  static const String insightMessage = 'insightMessage';
 
   // Onboarding Wizard Cubit Strings
   static const String profileLoadFailedMessage = 'Profil yüklenemedi:';
