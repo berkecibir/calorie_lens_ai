@@ -16,6 +16,7 @@ import 'package:mockito/mockito.dart';
 import 'auth_cubit_test.mocks.dart';
 
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/send_password_reset_email.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/send_email_verification.dart';
 
 @GenerateMocks([
   SignInWithEmailAndPassword,
@@ -23,6 +24,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/se
   SignOut,
   GetCurrentUser,
   SendPasswordResetEmail,
+  SendEmailVerification,
 ])
 void main() {
   late AuthCubit cubit;
@@ -31,6 +33,7 @@ void main() {
   late MockSignOut mockSignOut;
   late MockGetCurrentUser mockGetCurrentUser;
   late MockSendPasswordResetEmail mockSendPasswordResetEmail;
+  late MockSendEmailVerification mockSendEmailVerification;
 
   setUp(() {
     mockSignIn = MockSignInWithEmailAndPassword();

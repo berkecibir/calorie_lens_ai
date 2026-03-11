@@ -58,7 +58,10 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, UserEntity?>> getCurrentUser() async {
     try {
       final cachedUser = await localDataSource.getCachedUserSession();
-      if (cachedUser != null) {
+
+      // E-posta henüz doğrulanmamışsa cache'i atla ve Firebase'den taze veri çek.
+      // Bu sayede "Doğrulamayı Kontrol Et" butonu gerçek durumu görür.
+      if (cachedUser != null && cachedUser.isEmailVerified) {
         return Right(cachedUser);
       }
 

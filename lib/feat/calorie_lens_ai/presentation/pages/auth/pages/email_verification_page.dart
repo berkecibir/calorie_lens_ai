@@ -3,7 +3,7 @@ import 'package:calorie_lens_ai_app/core/widgets/snackbar/custom_snackbar.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/auth/auth_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/auth/auth_state.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/widgets/auth_page_layouts.dart';
-import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/pages/onboarding_wizard_page.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/splash/page/splash_page.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/pages/sign_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +24,8 @@ class EmailVerificationPage extends StatelessWidget {
         child: BlocConsumer<AuthCubit, AuthState>(
           listener: (context, state) {
             if (state is Authenticated) {
-              Navigation.pushReplacementNamed(root: OnboardingWizardPages.id);
+              // SplashPage, wizard tamamlandı mı kontrolünü yapar ve doğru yere yönlendirir.
+              Navigation.pushReplacementNamed(root: SplashPage.id);
             } else if (state is Unauthenticated) {
               Navigation.pushReplacementNamed(root: SignInPage.id);
             } else if (state is AuthError) {

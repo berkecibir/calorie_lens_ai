@@ -82,8 +82,10 @@ Future<void> init() async {
   // Gemini Model — FoodAnalysisRemoteDataSource'dan önce kayıt edilmeli
   sl.registerLazySingleton<GenerativeModel>(
     () => GenerativeModel(
-      model: 'gemini-1.5-flash-latest',
+      model: 'models/gemini-1.5-flash',
       apiKey: dotenv.env['GEMINI_API_KEY']!,
+      // API versiyonunu v1beta yerine v1 olarak zorla:
+      // requestOptions: const RequestOptions(apiVersion: 'v1'),
     ),
   );
 

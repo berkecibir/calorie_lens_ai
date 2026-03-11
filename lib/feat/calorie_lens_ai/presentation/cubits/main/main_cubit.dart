@@ -28,7 +28,20 @@ class MainCubit extends Cubit<MainState> {
       (failure) => emit(MainError(message: 'Kullanıcı bilgileri alınamadı')),
       (user) {
         profileResult.fold(
-          (failure) => emit(MainError(message: 'Profil bilgileri alınamadı')),
+          (failure) {
+            // Profil henüz kaydedilmemişse (onboarding wizard tamamlanmamış)
+            // uygulamayı kilitlemek yerine varsayılan değerlerle göster.
+            emit(MainLoaded(
+              userName: user?.displayName ?? 'Kullanıcı',
+              dailyCalorieGoal: 0,
+              proteinTarget: 0,
+              carbTarget: 0,
+              fatTarget: 0,
+              consumedCalories: 0,
+              insightMessage:
+                  'Kişiselleştirilmiş hedefler için profil bilgilerini tamamlayın.',
+            ));
+          },
           (profile) {
             try {
               // 3. Hesaplamayı yap (NutritionCalculator halihazırda var!)
@@ -47,8 +60,17 @@ class MainCubit extends Cubit<MainState> {
                 insightMessage: nutritionData['insightMessage'] ?? '',
               ));
             } catch (e) {
-              emit(const MainError(
-                  message: "Profil bilgileri eksik, lütfen tamamlayın."));
+              // NutritionCalculator hesaplama hatası - profil eksik alanlar var
+              emit(MainLoaded(
+                userName: user?.displayName ?? 'Kullanıcı',
+                dailyCalorieGoal: 0,
+                proteinTarget: 0,
+                carbTarget: 0,
+                fatTarget: 0,
+                consumedCalories: 0,
+                insightMessage:
+                    'Kişiselleştirilmiş hedefler için profil bilgilerini tamamlayın.',
+              ));
             }
           },
         );
