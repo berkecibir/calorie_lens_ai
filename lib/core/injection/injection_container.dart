@@ -193,6 +193,7 @@ Future<void> init() async {
       signOut: sl(),
       getCurrentUser: sl(),
       sendPasswordResetEmail: sl(),
+      sendEmailVerification: sl(),
     ),
   );
 

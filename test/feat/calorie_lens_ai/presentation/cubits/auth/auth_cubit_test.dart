@@ -38,6 +38,7 @@ void main() {
     mockSignOut = MockSignOut();
     mockGetCurrentUser = MockGetCurrentUser();
     mockSendPasswordResetEmail = MockSendPasswordResetEmail();
+    mockSendEmailVerification = MockSendEmailVerification();
 
     cubit = AuthCubit(
       signInWithEmailAndPassword: mockSignIn,
@@ -45,6 +46,7 @@ void main() {
       signOut: mockSignOut,
       getCurrentUser: mockGetCurrentUser,
       sendPasswordResetEmail: mockSendPasswordResetEmail,
+      sendEmailVerification: mockSendEmailVerification,
     );
   });
 
