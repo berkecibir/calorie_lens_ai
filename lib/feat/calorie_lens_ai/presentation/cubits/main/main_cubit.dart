@@ -61,6 +61,7 @@ class MainCubit extends Cubit<MainState> {
               consumedProtein: cProt,
               consumedCarbs: cCarb,
               consumedFat: cFat,
+              todayMeals: const [],
               insightMessage:
                   'Kişiselleştirilmiş hedefler için profil bilgilerini tamamlayın.',
             ));
@@ -81,6 +82,7 @@ class MainCubit extends Cubit<MainState> {
                 consumedProtein: cProt,
                 consumedCarbs: cCarb,
                 consumedFat: cFat,
+                todayMeals: logsResult.getOrElse(() => []),
                 insightMessage: nutritionData['insightMessage'] ?? '',
               ));
             } catch (e) {
@@ -94,6 +96,7 @@ class MainCubit extends Cubit<MainState> {
                 consumedProtein: cProt,
                 consumedCarbs: cCarb,
                 consumedFat: cFat,
+                todayMeals: logsResult.getOrElse(() => []),
                 insightMessage:
                     'Kişiselleştirilmiş hedefler için profil bilgilerini tamamlayın.',
               ));
