@@ -103,18 +103,28 @@ class UserProfileModel {
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
     return UserProfileModel(
+      // Null safety ve güvenli enum eşleşmesi:
       gender: json[AppTexts.gender] != null
-          ? Gender.values.firstWhere((e) => e.name == json[AppTexts.gender])
+          ? Gender.values.firstWhere(
+              (e) => e.name == json[AppTexts.gender],
+              orElse: () => Gender.male, // Eşleşmezse varsayılan değer
+            )
           : null,
+
       activityLevel: json[AppTexts.activityLevel] != null
-          ? ActivityLevel.values
-              .firstWhere((e) => e.name == json[AppTexts.activityLevel])
+          ? ActivityLevel.values.firstWhere(
+              (e) => e.name == json[AppTexts.activityLevel],
+              orElse: () => ActivityLevel.sedentary, // Varsayılan değer
+            )
           : null,
-      age: json[AppTexts.age],
-      heightCm: json[AppTexts.heightCm],
-      weightKg: json[AppTexts.weightKg],
-      targetWeightKg: json[AppTexts.targetWeightKg],
-      dietType: json[AppTexts.dietType],
+
+      // Geriye kalan alanlar:
+      age: json[AppTexts.age] as int?,
+      heightCm: json[AppTexts.heightCm] as int?,
+      // num? olarak cast edip toDouble() çağırmak her zaman daha güvenlidir (int gelirse patlamaz)
+      weightKg: (json[AppTexts.weightKg] as num?)?.toDouble(),
+      targetWeightKg: (json[AppTexts.targetWeightKg] as num?)?.toDouble(),
+      dietType: json[AppTexts.dietType] as String?,
       allergies: json[AppTexts.allergies] != null
           ? List<String>.from(json[AppTexts.allergies])
           : null,

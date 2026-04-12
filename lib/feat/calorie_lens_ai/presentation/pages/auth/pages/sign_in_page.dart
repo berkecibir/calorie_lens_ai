@@ -4,7 +4,8 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/widgets/auth_page_layouts.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/widgets/sign_in/sign_in_title_section.dart'
     show SignInTitleSection;
-import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/home/home_page.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/pages/email_verification_page.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/widgets/device_spacing/device_spacing.dart';
@@ -45,7 +46,10 @@ class _SignInPageState extends State<SignInPage> with SignInMixin {
                       '${AppTexts.signInErrorOccured} ${state.message}');
                 } else if (state is Authenticated) {
                   // Giriş başarılıysa ana sayfaya yönlendir
-                  Navigation.push(page: HomePage());
+                  Navigation.pushReplacementNamed(root: MainPage.id);
+                } else if (state is AuthEmailNotVerified) {
+                  Navigation.pushReplacementNamed(
+                      root: EmailVerificationPage.id);
                 }
               },
               // Performans için sadece ilgili state değişimlerinde rebuild yap

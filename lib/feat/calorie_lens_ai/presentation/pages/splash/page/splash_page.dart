@@ -2,8 +2,9 @@ import 'package:calorie_lens_ai_app/core/utils/const/app_texts.dart';
 import 'package:calorie_lens_ai_app/core/widgets/navigation_helper/navigation_helper.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/splash/splash_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/splash/splash_state.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/pages/email_verification_page.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/auth/pages/sign_in_page.dart';
-import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/home/home_page.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/main_page.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding/pages/onboarding_pages.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/onboarding_wizard/pages/onboarding_wizard_page.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/splash/page/mixin/splash_page_mixin.dart';
@@ -29,6 +30,7 @@ class _SplashPageState extends State<SplashPage> with SplashPageMixin {
       listenWhen: (previous, current) {
         return current is SplashNavigateToOnboarding ||
             current is SplashNavigateToAuth ||
+            current is SplashNavigateToEmailVerification ||
             current is SplashNavigateToWizard ||
             current is SplashNavigateToHome ||
             current is SplashError;
@@ -59,10 +61,12 @@ class _SplashPageState extends State<SplashPage> with SplashPageMixin {
       Navigation.pushReplacementNamed(root: OnboardingPages.id);
     } else if (state is SplashNavigateToAuth) {
       Navigation.pushReplacementNamed(root: SignInPage.id);
+    } else if (state is SplashNavigateToEmailVerification) {
+      Navigation.pushReplacementNamed(root: EmailVerificationPage.id);
     } else if (state is SplashNavigateToWizard) {
       Navigation.pushReplacementNamed(root: OnboardingWizardPages.id);
     } else if (state is SplashNavigateToHome) {
-      Navigation.pushReplacementNamed(root: HomePage.id);
+      Navigation.pushReplacementNamed(root: MainPage.id);
     } else if (state is SplashError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(state.message)),

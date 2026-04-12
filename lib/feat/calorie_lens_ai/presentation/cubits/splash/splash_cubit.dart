@@ -46,6 +46,11 @@ class SplashCubit extends Cubit<SplashState> {
         emit(SplashNavigateToAuth());
         return;
       }
+      // Mail doğrulanmış mı kontrol et
+      if (!user.isEmailVerified) {
+        emit(SplashNavigateToEmailVerification());
+        return;
+      }
       // 3. Wizard tamamlandı mı kontrol et
       final wizardResult = await checkOnboardingWizardStatus.call(NoParams());
       final isWizardCompleted = wizardResult.fold(
