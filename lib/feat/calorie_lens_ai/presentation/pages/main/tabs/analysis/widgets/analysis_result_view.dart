@@ -4,6 +4,7 @@ import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.d
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/food_analysis/food_analysis_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/food_analysis/food_analysis_state.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/main/main_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/pages/main/tabs/analysis/widgets/analysis_macro_card.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/buttons/wizard_continue_button.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/widgets/cards/summary_card.dart';
@@ -108,11 +109,21 @@ class AnalysisResultView extends StatelessWidget {
 
           // Tracker'a ekle butonu
           WizardContinueButton(
-            onPressed: () {
-              // TODO: Tracker entegrasyonu Faz 2'de gelecek
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Tracker yakında eklenecek!')),
-              );
+            onPressed: () async {
+              final result = state.result;
+              await context.read<FoodAnalysisCubit>().saveResultToLog(result);
+
+              if (context.mounted) {
+                // Ana sayfadaki verileri tazele
+                context.read<MainCubit>().loadMainScreenData();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Yemek başarıyla günlüğe eklendi!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
             },
             text: 'Bugüne Ekle',
           ),

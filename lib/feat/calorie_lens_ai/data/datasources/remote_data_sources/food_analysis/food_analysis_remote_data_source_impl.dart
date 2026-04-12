@@ -69,28 +69,48 @@ Eğer yemek tanınamıyorsa food_name'i "Tanınamadı" yap ve confidence'ı 0.1 
 
   @override
   Future<FoodAnalysisModel> analyzeFood(File imageFile) async {
-    final imageBytes = await imageFile.readAsBytes();
-    final mimeType = imageFile.path.toLowerCase().endsWith('.png')
-        ? 'image/png'
-        : 'image/jpeg';
+    try {
+      final imageBytes = await imageFile.readAsBytes();
+      final pathLower = imageFile.path.toLowerCase();
+      
+      String mimeType = 'image/jpeg';
+      if (pathLower.endsWith('.png')) {
+        mimeType = 'image/png';
+      } else if (pathLower.endsWith('.webp')) {
+        mimeType = 'image/webp';
+      } else if (pathLower.endsWith('.heic') || pathLower.endsWith('.heif')) {
+        mimeType = 'image/heic';
+      }
 
-    final response = await model.generateContent([
-      Content.multi([
-        TextPart(_prompt),
-        DataPart(mimeType, imageBytes),
-      ]),
-    ]);
+      final response = await model.generateContent([
+        Content.multi([
+          TextPart(_prompt),
+          DataPart(mimeType, imageBytes),
+        ]),
+      ]);
 
-    final text = response.text;
-    if (text == null || text.isEmpty) {
-      throw Exception('Gemini boş yanıt döndürdü');
+      final text = response.text;
+      if (text == null || text.isEmpty) {
+        throw Exception('Gemini boş yanıt döndürdü');
+      }
+
+      // JSON bloğunu metin içinden ayıkla (regex veya manuel arama ile)
+      final cleanJson = _extractJson(text);
+
+      return FoodAnalysisModel.fromGeminiResponse(cleanJson);
+    } catch (e) {
+      throw Exception('Analiz sırasında hata: $e');
     }
+  }
 
-    // Model bazen ```json ... ``` bloğu içine alabiliyor,
-    // bunu temizlemezsen jsonDecode hata verir.
-    final cleanJson =
-        text.replaceAll('```json', '').replaceAll('```', '').trim();
-
-    return FoodAnalysisModel.fromGeminiResponse(cleanJson);
+  /// Metin içindeki ilk JSON bloğunu bulur
+  String _extractJson(String text) {
+    final start = text.indexOf('{');
+    final end = text.lastIndexOf('}');
+    if (start != -1 && end != -1 && end > start) {
+      return text.substring(start, end + 1);
+    }
+    // Eğer { } bulunamazsa olduğu gibi döndür (Model.fromGeminiResponse içinde temizleme devam ediyor)
+    return text.replaceAll('```json', '').replaceAll('```', '').trim();
   }
 }

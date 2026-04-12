@@ -12,7 +12,6 @@ class AnalysisPickerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final cubit = context.read<FoodAnalysisCubit>();
     return Padding(
       padding: DevicePadding.xlarge.all,

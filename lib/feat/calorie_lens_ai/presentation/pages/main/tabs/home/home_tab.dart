@@ -114,7 +114,7 @@ class _HomeTabState extends State<HomeTab> with HomeTabMixin {
         Expanded(
           child: NutrientCard(
             label: HomePageTexts.proteinLabel,
-            current: 0, // TODO: state.consumedProtein
+            current: state.consumedProtein,
             target: state.proteinTarget,
             color: const Color(0xFF42A5F5),
           ),
@@ -123,7 +123,7 @@ class _HomeTabState extends State<HomeTab> with HomeTabMixin {
         Expanded(
           child: NutrientCard(
             label: HomePageTexts.carbLabel,
-            current: 0, // TODO: state.consumedCarb
+            current: state.consumedCarbs,
             target: state.carbTarget,
             color: const Color(0xFFFFA726),
           ),
@@ -132,7 +132,7 @@ class _HomeTabState extends State<HomeTab> with HomeTabMixin {
         Expanded(
           child: NutrientCard(
             label: HomePageTexts.fatLabel,
-            current: 0, // TODO: state.consumedFat
+            current: state.consumedFat,
             target: state.fatTarget,
             color: const Color(0xFFEF5350),
           ),

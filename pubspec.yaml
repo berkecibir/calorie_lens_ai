@@ -52,6 +52,7 @@ dependencies:
 
   # Google Generative AI for food analysis
   google_generative_ai: ^0.4.7
+  uuid: ^4.3.3
 
 dev_dependencies:
   flutter_test:

@@ -17,7 +17,10 @@ class MainLoaded extends MainState {
   final int carbTarget;
   final int fatTarget;
   final int consumedCalories;
-  final String insightMessage; // Yeni alan
+  final int consumedProtein;
+  final int consumedCarbs;
+  final int consumedFat;
+  final String insightMessage;
 
   const MainLoaded({
     required this.userName,
@@ -26,6 +29,9 @@ class MainLoaded extends MainState {
     required this.carbTarget,
     required this.fatTarget,
     this.consumedCalories = 0,
+    this.consumedProtein = 0,
+    this.consumedCarbs = 0,
+    this.consumedFat = 0,
     this.insightMessage = '',
   });
 
@@ -37,6 +43,9 @@ class MainLoaded extends MainState {
         carbTarget,
         fatTarget,
         consumedCalories,
+        consumedProtein,
+        consumedCarbs,
+        consumedFat,
         insightMessage,
       ];
 }

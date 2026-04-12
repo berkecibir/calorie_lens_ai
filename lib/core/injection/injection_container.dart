@@ -32,6 +32,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboard
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/save_user_profile.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/onboarding_wizard/calculate_and_save_nutrition_data.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/auth/auth_cubit.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/auth/password_visibility_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/food_analysis/food_analysis_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/main/main_cubit.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/onboarding/onboarding_cubit.dart';
@@ -43,8 +44,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../feat/calorie_lens_ai/presentation/cubits/auth/password_visibility_cubit.dart';
-import '../../feat/calorie_lens_ai/presentation/cubits/bottom_nav/bottom_nav_cubit.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/bottom_nav/bottom_nav_cubit.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/meal_log/meal_log_remote_data_source.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/repositories/meal_log/meal_log_repository_impl.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/repositories/meal_log/meal_log_repository.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/meal_log/get_daily_meal_logs.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/meal_log/save_meal_log.dart';
 
 final sl = GetIt.instance;
 
@@ -93,6 +98,10 @@ Future<void> init() async {
     () => FoodAnalysisRemoteDataSourceImpl(model: sl()),
   );
 
+  sl.registerLazySingleton<MealLogRemoteDataSource>(
+    () => MealLogRemoteDataSourceImpl(firestore: sl()),
+  );
+
   // Repositories
   // ---
   sl.registerLazySingleton<OnboardingRepository>(
@@ -114,6 +123,10 @@ Future<void> init() async {
     () => FoodAnalysisRepositoryImpl(remoteDataSource: sl()),
   );
 
+  sl.registerLazySingleton<MealLogRepository>(
+    () => MealLogRepositoryImpl(remoteDataSource: sl()),
+  );
+
   // Use cases (Onboarding & Auth)
   // ---
   // Onboarding
@@ -130,6 +143,14 @@ Future<void> init() async {
   // Food Analysis
   sl.registerLazySingleton<AnalyzeFood>(
     () => AnalyzeFood(repository: sl()),
+  );
+
+  // Meal Log
+  sl.registerLazySingleton<SaveMealLog>(
+    () => SaveMealLog(repository: sl()),
+  );
+  sl.registerLazySingleton<GetDailyMealLogs>(
+    () => GetDailyMealLogs(repository: sl()),
   );
 
   // Yeni eklenen use caseler
@@ -211,12 +232,20 @@ Future<void> init() async {
         checkOnboardingWizardStatus: sl(),
       ));
 
-  sl.registerFactory(
-    () => MainCubit(getCurrentUser: sl(), getUserProfile: sl()),
+  sl.registerFactory<MainCubit>(
+    () => MainCubit(
+      getCurrentUser: sl(),
+      getUserProfile: sl(),
+      getDailyMealLogs: sl(),
+    ),
   );
 
   sl.registerFactory<FoodAnalysisCubit>(
-    () => FoodAnalysisCubit(analyzeFood: sl()),
+    () => FoodAnalysisCubit(
+      analyzeFood: sl(),
+      saveMealLog: sl(),
+      getCurrentUser: sl(),
+    ),
   );
 
   await Future<void>.value();
