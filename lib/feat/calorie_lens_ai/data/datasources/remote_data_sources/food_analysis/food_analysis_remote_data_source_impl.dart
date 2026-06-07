@@ -1,47 +1,3 @@
-/* import 'dart:io';
-
-import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/food_analysis/food_analysis_remote_data_source.dart';
-import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/models/food_analysis/food_analysis_model.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
-
-class FoodAnalysisRemoteDataSourceImpl implements FoodAnalysisRemoteDataSource {
-  final GenerativeModel model;
-
-  const FoodAnalysisRemoteDataSourceImpl({required this.model});
-
-  static const _prompt = '''
-Bu fotoğraftaki yemeği analiz et ve SADECE aşağıdaki JSON formatında yanıt ver, başka hiçbir şey yazma:
-{
-  "food_name": "yemek adı (Türkçe)",
-  "calories": 0,
-  "protein_g": 0.0,
-  "carbs_g": 0.0,
-  "fat_g": 0.0,
-  "portion": "1 porsiyon (~200g)",
-  "confidence": 0.9
-}
-Eğer yemek tanınamıyorsa food_name'i "Tanınamadı" yap ve confidence'ı 0.1 yap.
-''';
-
-  @override
-  Future<FoodAnalysisModel> analyzeFood(File imageFile) async {
-    final imageBytes = await imageFile.readAsBytes();
-    final mimeType =
-        imageFile.path.endsWith('.png') ? 'image/png' : 'image/jpeg';
-    final response = await model.generateContent([
-      Content.multi([
-        TextPart(_prompt),
-        DataPart(mimeType, imageBytes),
-      ]),
-    ]);
-    final text = response.text;
-    if (text == null || text.isEmpty) {
-      throw Exception('Gemini boş yanıt döndürdü');
-    }
-    return FoodAnalysisModel.fromGeminiResponse(text);
-  }
-}
- */
 import 'dart:io';
 
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/data/datasources/remote_data_sources/food_analysis/food_analysis_remote_data_source.dart';
@@ -54,9 +10,9 @@ class FoodAnalysisRemoteDataSourceImpl implements FoodAnalysisRemoteDataSource {
   const FoodAnalysisRemoteDataSourceImpl({required this.model});
 
   static const _prompt = '''
-Bu fotoğraftaki yemeği analiz et ve SADECE aşağıdaki JSON formatında yanıt ver, başka hiçbir şey yazma:
+Bu fotografin icindeki yemegi analiz et ve SADECE asagidaki JSON formatinda yanit ver. Aciklama, markdown veya ek metin yazma:
 {
-  "food_name": "yemek adı (Türkçe)",
+  "food_name": "yemek adi Turkce",
   "calories": 0,
   "protein_g": 0.0,
   "carbs_g": 0.0,
@@ -64,53 +20,54 @@ Bu fotoğraftaki yemeği analiz et ve SADECE aşağıdaki JSON formatında yanı
   "portion": "1 porsiyon (~200g)",
   "confidence": 0.9
 }
-Eğer yemek tanınamıyorsa food_name'i "Tanınamadı" yap ve confidence'ı 0.1 yap.
+Eger yemek taninamiyorsa food_name'i "Taninamadi" yap ve confidence'i 0.1 yap.
 ''';
 
   @override
   Future<FoodAnalysisModel> analyzeFood(File imageFile) async {
     try {
       final imageBytes = await imageFile.readAsBytes();
-      final pathLower = imageFile.path.toLowerCase();
-      
-      String mimeType = 'image/jpeg';
-      if (pathLower.endsWith('.png')) {
-        mimeType = 'image/png';
-      } else if (pathLower.endsWith('.webp')) {
-        mimeType = 'image/webp';
-      } else if (pathLower.endsWith('.heic') || pathLower.endsWith('.heif')) {
-        mimeType = 'image/heic';
+      if (imageBytes.isEmpty) {
+        throw Exception('Secilen fotograf okunamadi');
       }
 
       final response = await model.generateContent([
         Content.multi([
           TextPart(_prompt),
-          DataPart(mimeType, imageBytes),
+          DataPart(_mimeTypeFor(imageFile.path), imageBytes),
         ]),
       ]);
 
       final text = response.text;
-      if (text == null || text.isEmpty) {
-        throw Exception('Gemini boş yanıt döndürdü');
+      if (text == null || text.trim().isEmpty) {
+        throw Exception('Gemini bos yanit dondurdu');
       }
 
-      // JSON bloğunu metin içinden ayıkla (regex veya manuel arama ile)
-      final cleanJson = _extractJson(text);
-
-      return FoodAnalysisModel.fromGeminiResponse(cleanJson);
+      return FoodAnalysisModel.fromGeminiResponse(_extractJson(text));
     } catch (e) {
-      throw Exception('Analiz sırasında hata: $e');
+      throw Exception('Analiz sirasinda hata: $e');
     }
   }
 
-  /// Metin içindeki ilk JSON bloğunu bulur
+  String _mimeTypeFor(String path) {
+    final pathLower = path.toLowerCase();
+    if (pathLower.endsWith('.png')) return 'image/png';
+    if (pathLower.endsWith('.webp')) return 'image/webp';
+    if (pathLower.endsWith('.heic')) return 'image/heic';
+    if (pathLower.endsWith('.heif')) return 'image/heif';
+    return 'image/jpeg';
+  }
+
   String _extractJson(String text) {
-    final start = text.indexOf('{');
-    final end = text.lastIndexOf('}');
+    final cleaned = text
+        .replaceAll(RegExp(r'```(?:json)?', caseSensitive: false), '')
+        .replaceAll('```', '')
+        .trim();
+    final start = cleaned.indexOf('{');
+    final end = cleaned.lastIndexOf('}');
     if (start != -1 && end != -1 && end > start) {
-      return text.substring(start, end + 1);
+      return cleaned.substring(start, end + 1);
     }
-    // Eğer { } bulunamazsa olduğu gibi döndür (Model.fromGeminiResponse içinde temizleme devam ediyor)
-    return text.replaceAll('```json', '').replaceAll('```', '').trim();
+    return cleaned;
   }
 }
