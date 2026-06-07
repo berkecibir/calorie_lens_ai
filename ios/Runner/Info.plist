@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Yemek fotografi cekip kalori ve besin analizi yapabilmek icin kameraya erisim gerekiyor.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Galeriden yemek fotografi secip kalori ve besin analizi yapabilmek icin fotograf arsivine erisim gerekiyor.</string>
 </dict>
 </plist>

@@ -87,10 +87,8 @@ Future<void> init() async {
   // Gemini Model — FoodAnalysisRemoteDataSource'dan önce kayıt edilmeli
   sl.registerLazySingleton<GenerativeModel>(
     () => GenerativeModel(
-      model: 'models/gemini-1.5-flash',
-      apiKey: dotenv.env['GEMINI_API_KEY']!,
-      // API versiyonunu v1beta yerine v1 olarak zorla:
-      // requestOptions: const RequestOptions(apiVersion: 'v1'),
+      model: _geminiModelName,
+      apiKey: _geminiApiKey,
     ),
   );
 
@@ -249,4 +247,23 @@ Future<void> init() async {
   );
 
   await Future<void>.value();
+}
+
+String get _geminiApiKey {
+  final apiKey = dotenv.env['GEMINI_API_KEY']?.trim();
+  if (apiKey == null || apiKey.isEmpty) {
+    throw StateError(
+      'GEMINI_API_KEY assets/.env icinde tanimli degil. '
+      'Fotograftan kalori analizi icin gecerli bir Gemini API anahtari gerekli.',
+    );
+  }
+  return apiKey;
+}
+
+String get _geminiModelName {
+  final configuredModel = dotenv.env['GEMINI_MODEL']?.trim();
+  if (configuredModel != null && configuredModel.isNotEmpty) {
+    return configuredModel;
+  }
+  return 'gemini-2.5-flash';
 }

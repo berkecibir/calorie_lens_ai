@@ -1,3 +1,4 @@
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/entities/meal_log/meal_log_entity.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class MainState extends Equatable {
@@ -20,6 +21,7 @@ class MainLoaded extends MainState {
   final int consumedProtein;
   final int consumedCarbs;
   final int consumedFat;
+  final List<MealLogEntity> todayMeals;
   final String insightMessage;
 
   const MainLoaded({
@@ -32,6 +34,7 @@ class MainLoaded extends MainState {
     this.consumedProtein = 0,
     this.consumedCarbs = 0,
     this.consumedFat = 0,
+    this.todayMeals = const [],
     this.insightMessage = '',
   });
 
@@ -46,6 +49,7 @@ class MainLoaded extends MainState {
         consumedProtein,
         consumedCarbs,
         consumedFat,
+        todayMeals,
         insightMessage,
       ];
 }

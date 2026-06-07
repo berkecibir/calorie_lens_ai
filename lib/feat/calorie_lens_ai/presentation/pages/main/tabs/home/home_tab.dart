@@ -20,6 +20,7 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> with HomeTabMixin {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocBuilder<MainCubit, MainState>(
       // Performans: Sadece Loading, Loaded veya Error durumlarında rebuild et.
       // Eşitlik kontrolü Equatable sayesinde otomatik yapılır.
@@ -63,6 +64,61 @@ class _HomeTabState extends State<HomeTab> with HomeTabMixin {
 
                   // --- Hızlı Erişim ---
                   const HomeQuickActions(),
+                  const SizedBox(height: AppSizes.s24),
+
+                  // --- Bugün Neler Yedin? ---
+                  Text(
+                    'Bugün Neler Yedin?',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  const SizedBox(height: AppSizes.s12),
+                  if (state.todayMeals.isEmpty)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Text(
+                          'Henüz yemek eklenmedi.',
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.5),
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.todayMeals.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: AppSizes.s8),
+                      itemBuilder: (context, index) {
+                        final meal = state.todayMeals[index];
+                        return ListTile(
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 12),
+                          tileColor: theme.colorScheme.surfaceContainerHighest
+                              .withValues(alpha: 0.3),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(AppSizes.s12),
+                          ),
+                          leading: CircleAvatar(
+                            backgroundColor: theme.colorScheme.primaryContainer,
+                            child: Icon(Icons.restaurant_rounded,
+                                color: theme.colorScheme.primary, size: 20),
+                          ),
+                          title: Text(meal.foodName,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w600)),
+                          subtitle: Text(
+                              '${meal.calories} kcal • ${meal.dateTime.hour}:${meal.dateTime.minute.toString().padLeft(2, '0')}'),
+                          trailing: const Icon(Icons.chevron_right_rounded),
+                        );
+                      },
+                    ),
+                  const SizedBox(height: AppSizes.s32),
                 ],
               ),
             ),
