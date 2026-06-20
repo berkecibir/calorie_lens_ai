@@ -1,4 +1,5 @@
 import 'package:calorie_lens_ai_app/core/sizes/app_sizes.dart';
+import 'package:calorie_lens_ai_app/core/utils/const/analysis_page_texts.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_padding/device_padding.dart';
 import 'package:calorie_lens_ai_app/core/widgets/device_spacing/device_spacing.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/food_analysis/food_analysis_cubit.dart';
@@ -9,46 +10,78 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AnalysisErrorView extends StatelessWidget {
   final FoodAnalysisError state;
+
   const AnalysisErrorView({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Padding(
       padding: DevicePadding.xlarge.all,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Icon(
-            Icons.error_outline_rounded,
-            size: AppSizes.s64,
-            color: theme.colorScheme.error,
-          ),
+          // Statik bölüm — state değişmez, rebuild gereksiz
+          const _ErrorIcon(),
           DeviceSpacing.large.height,
-          Text(
-            'Bir hata oluştu',
-            textAlign: TextAlign.center,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          const _ErrorTitleText(),
           DeviceSpacing.small.height,
-          Text(
-            state.message,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-            ),
-          ),
+
+          // Dinamik bölüm — hata mesajı state'e bağlı
+          _ErrorMessageText(message: state.message),
           DeviceSpacing.xxlarge.height,
+
           WizardContinueButton(
             onPressed: context.read<FoodAnalysisCubit>().reset,
-            text: 'Tekrar Dene',
+            text: AnalysisPageTexts.retryButton,
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ErrorIcon extends StatelessWidget {
+  const _ErrorIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      Icons.error_outline_rounded,
+      size: AppSizes.s64,
+      color: Theme.of(context).colorScheme.error,
+    );
+  }
+}
+
+class _ErrorTitleText extends StatelessWidget {
+  const _ErrorTitleText();
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      AnalysisPageTexts.errorTitle,
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+    );
+  }
+}
+
+class _ErrorMessageText extends StatelessWidget {
+  final String message;
+
+  const _ErrorMessageText({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      message,
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+          ),
     );
   }
 }

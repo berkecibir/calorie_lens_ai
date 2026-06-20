@@ -12,15 +12,10 @@ class AnalysisTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FoodAnalysisCubit, FoodAnalysisState>(
-      // Sadece state tipi değiştiğinde rebuild et — gereksiz render yok
+    return BlocBuilder<FoodAnalysisCubit, FoodAnalysisState>(
+      // Sadece state tipi değiştiğinde rebuild et
       buildWhen: (previous, current) =>
           previous.runtimeType != current.runtimeType,
-      listenWhen: (previous, current) =>
-          previous.runtimeType != current.runtimeType,
-      listener: (context, state) {
-        // Gerekirse buraya snackbar/navigation eklenebilir
-      },
       builder: (context, state) {
         return switch (state) {
           FoodAnalysisInitial() => const AnalysisPickerView(),
