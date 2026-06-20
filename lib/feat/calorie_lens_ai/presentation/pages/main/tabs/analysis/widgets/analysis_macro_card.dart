@@ -16,8 +16,6 @@ class AnalysisMacroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Expanded(
       child: Container(
         padding: DevicePadding.medium.all,
@@ -28,23 +26,49 @@ class AnalysisMacroCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(
-              '${value.toStringAsFixed(1)}g',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
-            ),
+            _MacroValueText(value: value, color: color),
             const SizedBox(height: AppSizes.s4),
-            Text(
-              label,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              ),
-            ),
+            _MacroLabelText(label: label),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _MacroValueText extends StatelessWidget {
+  final double value;
+  final Color color;
+
+  const _MacroValueText({
+    required this.value,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '${value.toStringAsFixed(1)}g',
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+    );
+  }
+}
+
+class _MacroLabelText extends StatelessWidget {
+  final String label;
+
+  const _MacroLabelText({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      label,
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+          ),
     );
   }
 }
