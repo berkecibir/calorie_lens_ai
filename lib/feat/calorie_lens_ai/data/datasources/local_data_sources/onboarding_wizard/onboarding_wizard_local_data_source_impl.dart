@@ -29,48 +29,59 @@ class OnboardingWizardLocalDataSourceImpl
   }
 
   @override
-  Future<UserProfileEntity> getUserProfile() async {
+  Future<UserProfileEntity> getUserProfile({String? userId}) async {
     try {
       final box = await _openBox();
-      final data = box.get(USER_PROFILE_KEY);
+      final key =
+          userId != null ? '${USER_PROFILE_KEY}_$userId' : USER_PROFILE_KEY;
+      final data = box.get(key);
       if (data != null) {
-        // Data should be Map<dynamic, dynamic> from Hive, cast to Map<String, dynamic>
         final map = Map<String, dynamic>.from(data as Map);
         return UserProfileModel.fromJson(map).toEntity();
       }
       return UserProfileEntity.empty();
     } catch (e) {
-      // Fallback or error logging
       return UserProfileEntity.empty();
     }
   }
 
   @override
-  Future<void> saveUserProfile(UserProfileEntity profile) async {
+  Future<void> saveUserProfile(UserProfileEntity profile,
+      {String? userId}) async {
     final model = UserProfileModel.fromEntity(profile);
     final box = await _openBox();
-    await box.put(USER_PROFILE_KEY, model.toJson());
+    final key =
+        userId != null ? '${USER_PROFILE_KEY}_$userId' : USER_PROFILE_KEY;
+    await box.put(key, model.toJson());
   }
 
   @override
-  Future<void> clearTempCache() async {
+  Future<void> clearTempCache({String? userId}) async {
     final box = await _openBox();
-    await box.delete(USER_PROFILE_KEY);
+    final key =
+        userId != null ? '${USER_PROFILE_KEY}_$userId' : USER_PROFILE_KEY;
+    await box.delete(key);
   }
 
   @override
-  Future<bool> checkOnboardingWizardStatus() async {
+  Future<bool> checkOnboardingWizardStatus({String? userId}) async {
     try {
       final box = await _openBox();
-      return box.get(WIZARD_COMPLETED_KEY) ?? false;
+      final key = userId != null
+          ? '${WIZARD_COMPLETED_KEY}_$userId'
+          : WIZARD_COMPLETED_KEY;
+      return box.get(key) ?? false;
     } catch (e) {
       return false;
     }
   }
 
   @override
-  Future<void> completeOnboardingWizard() async {
+  Future<void> completeOnboardingWizard({String? userId}) async {
     final box = await _openBox();
-    await box.put(WIZARD_COMPLETED_KEY, true);
+    final key = userId != null
+        ? '${WIZARD_COMPLETED_KEY}_$userId'
+        : WIZARD_COMPLETED_KEY;
+    await box.put(key, true);
   }
 }

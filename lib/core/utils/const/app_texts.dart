@@ -6,6 +6,7 @@ class AppTexts {
   static const String onboardingWizardPageId = "onboarding_wizard_page";
   static const String splashPageId = 'splash_page';
   static const String forgotPasswordPageId = 'forgot_password_page';
+  static const String mainPageId = 'main_page_id';
 
   // App Name
   static const String appName = 'CalorieLens AI';
@@ -92,6 +93,7 @@ class AppTexts {
   static const String proteinGrams = 'proteinGrams';
   static const String carbGrams = 'carbGrams';
   static const String fatGrams = 'fatGrams';
+  static const String insightMessage = 'insightMessage';
 
   // Onboarding Wizard Cubit Strings
   static const String profileLoadFailedMessage = 'Profil yüklenemedi:';
@@ -172,5 +174,16 @@ class AppTexts {
   static const String sendResetLinkButtonText = 'Bağlantı Gönder';
   static const String backToSignInText = 'Giriş ekranına dön';
   static const String resetEmailSentMessage =
-      'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.';
+      'Şifre sıfırlama bağlantısı e-postası adresinize gönderildi.';
+
+  // Email Verification Page Strings
+  static const String emailVerificationPageId = 'email_verification_page';
+  static const String verifyEmailTitle = 'E-posta Adresinizi Doğrulayın';
+  static const String verifyEmailDescription =
+      'Lütfen e-posta adresinize gönderdiğimiz bağlantıya tıklayarak hesabınızı doğrulayın. Doğrulama yaptıktan sonra "Doğrulamayı Kontrol Et" butonuna tıklayın.';
+  static const String checkVerificationButtonText = 'Doğrulamayı Kontrol Et';
+  static const String resendEmailButtonText = 'E-postayı Tekrar Gönder';
+  static const String cancelAndLogoutButtonText = 'Vazgeç ve Çıkış Yap';
+  static const String emailVerificationSentMessage =
+      'Doğrulama e-postası tekrar gönderildi.';
 }

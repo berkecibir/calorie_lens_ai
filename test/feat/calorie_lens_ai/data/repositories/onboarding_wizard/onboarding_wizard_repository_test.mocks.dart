@@ -266,10 +266,12 @@ class MockOnboardingWizardLocalDataSource extends _i1.Mock
   }
 
   @override
-  _i6.Future<_i2.UserProfileEntity> getUserProfile() => (super.noSuchMethod(
+  _i6.Future<_i2.UserProfileEntity> getUserProfile({String? userId}) =>
+      (super.noSuchMethod(
         Invocation.method(
           #getUserProfile,
           [],
+          {#userId: userId},
         ),
         returnValue:
             _i6.Future<_i2.UserProfileEntity>.value(_FakeUserProfileEntity_0(
@@ -277,45 +279,55 @@ class MockOnboardingWizardLocalDataSource extends _i1.Mock
           Invocation.method(
             #getUserProfile,
             [],
+            {#userId: userId},
           ),
         )),
       ) as _i6.Future<_i2.UserProfileEntity>);
 
   @override
-  _i6.Future<void> saveUserProfile(_i2.UserProfileEntity? profile) =>
+  _i6.Future<void> saveUserProfile(
+    _i2.UserProfileEntity? profile, {
+    String? userId,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #saveUserProfile,
           [profile],
+          {#userId: userId},
         ),
         returnValue: _i6.Future<void>.value(),
         returnValueForMissingStub: _i6.Future<void>.value(),
       ) as _i6.Future<void>);
 
   @override
-  _i6.Future<void> clearTempCache() => (super.noSuchMethod(
+  _i6.Future<void> clearTempCache({String? userId}) => (super.noSuchMethod(
         Invocation.method(
           #clearTempCache,
           [],
+          {#userId: userId},
         ),
         returnValue: _i6.Future<void>.value(),
         returnValueForMissingStub: _i6.Future<void>.value(),
       ) as _i6.Future<void>);
 
   @override
-  _i6.Future<bool> checkOnboardingWizardStatus() => (super.noSuchMethod(
+  _i6.Future<bool> checkOnboardingWizardStatus({String? userId}) =>
+      (super.noSuchMethod(
         Invocation.method(
           #checkOnboardingWizardStatus,
           [],
+          {#userId: userId},
         ),
         returnValue: _i6.Future<bool>.value(false),
       ) as _i6.Future<bool>);
 
   @override
-  _i6.Future<void> completeOnboardingWizard() => (super.noSuchMethod(
+  _i6.Future<void> completeOnboardingWizard({String? userId}) =>
+      (super.noSuchMethod(
         Invocation.method(
           #completeOnboardingWizard,
           [],
+          {#userId: userId},
         ),
         returnValue: _i6.Future<void>.value(),
         returnValueForMissingStub: _i6.Future<void>.value(),

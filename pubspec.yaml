@@ -47,6 +47,13 @@ dependencies:
   # File Path Manipulation
   path: ^1.9.1            # Güncel
 
+  # Image Picker for food image upload
+  image_picker: ^1.2.1
+
+  # Google Generative AI for food analysis
+  google_generative_ai: ^0.4.7
+  uuid: ^4.3.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

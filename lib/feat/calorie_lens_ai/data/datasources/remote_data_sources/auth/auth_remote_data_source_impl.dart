@@ -40,7 +40,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final user = _firebaseAuth.currentUser;
       if (user == null) return null;
-      return UserModel.fromFirebaseUser(user);
+      await user.reload();
+      final updatedUser = _firebaseAuth.currentUser;
+      return UserModel.fromFirebaseUser(updatedUser!);
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
     } catch (e) {

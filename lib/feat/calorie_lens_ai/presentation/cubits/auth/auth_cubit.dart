@@ -4,6 +4,7 @@ import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/se
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_in_with_email_and_password.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_out.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/sign_up_with_email_and_password.dart';
+import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/domain/usecases/auth/send_email_verification.dart';
 import 'package:calorie_lens_ai_app/feat/calorie_lens_ai/presentation/cubits/auth/auth_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,6 +14,7 @@ class AuthCubit extends Cubit<AuthState> {
   final SignOut signOut;
   final GetCurrentUser getCurrentUser;
   final SendPasswordResetEmail sendPasswordResetEmail;
+  final SendEmailVerification sendEmailVerification;
 
   AuthCubit({
     required this.signInWithEmailAndPassword,
@@ -20,6 +22,7 @@ class AuthCubit extends Cubit<AuthState> {
     required this.signOut,
     required this.getCurrentUser,
     required this.sendPasswordResetEmail,
+    required this.sendEmailVerification,
   }) : super(AuthInitial());
 
   // Kullanıcı kayıtlı mı değil mi ?
@@ -31,7 +34,11 @@ class AuthCubit extends Cubit<AuthState> {
       (failuer) => emit(Unauthenticated()),
       (user) {
         if (user != null) {
-          emit(Authenticated(user: user));
+          if (user.isEmailVerified) {
+            emit(Authenticated(user: user));
+          } else {
+            emit(AuthEmailNotVerified(user: user));
+          }
         } else {
           emit(Unauthenticated());
         }
@@ -64,8 +71,13 @@ class AuthCubit extends Cubit<AuthState> {
       SignUpParams(email: email, password: password, displayName: displayName),
     );
     failuerOrUser.fold(
-        (failure) => emit(AuthError(message: failure.toString())),
-        (user) => emit(Authenticated(user: user)));
+        (failure) => emit(AuthError(message: failure.toString())), (user) {
+      if (user.isEmailVerified) {
+        emit(Authenticated(user: user));
+      } else {
+        emit(AuthEmailNotVerified(user: user));
+      }
+    });
   }
 
   // E-posta ve şifre ile oturum açma
@@ -76,8 +88,13 @@ class AuthCubit extends Cubit<AuthState> {
       SignInParams(email: email, password: password),
     );
     failureOrUser.fold(
-        (failure) => emit(AuthError(message: failure.toString())),
-        (user) => emit(Authenticated(user: user)));
+        (failure) => emit(AuthError(message: failure.toString())), (user) {
+      if (user.isEmailVerified) {
+        emit(Authenticated(user: user));
+      } else {
+        emit(AuthEmailNotVerified(user: user));
+      }
+    });
   }
 
   // Oturumu kapatma
@@ -87,5 +104,17 @@ class AuthCubit extends Cubit<AuthState> {
     failureOrUser.fold(
         (failure) => emit(AuthError(message: failure.toString())),
         (user) => emit(Unauthenticated()));
+  }
+
+  // E-posta doğrulama gönder
+  Future<void> sendVerificationEmail() async {
+    final result = await sendEmailVerification(NoParams());
+    result.fold(
+      (failure) => emit(AuthError(message: failure.toString())),
+      (_) {
+        // İsterseniz burada "E-posta gönderildi" gibi bir state dönebilirsiniz.
+        // Şimdilik sadece başarılı kabul edelim.
+      },
+    );
   }
 }
