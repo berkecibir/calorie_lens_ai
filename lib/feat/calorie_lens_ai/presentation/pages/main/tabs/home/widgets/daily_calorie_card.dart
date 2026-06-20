@@ -69,7 +69,7 @@ class DailyCalorieCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Daily Calorie',
+                  HomePageTexts.dailyCalorieTitle,
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,

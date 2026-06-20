@@ -14,4 +14,17 @@ class HomePageTexts {
   static const String remainingLabel = 'Kalan';
   static const String consumedLabel = 'Alınan';
   static const String kcalUnit = 'kcal';
+
+  // Greeting
+  static const String helloPrefix = 'Merhaba, ';
+  static const String helloSuffix = '! 👋';
+  static const String nutritionSummarySubtitle = 'Bugünkü beslenme özetine göz at';
+
+  // Calorie Card
+  static const String dailyCalorieTitle = 'Günlük Kalori';
+
+  // Quick Actions
+  static const String quickAccessTitle = 'Hızlı Erişim';
+  static const String scanFoodLabel = 'Yemek Tara';
+  static const String manualAddLabel = 'Manuel Ekle';
 }
