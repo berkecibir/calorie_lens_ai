@@ -15,6 +15,8 @@ class SplashNavigateToOnboarding extends SplashState {}
 
 class SplashNavigateToAuth extends SplashState {}
 
+class SplashNavigateToEmailVerification extends SplashState {}
+
 class SplashNavigateToWizard extends SplashState {}
 
 class SplashNavigateToHome extends SplashState {}

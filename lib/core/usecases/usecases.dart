@@ -3,13 +3,13 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
 // base interface
-abstract class UseCase<Type, Params> {
-  Future<Either<Failure, Type>> call(Params params);
+abstract class UseCase<R, P> {
+  Future<Either<Failure, R>> call(P params);
 }
 
 // without parameters usecase
-abstract class NoParamsUseCase<Type> {
-  Future<Either<Failure, Type>> call();
+abstract class NoParamsUseCase<R> {
+  Future<Either<Failure, R>> call();
 }
 
 // base class for usecase params

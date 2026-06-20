@@ -48,7 +48,7 @@ class SignInFormSection extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
-                // TODO: Şifremi unuttum sayfasına git
+                Navigation.pushNamed(root: AppTexts.forgotPasswordPageId);
               },
               style: TextButton.styleFrom(
                 padding: DevicePadding.small.onlyVertical,

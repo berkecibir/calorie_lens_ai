@@ -25,8 +25,24 @@ class Authenticated extends AuthState {
   List<Object> get props => [user];
 }
 
+class AuthEmailNotVerified extends AuthState {
+  final UserEntity user;
+
+  const AuthEmailNotVerified({required this.user});
+
+  @override
+  List<Object> get props => [user];
+}
+
 class Unauthenticated extends AuthState {
   const Unauthenticated();
+}
+
+class PasswordResetMailSent extends AuthState {
+  const PasswordResetMailSent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class AuthError extends AuthState {
